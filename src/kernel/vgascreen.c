@@ -3,6 +3,8 @@
 #include <kernel/screen.h>
 #include <kernel/sys_asm.h>
 
+#include <stdlib.h>
+
 #define VGA_ADDRESS 0xA0000
 #define VGA_AC_INDEX 0x3C0
 #define VGA_AC_WRITE 0x3C0
@@ -164,14 +166,16 @@ void vga_add_color(uint16_t index, uint16_t red, uint16_t green, uint16_t blue) 
 }
 
 void vga_set_pixel(vga_screen *scr, uint16_t x, uint16_t y, uint16_t color) {
-  scr->memory[scr->width * y + x] = color;
+  if (x <= scr->width && y <= scr->height) {
+    scr->memory[scr->width * y + x] = color;
+  }
 }
 
 void vga_fill_rect(vga_screen *scr, uint16_t origin_x, uint16_t origin_y, uint16_t width, uint16_t height, uint16_t color) {
   uint16_t x, y;
   for (y = origin_y; y < (origin_y + height); y++) {
     for (x = origin_x; x < (origin_x + width); x++) {
-      scr->memory[scr->width * y + x] = color;
+      vga_set_pixel(scr, x, y, color);
     }
   }
 }
@@ -191,7 +195,7 @@ vga_screen vga_init_320_200_256() {
   vga_write_registers(mode_320_200_256);
   vga_init_colors();
   
-  vga_clear_screen(&screen, COLOR_BLUE);
+  vga_clear_screen(&screen, COLOR_BLACK);
    
   vga_fill_rect(&screen, 5, 10, 50, 25, COLOR_RED);
   vga_fill_rect(&screen, 50, 80, 25, 75, COLOR_GREEN);

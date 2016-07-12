@@ -1,8 +1,9 @@
-#include <string.h>
-
-#include <kernel/sys_asm.h>
 #include <kernel/terminal.h>
+#include <kernel/sys_asm.h>
 #include <kernel/screen.h>
+#include <kernel/keyboard.h>
+
+#include <string.h>
 
 size_t terminal_row;
 size_t terminal_column;
@@ -56,13 +57,26 @@ void terminal_putchar(char c) {
 	terminal_cursorpos(terminal_row, terminal_column);
 }
  
-void terminal_write(const char* data, size_t size) {
-  for ( size_t i = 0; i < size; i++ )
+void terminal_write(const char *data, size_t size) {
+  for (size_t i = 0; i < size; i++)
 	  terminal_putchar(data[i]);
 }
  
-void terminal_writestring(const char* data) {
+void terminal_writestring(const char *data) {
   terminal_write(data, strlen(data));
+}
+
+void terminal_readstring(char *data) {
+  memset(data, '\0', strlen(data));
+  while (true) {
+    unsigned char ch = keyboard_getchar();
+    terminal_putchar(ch);
+    if (ch == '\n') {
+      break;
+    }
+    *(data++) = ch;
+  }
+  (*data) = '\0';
 }
 
 void terminal_cursorpos(int row, int col) {
