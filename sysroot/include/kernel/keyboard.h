@@ -1,9 +1,6 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
-#include <stdio.h>
-#include <stdbool.h>
-
 #define KEY_ERROR '\0'
 #define KEY_ESC 27
 #define KEY_1 '1'

@@ -21,7 +21,6 @@
 #define check_flag(flags, n) ((flags) & bit(n))
 
 void reboot(void) {
-
   uint8_t temp;
        
   asm volatile ("cli"); /* disable all interrupts */

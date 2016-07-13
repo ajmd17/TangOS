@@ -99,14 +99,23 @@ void main() {
       
       // clip in bounds
       if (mx < 0) mx = 0;
-      if (mx > 317) mx = 317;
+      if (mx > 318) mx = 318;
       if (my < 0) my = 0;
-      if (my > 197) my = 197;
+      if (my > 198) my = 198;
       
-      vga_clear_screen(&screen, COLOR_BLUE);
-	    vga_fill_rect(&screen, mx, my, 3, 3, COLOR_WHITE);
+      vga_clear_screen(&screen, COLOR_BLACK);
+   
+      // some random rectangles
+      vga_fill_rect(&screen, 5, 10, 50, 25, COLOR_RED);
+      vga_fill_rect(&screen, 50, 80, 25, 75, COLOR_GREEN);
+  
+      // draw cursor
+	    vga_fill_rect(&screen, mx, my, 2, 2, COLOR_WHITE);
 	  }
 	} else {
-	  printf("Cancelled\n");
+	  printf("Cancelled... Press any key to reboot\n");
+	  char ch[2];
+	  keyboard_getchar(ch);
+	  reboot();
 	}
 } 

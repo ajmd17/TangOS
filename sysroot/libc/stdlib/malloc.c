@@ -7,7 +7,7 @@
 #define	HEAP_SIZE	32768u
 #endif
 
-#define	MALLOC_MAGIC	0x6D92	/* must be < 0x8000 */
+#define	MALLOC_MAGIC 0x6D92	/* must be < 0x8000 */
 
 typedef struct _malloc {
 	size_t size;		/* 2 bytes	 4 bytes */
@@ -68,8 +68,9 @@ void *malloc(size_t size) {
 	malloc_t *m, *n;
 	int delta;
 
-	if (size == 0)
+	if (size == 0) {
 		return NULL;
+  }
 	total_size = size + sizeof(malloc_t);
 	m = (malloc_t *)g_heap_bot;
 	if (m != NULL) {
@@ -102,10 +103,10 @@ void *malloc(size_t size) {
 	delta = total_size;
 	n = kbrk(&delta);
 	
-	if(n == NULL)
+	if(n == NULL) {
 		return NULL;
-	if(m != NULL)
-		m->next = n;
+  }
+	m->next = n;
 	n->size = size;
 	n->magic = MALLOC_MAGIC;
 	n->used = 1;
@@ -164,8 +165,9 @@ void *realloc(void *blk, size_t size) {
 	malloc_t *m;
 
 	if (size == 0) {
-		if (blk != NULL)
+		if (blk != NULL) {
 			free(blk);
+	  }
 		new_blk = NULL;
 	} else {
 		new_blk = malloc(size);

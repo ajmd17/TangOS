@@ -196,9 +196,6 @@ vga_screen vga_init_320_200_256() {
   vga_init_colors();
   
   vga_clear_screen(&screen, COLOR_BLACK);
-   
-  vga_fill_rect(&screen, 5, 10, 50, 25, COLOR_RED);
-  vga_fill_rect(&screen, 50, 80, 25, 75, COLOR_GREEN);
   
   return screen;
 }

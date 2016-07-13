@@ -2,6 +2,9 @@
 #include <kernel/sys_asm.h>
 #include <kernel/scancodes.h>
 
+#include <stdio.h>
+#include <stdbool.h>
+
 bool keyboard_shift_pressed = false;
 
 int keyboard_getkeycode() {

@@ -6,7 +6,7 @@
 #include <kernel/sys_asm.h>
 
 uint8_t bcd2bin(uint8_t bcd) {
-    return ((bcd >> 4) * 10) + (bcd & 0x0F);
+  return ((bcd >> 4) * 10) + (bcd & 0x0F);
 }
 
 uint16_t time_getyear() {
