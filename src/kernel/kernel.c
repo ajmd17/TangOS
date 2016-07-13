@@ -20,7 +20,7 @@
 #if defined(__cplusplus)
 extern "C"
 #endif
-void kernel_early() {
+void init() {
 	mouse_install();
 	terminal_initialize();
 	
@@ -40,7 +40,7 @@ void kernel_early() {
 #if defined(__cplusplus)
 extern "C"
 #endif
-void kernel_main() {
+void main() {
 /*	int *i_ptr = (int*)malloc(sizeof(int));
 	*i_ptr = 6629;
 	printf("*i_ptr = %d\n", *i_ptr);
@@ -62,32 +62,35 @@ void kernel_main() {
 	} while (c != '\0');*/
 	
 	/* ===== Mouse ===== */
-	/*vga_screen screen = vga_init_320_200_256();
+	vga_screen screen = vga_init_320_200_256();
 	
 	int mx = 0, my = 0;
   while (1) {
-    uint8_t mouse_stat = inb(0x64);
-
-   // if (!(mouse_stat & 0x01)){
-    //   continue;
-    //}
+    
+  
+    uint8_t mouse_stat = 0x00;
+    while (!(mouse_stat & 0x01)){
+      mouse_stat = inb(0x64);
+    }
 
     mouse_handler();
-    mx += mouse_x - 20;
-    my += mouse_y - 20;
+    mouse_handler();
+    mouse_handler();
     
-    if (mx < 20) mx = 20;
-    if (mx > 300) mx = 300;
-    if (my < 20) my = 20;
-    if (my > 180) my = 180;
+    mx += mouse_dx;
+    my += mouse_dy;
     
+    // clip in bounds
+    if (mx < 0) mx = 0;
+    if (mx > 317) mx = 317;
+    if (my < 0) my = 0;
+    if (my > 197) my = 197;
     
-  //  terminal_cursorpos(mx, my);
     vga_clear_screen(&screen, COLOR_BLUE);
-	  vga_fill_rect(&screen, mx, my, 3, 3, COLOR_GREEN);
-  }*/
+	  vga_fill_rect(&screen, mx, my, 3, 3, COLOR_WHITE);
+  }
 	
-	char *str = (char*)malloc(10000);
+	/*char *str = (char*)malloc(10000);
 	memset(str, '\0', 50);
 	printf("Length: %d\n", strlen(str) + 1);
 	printf("Enter a string: ");
@@ -120,5 +123,5 @@ void kernel_main() {
 	  
 	} else {
 	  printf("Cancelled\n");
-	}
+	}*/
 } 
