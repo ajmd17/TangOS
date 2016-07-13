@@ -73,6 +73,9 @@ void terminal_readstring(char *data) {
     terminal_putchar(ch);
     if (ch == '\n') {
       break;
+    } else if (ch == 8) { // backspace
+      *(data--) = '\0';
+      continue;
     }
     *(data++) = ch;
   }

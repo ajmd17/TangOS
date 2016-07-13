@@ -61,35 +61,6 @@ void main() {
 	  }
 	} while (c != '\0');*/
 	
-	/* ===== Mouse ===== */
-	vga_screen screen = vga_init_320_200_256();
-	
-	int mx = 0, my = 0;
-  while (1) {
-    
-  
-    uint8_t mouse_stat = 0x00;
-    while (!(mouse_stat & 0x01)){
-      mouse_stat = inb(0x64);
-    }
-
-    mouse_handler();
-    mouse_handler();
-    mouse_handler();
-    
-    mx += mouse_dx;
-    my += mouse_dy;
-    
-    // clip in bounds
-    if (mx < 0) mx = 0;
-    if (mx > 317) mx = 317;
-    if (my < 0) my = 0;
-    if (my > 197) my = 197;
-    
-    vga_clear_screen(&screen, COLOR_BLUE);
-	  vga_fill_rect(&screen, mx, my, 3, 3, COLOR_WHITE);
-  }
-	
 	/*char *str = (char*)malloc(10000);
 	memset(str, '\0', 50);
 	printf("Length: %d\n", strlen(str) + 1);
@@ -99,11 +70,9 @@ void main() {
 	printf("Length: %d\n", strlen(str) + 1);
 	free(str);
 	
-	
-	
   terminal_setcolor(make_color(COLOR_YELLOW, COLOR_BLUE));
 	dump_heap();
-  terminal_setcolor(make_color(COLOR_LIGHT_GREY, COLOR_BLACK));
+  terminal_setcolor(make_color(COLOR_LIGHT_GREY, COLOR_BLACK));*/
 	
 	printf("Type \"vga\" to enter VGA mode... ");
 	
@@ -111,17 +80,33 @@ void main() {
 	terminal_readstring(cmd_str);
 	
 	if (!strcmp(cmd_str, "vga")) {
+	  // enter graphics mode
 	  vga_screen screen = vga_init_320_200_256();
-	  
-	  int offset = 15;
-	  while (true) {
-	    if (keyboard_getchar() == ' ') {
-	      vga_fill_rect(&screen, offset, 0, 5, 55, COLOR_LIGHT_GREEN);
-	      offset += 25;
-	    }
+	
+	  int mx = 0, my = 0;
+    while (true) {
+      uint8_t mouse_stat = 0x00;
+      do {
+        mouse_stat = inb(0x64);
+      } while (!(mouse_stat & 0x01));
+
+      mouse_handler();
+      mouse_handler();
+      mouse_handler();
+      
+      mx += mouse_dx;
+      my += mouse_dy;
+      
+      // clip in bounds
+      if (mx < 0) mx = 0;
+      if (mx > 317) mx = 317;
+      if (my < 0) my = 0;
+      if (my > 197) my = 197;
+      
+      vga_clear_screen(&screen, COLOR_BLUE);
+	    vga_fill_rect(&screen, mx, my, 3, 3, COLOR_WHITE);
 	  }
-	  
 	} else {
 	  printf("Cancelled\n");
-	}*/
+	}
 } 
