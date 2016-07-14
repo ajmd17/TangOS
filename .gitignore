@@ -1,5 +1,7 @@
 ./obj
 ./vfs
 ./isodir
+./i686-elf-4.9.1-Linux-x86_64/
+./ghost-i686-elf-tools/
 *.iso
 *.bin

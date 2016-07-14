@@ -16,20 +16,24 @@
 #include <kernel/vgascreen.h>
 #include <kernel/sys_time.h>
 #include <kernel/power.h>
+#include <kernel/idt.h>
+//#include <kernel/irq.h>
 
 #if defined(__cplusplus)
 extern "C"
 #endif
 void init() {
+  idt_install();
+  //irq_install();
+
 	mouse_install();
-	terminal_initialize();
 	
+	terminal_initialize();
   terminal_setcolor(make_color(COLOR_LIGHT_RED, COLOR_BLACK));
+
 	printf("Kernel initialized\n");
 	printf("Available memory: %d bytes\n", available_ram());
-	
 	printf("Year: %d\n", time_getyear());
-	
 	printf ("Welcome to TangOS\n\n");
 	
   terminal_setcolor(make_color(COLOR_LIGHT_GREY, COLOR_BLACK));
@@ -41,43 +45,12 @@ void init() {
 extern "C"
 #endif
 void main() {
-/*	int *i_ptr = (int*)malloc(sizeof(int));
-	*i_ptr = 6629;
-	printf("*i_ptr = %d\n", *i_ptr);
-	printf("i_ptr = %u\n", i_ptr);
-	free(i_ptr);*/
-	
-	/*printf(" > ");
-	unsigned char c = '\0';
-	do {
-	  c = keyboard_getchar();
-	  putchar((int)c);
-	  
-	  if (c == '\n') {
-	    printf(" > ");
-	  } else if (c == '!') {
-	    reboot();
-	    break;
-	  }
-	} while (c != '\0');*/
-	
-	/*char *str = (char*)malloc(10000);
-	memset(str, '\0', 50);
-	printf("Length: %d\n", strlen(str) + 1);
-	printf("Enter a string: ");
-	terminal_readstring(str);
-	printf("String is: %s\n", str);
-	printf("Length: %d\n", strlen(str) + 1);
-	free(str);
-	
-  terminal_setcolor(make_color(COLOR_YELLOW, COLOR_BLUE));
-	dump_heap();
-  terminal_setcolor(make_color(COLOR_LIGHT_GREY, COLOR_BLACK));*/
-	
 	printf("Type \"vga\" to enter VGA mode... ");
 	
-	char cmd_str[20];
-	terminal_readstring(cmd_str);
+	char cmd_str[4];
+	terminal_readstring(cmd_str, 4);
+  printf("got string: %s\n", cmd_str);
+  keyboard_getchar(); // wait
 	
 	if (!strcmp(cmd_str, "vga")) {
 	  // enter graphics mode
@@ -110,12 +83,11 @@ void main() {
       vga_fill_rect(&screen, 50, 80, 25, 75, COLOR_GREEN);
   
       // draw cursor
-	    vga_fill_rect(&screen, mx, my, 2, 2, COLOR_WHITE);
+	    vga_fill_rect(&screen, mx, my, 2, 2, COLOR_MAGENTA);
 	  }
 	} else {
 	  printf("Cancelled... Press any key to reboot\n");
-	  char ch[2];
-	  keyboard_getchar(ch);
+	  keyboard_getchar();
 	  reboot();
 	}
 } 

@@ -120,7 +120,7 @@ void vga_write_registers(uint8_t *regs) {
   }
   
   /* write GRAPHICS CONTROLLER regs */
-  for(i = 0; i < VGA_NUM_GC_REGS; i++) {
+  for (i = 0; i < VGA_NUM_GC_REGS; i++) {
     outb(VGA_GC_INDEX, i);
     outb(VGA_GC_DATA, *regs);
     regs++;

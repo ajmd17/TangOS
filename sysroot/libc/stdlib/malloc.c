@@ -101,7 +101,7 @@ void *malloc(size_t size) {
 	}
 	
 	delta = total_size;
-	n = kbrk(&delta);
+	n = (malloc_t*)kbrk(&delta);
 	
 	if(n == NULL) {
 		return NULL;
