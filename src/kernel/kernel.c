@@ -16,15 +16,17 @@
 #include <kernel/vgascreen.h>
 #include <kernel/sys_time.h>
 #include <kernel/power.h>
+#include <kernel/gdt.h>
 #include <kernel/idt.h>
-//#include <kernel/irq.h>
+#include <kernel/irq.h>
 
 #if defined(__cplusplus)
 extern "C"
 #endif
 void init() {
+  gdt_install();
   idt_install();
-  //irq_install();
+  irq_install();
 
 	mouse_install();
 	
