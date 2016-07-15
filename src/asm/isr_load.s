@@ -256,28 +256,26 @@ _isr31:
 # Here we save the processor state, calls the C fault handler
 # and restores the stack frame in the end.
 isr_common_stub:
-  pusha
-  push %ds
-  push %es
-  push %fs
-  push %gs
+  pushal
+  mov %ds, %ax
+  pushl %eax
   mov $0x10, %ax
   mov %ax, %ds
   mov %ax, %es
   mov %ax, %fs
   mov %ax, %gs
-  mov %esp, %eax
-  
-  push %eax
-  mov $(fault_handler), %eax
-  call *%eax
-  pop %eax
-  
-  pop %gs
-  pop %fs
-  pop %es
-  pop %ds
-  popa
+  mov %ax, %ss
+  call fault_handler
+
+  popl %ebx
+  mov %bx, %ds
+  mov %bx, %es
+  mov %bx, %fs
+  mov %bx, %gs
+
+  popal
   add $8, %esp
+  sti
+
   iret
   

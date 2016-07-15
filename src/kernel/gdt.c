@@ -10,19 +10,21 @@ struct gdt_entry {
   unsigned char granularity;
   unsigned char base_high;
 } __attribute__((packed));
+typedef struct gdt_entry gdt_entry_t;
 
 // The GDT pointer defines the range of our GDT in memory.
 struct gdt_ptr {
   unsigned short limit;
   unsigned int base;
 } __attribute__((packed));
+typedef struct gdt_ptr gdt_ptr_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 // The GDT with three entries and a pointer to our GDT.
-struct gdt_entry gdt[3];
-struct gdt_ptr gdt_p;
+gdt_entry_t gdt[3];
+gdt_ptr_t gdt_p;
 
 extern void gdt_flush();
 
@@ -52,7 +54,7 @@ void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned cha
 // flag which tells it is a data segment.
 void gdt_install() {
   /* Setup the GDT pointer and limit */
-  gdt_p.limit = (sizeof(struct gdt_entry) * 3) - 1;
+  gdt_p.limit = (sizeof(gdt_entry_t) * 3) - 1;
   gdt_p.base = (unsigned int)&gdt; // convert pointer to unsigned int
   gdt_set_gate(0, 0, 0, 0, 0);
   gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);

@@ -19,6 +19,7 @@
 #include <kernel/gdt.h>
 #include <kernel/idt.h>
 #include <kernel/irq.h>
+#include <kernel/isrs.h>
 
 #if defined(__cplusplus)
 extern "C"
@@ -26,11 +27,13 @@ extern "C"
 void init() {
   gdt_install();
   idt_install();
+  isrs_install();
   irq_install();
 
 	mouse_install();
-	
-	terminal_initialize();
+  keyboard_install();
+
+  terminal_initialize();
   terminal_setcolor(make_color(COLOR_LIGHT_RED, COLOR_BLACK));
 
 	printf("Kernel initialized\n");
@@ -47,27 +50,27 @@ void init() {
 extern "C"
 #endif
 void main() {
-	printf("Type \"vga\" to enter VGA mode... ");
+  printf("Type \"vga\" to enter VGA mode... ");
 	
-	char cmd_str[4];
-	terminal_readstring(cmd_str, 4);
-  printf("got string: %s\n", cmd_str);
-  keyboard_getchar(); // wait
+	char cmd_str[128];
+	terminal_readstring(cmd_str, 128);
 	
 	if (!strcmp(cmd_str, "vga")) {
 	  // enter graphics mode
 	  vga_screen screen = vga_init_320_200_256();
 	
-	  int mx = 0, my = 0;
+	  int mx = 0, my = 0, olddx = -1, olddy = -1;
     while (true) {
-      uint8_t mouse_stat = 0x00;
-      do {
-        mouse_stat = inb(0x64);
-      } while (!(mouse_stat & 0x01));
+      if (keyboard_keys['a']) {
+        keyboard_getchar();
+      }
 
-      mouse_handler();
-      mouse_handler();
-      mouse_handler();
+      if (mouse_dx == olddx && mouse_dy == olddy) {
+        continue;
+      }
+
+      olddx = mouse_dx;
+      olddy = mouse_dy;
       
       mx += mouse_dx;
       my += mouse_dy;

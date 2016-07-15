@@ -1,6 +1,9 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
+#include <stdint.h>
+#include <stdbool.h>
+
 #define KEY_ERROR '\0'
 #define KEY_ESC 27
 #define KEY_1 '1'
@@ -59,7 +62,13 @@
 
 #define KEY_SPACE ' '
 
+extern bool keyboard_keys[256];
+extern volatile char keyboard_lastchar;
+
+void keyboard_install(void);
+uint8_t keyboard_getstatus(void);
+
 int keyboard_getkeycode();
-unsigned char keyboard_getchar();
+char keyboard_getchar();
 
 #endif

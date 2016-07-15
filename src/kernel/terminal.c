@@ -84,7 +84,7 @@ void terminal_readstring(char *data, size_t size) {
 
   while (true) {
     num_chars = buffer_ptr - buffer_start;
-    char ch = (char)keyboard_getchar();
+    char ch = keyboard_getchar();
     if (ch == '\n') {
       terminal_putchar(ch);
       memcpy(data, terminal_string_buffer, num_chars + 1);

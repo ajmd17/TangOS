@@ -1,5 +1,7 @@
 #include <kernel/irq.h>
 #include <kernel/sys_asm.h>
+#include <stddef.h>
+#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,11 +22,17 @@ extern void _irq12();
 extern void _irq13();
 extern void _irq14();
 extern void _irq15();
-
 #ifdef __cplusplus
 }
 #endif
 
+void irq_install_handler(int irq, irq_handler_t handler) {
+  irq_routines[irq] = handler;
+}
+
+void irq_uninstall_handler(int irq) {
+  irq_routines[irq] = NULL;
+}
 
 void irq_remap(void) {
 	outb(0x20, 0x11);
@@ -64,7 +72,7 @@ void irq_gates(void) {
 void irq_install(void) {
 	irq_remap();
 	irq_gates();
-	IRQ_RES;
+	STI;
 }
 
 void irq_ack(int irq_no) {
@@ -78,17 +86,15 @@ void irq_ack(int irq_no) {
 extern "C"
 #endif
 void irq_handler(regs_t *r) {
-	IRQ_OFF;
-	irq_handler_t handler;
-	if (r->int_no > 47 || r->int_no < 32) {
-	  handler = 0;
-  } else {
-		handler = irq_routines[r->int_no - 32];
-	}
-	if (handler) {
-		handler(r);
-	} else {
-		irq_ack(r->int_no - 32);
-	}
-	IRQ_RES;
+	CLI;
+  int i = r->int_no - 32;
+  if (i >= 0 && i <= 15) {
+    irq_handler_t handler = irq_routines[i];
+    if (handler != NULL) {
+      handler(r);
+    } else {
+      irq_ack(i);
+    }
+  }
+	STI;
 }

@@ -1,5 +1,8 @@
 #include <kernel/mouse.h>
 #include <kernel/sys_asm.h>
+#include <kernel/irq.h>
+
+#define MOUSE_IRQ 12
 
 typedef char sbyte;
 typedef unsigned char byte;
@@ -40,7 +43,7 @@ dword inport64() {
   return (dword)inb(0x64);
 }
 
-void mouse_handler(void) {
+void mouse_handler(regs_t *regs) {
   switch(mouse_cycle) {
   case 0:
     mouse_byte[0] = (int)inb(0x60);
@@ -65,38 +68,68 @@ void mouse_handler(void) {
     mouse_cycle=0;
     break;
   }
+  // acknowledge
+  irq_ack(MOUSE_IRQ);
 }
 
 void mouse_install(void) {
+  CLI; // disable interrupts
+
   int mouse_type;
   byte data;
+
   for (int i = 0; i < 5; i++) {
     outport64(0xA7);
     outport64(0xA8);
     outport64(0xD4);
     outport60(0xF5);
+
     data = inport60();
-    if (data != 0xFA) continue;
+    if (data != 0xFA) {
+      continue;
+    }
+
     outport64(0xD4);
     outport60(0xFF);
+
     data = inport60();
-    if (data != 0xFA) continue;
+    if (data != 0xFA) {
+      continue;
+    }
+
     data = inport60();
-    if (data != 0xAA) continue;
+    if (data != 0xAA) { 
+      continue; 
+    }
+
     mouse_type = inport60();
+
     outport64(0xD4);
     outport60(0xE6);
+
     data = inport60();
-    if (data != 0xFA) continue;
-    outport64(0x20);                   
+    if (data != 0xFA) { 
+      continue;
+    }
+
+    outport64(0x20);
+
     data = inport60();
     data |= 0x02;
+
     outport64(0x60);
     outport60(data);
     outport64(0xD4);
     outport60(0xF4);
+
     data = inport60();
-    if (data != 0xFA) continue;
+    if (data != 0xFA) { 
+      continue; 
+    }
+
     break;
   }
+
+  STI; // enable interrupts
+  irq_install_handler(MOUSE_IRQ, mouse_handler); // install the handler
 }

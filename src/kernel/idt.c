@@ -9,38 +9,40 @@ struct idt_entry {
   unsigned char flags;
   unsigned short base_high;
 } __attribute__((packed));
+typedef struct idt_entry idt_entry_t;
 
 struct idt_ptr {
   unsigned short limit;
   uintptr_t base;
 } __attribute__((packed));
-
-typedef struct idt_entry idt_entry_t;
 typedef struct idt_ptr idt_ptr_t;
 
-idt_entry_t idt[256];
-idt_ptr_t idtp;
+static struct {
+  idt_entry_t entries[256];
+  idt_ptr_t pointer;
+} idt __attribute__((used));
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern void idt_load(); // defined in idt_load.s
+extern void idt_load(uintptr_t); // defined in idt_load.s
 #ifdef __cplusplus
 }
 #endif
 
 void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel, unsigned char flags) {
-  idt[num].base_low =	(base & 0xFFFF);
-  idt[num].base_high = (base >> 16) & 0xFFFF;
-  idt[num].sel = sel;
-  idt[num].zero =	0;
-  idt[num].flags = flags | 0x60;
+  idt.entries[num].base_low =	(base & 0xFFFF);
+  idt.entries[num].base_high = (base >> 16) & 0xFFFF;
+  idt.entries[num].sel = sel;
+  idt.entries[num].zero =	0;
+  idt.entries[num].flags = flags | 0x60;
 }
 
 void idt_install() {
-  idtp.limit = (sizeof(idt_entry_t) * 256) - 1;
-  idtp.base = (uintptr_t)&idt;
-  memset(&idt, 0, sizeof(idt_entry_t) * 256);
+  idt_ptr_t *idtp = &idt.pointer;
+  idtp->limit = sizeof(idt.entries) - 1;
+  idtp->base = (uintptr_t)&idt.entries[0];
+  memset(&idt.entries[0], 0, sizeof idt.entries);
 
-  idt_load();
+  idt_load((uintptr_t)idtp);
 }

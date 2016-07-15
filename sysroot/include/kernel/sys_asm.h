@@ -4,6 +4,13 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#define PAUSE { asm volatile ("hlt"); }
+#define STOP while (1) { PAUSE; }
+#define SYSCALL_VECTOR 0x7F
+
+#define CLI { asm volatile ("cli"); }
+#define STI { asm volatile ("sti"); }
+
 static inline uint32_t farpeekl(uint16_t sel, void* off) {
     uint32_t ret;
     asm ("push %%fs\n\t"

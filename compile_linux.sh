@@ -31,6 +31,9 @@
 # assemble isr_load.s
 ./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-as src/asm/isr_load.s -o obj/isr_load.o
 
+# assemble irq_handle.s
+./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-as src/asm/irq_handle.s -o obj/irq_handle.o
+
 # assemble boot.s
 ./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-as src/asm/boot.s -o obj/boot.o
 
@@ -48,7 +51,7 @@
 
 
 #link files together
-./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-g++ -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib obj/crti.o obj/gdt_flush.o obj/isr_load.o obj/idt_load.o obj/boot.o obj/kernel.o obj/itoa.o obj/puts.o obj/putchar.o obj/printf.o obj/abort.o obj/memcmp.o obj/malloc.o obj/memcpy.o obj/memmove.o obj/memset.o obj/strlen.o obj/strcmp.o obj/terminal.o obj/vgascreen.o obj/keyboard.o obj/mouse.o obj/power.o obj/idt.o obj/irq.o obj/gdt.o obj/isrs.o -lgcc
+./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-g++ -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib obj/crti.o obj/gdt_flush.o obj/isr_load.o obj/idt_load.o obj/irq_handle.o obj/boot.o obj/kernel.o obj/itoa.o obj/puts.o obj/putchar.o obj/printf.o obj/abort.o obj/memcmp.o obj/malloc.o obj/memcpy.o obj/memmove.o obj/memset.o obj/strlen.o obj/strcmp.o obj/terminal.o obj/vgascreen.o obj/keyboard.o obj/mouse.o obj/power.o obj/idt.o obj/irq.o obj/gdt.o obj/isrs.o -lgcc
 
 cp myos.bin isodir/boot/myos.bin
 cp grub.cfg isodir/boot/grub/grub.cfg
