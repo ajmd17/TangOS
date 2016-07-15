@@ -11,9 +11,9 @@
 #define IS_KEY_SHIFT(x) x == SCANCODE_LEFT_SHIFT || x == SCANCODE_RIGHT_SHIFT
 
 bool keyboard_keys[256]; // extern
-volatile char keyboard_lastchar; // extern
-bool keyboard_shift_pressed = false;
+volatile char keyboard_lastchar;
 volatile int keyboard_irq_state;
+bool keyboard_shift_pressed = false;
 
 char keycode2char(int keycode) {
   if (keycode != SCANCODE_ERROR) {
@@ -96,7 +96,6 @@ void keyboard_handler(regs_t *regs) {
       keyboard_irq_state = 1;
     }
   }
-
   irq_ack(KEYBOARD_IRQ);
 }
 
@@ -108,46 +107,7 @@ void keyboard_install(void) {
   irq_install_handler(KEYBOARD_IRQ, keyboard_handler);
 }
 
-uint8_t keyboard_getstatus(void) {
-  return inb(0x64);
-}
-
-int keyboard_getkeycode() {
-  int keycode;
-  while (true) {
-    // wait for key
-    while ((inb(0x64) & 0x01) == 0);
-
-    keycode = inb(0x60);
-    
-    if (keycode & 0x80) { // release
-      int keyreleased = keycode - 0x80;
-      if (keyreleased == SCANCODE_LEFT_SHIFT || 
-            keyreleased == SCANCODE_RIGHT_SHIFT) {
-        keyboard_shift_pressed = false;
-      }
-      continue;
-    }
-    
-    if (keycode != SCANCODE_ERROR) { // pressed
-      if (keycode == SCANCODE_LEFT_SHIFT || 
-            keycode == SCANCODE_RIGHT_SHIFT) {
-        keyboard_shift_pressed = true;
-        continue;
-      }
-      return keycode;
-    } else {
-      continue;
-    }
-    
-  }
-  return SCANCODE_ERROR;
-}
-    
 char keyboard_getchar() {
-  //int keycode = keyboard_getkeycode();
-  //return keycode2char(keycode);
-
   while (!keyboard_irq_state);
   keyboard_irq_state = 0;
   return keyboard_lastchar;

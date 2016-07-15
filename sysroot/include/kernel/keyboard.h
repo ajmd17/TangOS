@@ -63,12 +63,8 @@
 #define KEY_SPACE ' '
 
 extern bool keyboard_keys[256];
-extern volatile char keyboard_lastchar;
 
 void keyboard_install(void);
-uint8_t keyboard_getstatus(void);
-
-int keyboard_getkeycode();
 char keyboard_getchar();
 
 #endif

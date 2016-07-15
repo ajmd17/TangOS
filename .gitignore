@@ -5,3 +5,4 @@
 /ghost-i686-elf-tools/
 *.iso
 *.bin
+trace-*

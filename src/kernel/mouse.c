@@ -1,12 +1,9 @@
 #include <kernel/mouse.h>
 #include <kernel/sys_asm.h>
 #include <kernel/irq.h>
+#include <kernel/types.h>
 
 #define MOUSE_IRQ 12
-
-typedef char sbyte;
-typedef unsigned char byte;
-typedef unsigned int dword;
 
 byte mouse_cycle = 0;
 int mouse_byte[3];

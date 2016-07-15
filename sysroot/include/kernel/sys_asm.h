@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 #define PAUSE { asm volatile ("hlt"); }
-#define STOP while (1) { PAUSE; }
+#define STOP while (true) { PAUSE; }
 #define SYSCALL_VECTOR 0x7F
 
 #define CLI { asm volatile ("cli"); }
