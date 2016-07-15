@@ -22,7 +22,7 @@ void vga_fill_rect(vga_screen *scr,
   uint16_t width, uint16_t height, 
   uint16_t color);
 void vga_clear_screen(vga_screen *scr, uint8_t color);
-void vga_redraw(vga_screen *scr);
+void vga_blit(vga_screen *scr);
 
 vga_screen vga_init_320_200_256();
 

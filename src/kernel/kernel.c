@@ -81,6 +81,8 @@ void main() {
 
       // draw cursor
       cursor.draw(&screen);
+
+      vga_blit(&screen);
       //vga_fill_rect(&screen, mx, my, 2, 2, COLOR_MAGENTA);
     }
   } else {

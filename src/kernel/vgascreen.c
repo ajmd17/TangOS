@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define VGA_ADDRESS 0xA0000
 #define VGA_AC_INDEX 0x3C0
@@ -167,7 +168,7 @@ void vga_add_color(uint16_t index, uint16_t red, uint16_t green, uint16_t blue) 
 
 void vga_set_pixel(vga_screen *scr, uint16_t x, uint16_t y, uint16_t color) {
   if (x <= scr->width && y <= scr->height) {
-    scr->memory[scr->width * y + x] = color;
+    scr->buffer[scr->width * y + x] = color;
   }
 }
 
@@ -184,8 +185,9 @@ void vga_clear_screen(vga_screen *scr, uint8_t color) {
   vga_fill_rect(scr, 0, 0, scr->width, scr->height, color);
 }
 
-void vga_redraw(vga_screen *scr) {
-
+void vga_blit(vga_screen *scr) {
+  // copy buffer to vga memory
+  memcpy(scr->memory, scr->buffer, sizeof(uint8_t) * scr->width * scr->height);
 }
 
 vga_screen vga_init_320_200_256() {
@@ -195,7 +197,11 @@ vga_screen vga_init_320_200_256() {
   screen.bpp = 256;
   screen.memory = (uint8_t*)VGA_ADDRESS;
   screen.buffer = (uint8_t*)calloc(sizeof(uint8_t) * screen.width * screen.height);
-  printf("screen.buffer = %d\n", (int)screen.buffer);
+
+  if (screen.buffer == NULL) {
+    printf("Could not create screen buffer - not enough memory");
+    STOP;
+  }
 
   //enables the mode 13 state
   vga_write_registers(mode_320_200_256);

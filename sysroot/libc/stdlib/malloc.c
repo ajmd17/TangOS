@@ -1,8 +1,9 @@
 #include <string.h>
 #include <stdio.h>
 
+#define _32BIT
 #if defined(_32BIT)
-#define	HEAP_SIZE	500000uL
+#define	HEAP_SIZE	1000000u
 #else
 #define	HEAP_SIZE	32768u
 #endif

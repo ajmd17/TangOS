@@ -10,6 +10,7 @@
 .long FLAGS
 .long CHECKSUM
 
+.section .bootstrap_stack, "aw", @nobits
 stack_bottom:
 .skip 16384 # 16 KiB
 stack_top:
@@ -18,9 +19,6 @@ stack_top:
 .global _start
 .type _start, @function
 _start:
-	# Set up stack
-	movl $stack_top, %esp
-	
 	# Initialize the kernel
 	call init
 	
@@ -29,6 +27,7 @@ _start:
 
 	cli
 	hlt
+
 .Lhang:
 	jmp .Lhang
 
