@@ -57,23 +57,15 @@ void main() {
 	
 	if (!strcmp(cmd_str, "vga")) {
 	  // enter graphics mode
-	  vga_screen screen = vga_init_320_200_256();
+    vga_screen screen = vga_init_320_200_256();
 	
 	  int mx = 0, my = 0, olddx = -1, olddy = -1;
     while (true) {
-      if (keyboard_keys['a']) {
-        keyboard_getchar();
-      }
-
-      if (mouse_dx == olddx && mouse_dy == olddy) {
-        continue;
-      }
-
-      olddx = mouse_dx;
-      olddy = mouse_dy;
+      PAUSE; // wait for an interrupt
       
       mx += mouse_dx;
       my += mouse_dy;
+      mouse_dx = 0, mouse_dy = 0;
       
       // clip in bounds
       if (mx < 0) mx = 0;
@@ -81,7 +73,7 @@ void main() {
       if (my < 0) my = 0;
       if (my > 198) my = 198;
       
-      vga_clear_screen(&screen, COLOR_BLACK);
+      vga_clear_screen(&screen, COLOR_WHITE);
    
       // some random rectangles
       vga_fill_rect(&screen, 5, 10, 50, 25, COLOR_RED);
