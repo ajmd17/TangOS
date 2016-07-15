@@ -41,7 +41,7 @@ dword inport64() {
 }
 
 void mouse_handler(regs_t *regs) {
-  switch(mouse_cycle) {
+  switch (mouse_cycle) {
   case 0:
     mouse_byte[0] = (int)inb(0x60);
     mouse_cycle++;
@@ -62,7 +62,7 @@ void mouse_handler(regs_t *regs) {
     } else {
       mouse_dy = (int)(mouse_byte[2] * -1);
     }
-    mouse_cycle=0;
+    mouse_cycle = 0;
     break;
   }
   // acknowledge
@@ -95,8 +95,8 @@ void mouse_install(void) {
     }
 
     data = inport60();
-    if (data != 0xAA) { 
-      continue; 
+    if (data != 0xAA) {
+      continue;
     }
 
     mouse_type = inport60();
@@ -105,7 +105,7 @@ void mouse_install(void) {
     outport60(0xE6);
 
     data = inport60();
-    if (data != 0xFA) { 
+    if (data != 0xFA) {
       continue;
     }
 
@@ -120,8 +120,8 @@ void mouse_install(void) {
     outport60(0xF4);
 
     data = inport60();
-    if (data != 0xFA) { 
-      continue; 
+    if (data != 0xFA) {
+      continue;
     }
 
     break;

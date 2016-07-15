@@ -1,3 +1,5 @@
+#include <kernel/gdt.h>
+
 // This struct defines a GDT entry. Once again we define it
 // as packed to keep the structure the CPU expects the
 // entry to have. We do not want the compiler to optimize
@@ -5,10 +7,10 @@
 struct gdt_entry {
   unsigned short limit_low;
   unsigned short base_low;
-  unsigned char base_middle;
-  unsigned char access;
-  unsigned char granularity;
-  unsigned char base_high;
+  byte base_middle;
+  byte access;
+  byte granularity;
+  byte base_high;
 } __attribute__((packed));
 typedef struct gdt_entry gdt_entry_t;
 
@@ -33,7 +35,7 @@ extern void gdt_flush();
 #endif
 
 // Put a descriptor in the GDT
-void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran) {
+void gdt_set_gate(int num, unsigned long base, unsigned long limit, byte access, byte gran) {
   // The address of the descriptor
   gdt[num].base_low = (base & 0xFFFF);
   gdt[num].base_middle = (base >> 16) & 0xFF;

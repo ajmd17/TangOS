@@ -30,22 +30,22 @@ void init() {
   isrs_install();
   irq_install();
 
-	mouse_install();
+  mouse_install();
   keyboard_install();
 
   terminal_initialize();
   terminal_setcolor(make_color(COLOR_LIGHT_RED, COLOR_BLACK));
 
-	printf("Kernel initialized\n");
-	printf("Available memory: %d bytes\n", available_ram());
-	printf("Year: %d\n", time_getyear());
-	printf ("Welcome to TangOS\n\n");
-	
+  printf("Kernel initialized\n");
+  printf("Available memory: %d bytes\n", available_ram());
+  printf("Year: %d\n", time_getyear());
+  printf("Welcome to TangOS\n\n");
+
   terminal_setcolor(make_color(COLOR_LIGHT_GREY, COLOR_BLACK));
-	
-	printf("\n");
+
+  printf("\n");
 }
- 
+
 #if defined(__cplusplus)
 extern "C"
 #endif
@@ -66,7 +66,6 @@ void main() {
       mx += mouse_dx;
       my += mouse_dy;
       mouse_dx = 0, mouse_dy = 0;
-      
       // clip in bounds
       if (mx < 0) mx = 0;
       if (mx > 318) mx = 318;
@@ -74,17 +73,17 @@ void main() {
       if (my > 198) my = 198;
       
       vga_clear_screen(&screen, COLOR_WHITE);
-   
+			
       // some random rectangles
       vga_fill_rect(&screen, 5, 10, 50, 25, COLOR_RED);
       vga_fill_rect(&screen, 50, 80, 25, 75, COLOR_GREEN);
-  
+
       // draw cursor
-	    vga_fill_rect(&screen, mx, my, 2, 2, COLOR_MAGENTA);
-	  }
-	} else {
-	  printf("Cancelled... Press any key to reboot\n");
-	  keyboard_getchar();
-	  reboot();
-	}
-} 
+      vga_fill_rect(&screen, mx, my, 2, 2, COLOR_MAGENTA);
+    }
+  } else {
+    printf("Cancelled... Press any key to reboot\n");
+    keyboard_getchar();
+    reboot();
+  }
+}

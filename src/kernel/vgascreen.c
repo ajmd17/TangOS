@@ -1,9 +1,9 @@
 #include <kernel/vgascreen.h>
-
 #include <kernel/screen.h>
 #include <kernel/sys_asm.h>
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #define VGA_ADDRESS 0xA0000
 #define VGA_AC_INDEX 0x3C0
@@ -184,12 +184,18 @@ void vga_clear_screen(vga_screen *scr, uint8_t color) {
   vga_fill_rect(scr, 0, 0, scr->width, scr->height, color);
 }
 
+void vga_redraw(vga_screen *scr) {
+
+}
+
 vga_screen vga_init_320_200_256() {
   vga_screen screen;
   screen.width = 320;
   screen.height = 200;
   screen.bpp = 256;
   screen.memory = (uint8_t*)VGA_ADDRESS;
+  screen.buffer = (uint8_t*)calloc(sizeof(uint8_t) * screen.width * screen.height);
+  printf("screen.buffer = %d\n", (int)screen.buffer);
 
   //enables the mode 13 state
   vga_write_registers(mode_320_200_256);
