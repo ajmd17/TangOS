@@ -20,6 +20,7 @@
 #include <kernel/idt.h>
 #include <kernel/irq.h>
 #include <kernel/isrs.h>
+#include <gui/gui.hpp>
 
 #if defined(__cplusplus)
 extern "C"
@@ -58,28 +59,29 @@ void main() {
 	if (!strcmp(cmd_str, "vga")) {
 	  // enter graphics mode
     vga_screen screen = vga_init_320_200_256();
+    gui_cursor cursor;
 	
-	  int mx = 0, my = 0, olddx = -1, olddy = -1;
     while (true) {
       PAUSE; // wait for an interrupt
       
-      mx += mouse_dx;
-      my += mouse_dy;
+      cursor.x += mouse_dx;
+      cursor.y += mouse_dy;
       mouse_dx = 0, mouse_dy = 0;
       // clip in bounds
-      if (mx < 0) mx = 0;
-      if (mx > 318) mx = 318;
-      if (my < 0) my = 0;
-      if (my > 198) my = 198;
+      if (cursor.x < 0) cursor.x = 0;
+      if (cursor.x > 318) cursor.x = 318;
+      if (cursor.y < 0) cursor.y = 0;
+      if (cursor.y > 198) cursor.y = 198;
       
       vga_clear_screen(&screen, COLOR_WHITE);
 			
       // some random rectangles
-      vga_fill_rect(&screen, 5, 10, 50, 25, COLOR_RED);
-      vga_fill_rect(&screen, 50, 80, 25, 75, COLOR_GREEN);
+      //vga_fill_rect(&screen, 5, 10, 50, 25, COLOR_RED);
+      //vga_fill_rect(&screen, 50, 80, 25, 75, COLOR_GREEN);
 
       // draw cursor
-      vga_fill_rect(&screen, mx, my, 2, 2, COLOR_MAGENTA);
+      cursor.draw(&screen);
+      //vga_fill_rect(&screen, mx, my, 2, 2, COLOR_MAGENTA);
     }
   } else {
     printf("Cancelled... Press any key to reboot\n");
