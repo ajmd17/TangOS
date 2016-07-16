@@ -9,6 +9,7 @@ typedef struct {
   uint16_t bpp;
   uint8_t *memory;
   uint8_t *buffer;
+  bool dirty;
 } vga_screen;
 
 void vga_write_registers(uint8_t *regs);

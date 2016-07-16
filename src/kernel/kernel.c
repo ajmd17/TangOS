@@ -20,6 +20,9 @@
 #include <kernel/idt.h>
 #include <kernel/irq.h>
 #include <kernel/isrs.h>
+#include <kernel/image.h>
+#include <img/img_error_small.h>
+#include <img/img_warn_small.h>
 #include <gui/gui.hpp>
 
 #if defined(__cplusplus)
@@ -73,8 +76,18 @@ void main() {
       if (cursor.y < 0) cursor.y = 0;
       if (cursor.y > 198) cursor.y = 198;
       
-      vga_clear_screen(&screen, COLOR_WHITE);
+      vga_clear_screen(&screen, COLOR_DARK_GREY);
 			
+      image_draw(&screen,
+        15, 15,
+        img_error_small_width, img_error_small_height, 
+        img_error_small_data);
+
+      image_draw(&screen,
+        20 + img_error_small_width, 15,
+        img_warning_small_width, img_warning_small_height,
+        img_warning_small_data);
+
       // some random rectangles
       //vga_fill_rect(&screen, 5, 10, 50, 25, COLOR_RED);
       //vga_fill_rect(&screen, 50, 80, 25, 75, COLOR_GREEN);

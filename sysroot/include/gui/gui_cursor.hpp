@@ -15,8 +15,8 @@ public:
 
 	void draw(vga_screen *screen) {
     // draw cursor
-	  int mouse_outline_color = COLOR_BLACK;
-    int mouse_inside_color = COLOR_LIGHT_RED;
+	  int mouse_outline_color = COLOR_BLUE;
+    int mouse_inside_color = COLOR_LIGHT_BLUE;
       
 	  //Right side of cursor
 	  vga_set_pixel(screen, x, y, mouse_outline_color);
