@@ -10,6 +10,13 @@ void image_draw(vga_screen *scr,
   dword xorigin, dword yorigin,
   dword width, dword height,
   sbyte *buf);
+
+void image_draw_subimage(vga_screen *scr,
+  dword xoffset, dword yoffset,
+  dword subwidth, dword subheight,
+  dword xorigin, dword yorigin,
+  dword width, dword height,
+  sbyte *buf);
   
 
 #endif

@@ -94,6 +94,13 @@ void main() {
           msg_x + 2, msg_y + (msg_h/2 - img_warning_small_height/2),
           img_warning_small_width, img_warning_small_height,
           img_warning_small_data);
+
+        image_draw_subimage(&screen,
+          0, 0,
+          8, 10,
+          35, 20, 
+          img_error_small_width, img_error_small_height,
+          img_error_small_data);
       }
 
       // draw cursor
