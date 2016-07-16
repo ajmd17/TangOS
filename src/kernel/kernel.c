@@ -62,18 +62,19 @@ void main() {
   if (!strcmp(cmd_str, "vga")) {
     // enter graphics mode
     vga_screen screen = vga_init_320_200_256();
-    gui_cursor cursor;
+    gui::cursor cur;
 
     while (true) {
 
-      cursor.x += mouse_dx;
-      cursor.y += mouse_dy;
+      cur.x += mouse_dx;
+      cur.y += mouse_dy;
       mouse_dx = 0, mouse_dy = 0;
       // clip in bounds
-      if (cursor.x < 0) cursor.x = 0;
-      if (cursor.x > 318) cursor.x = 318;
-      if (cursor.y < 0) cursor.y = 0;
-      if (cursor.y > 198) cursor.y = 198;
+      if (cur.x < 0) cur.x = 0;
+      else if (cur.x > 318) cur.x = 318;
+
+      if (cur.y < 0) cur.y = 0;
+      else if (cur.y > 198) cur.y = 198;
 
       vga_clear_screen(&screen, COLOR_DARK_GRAY);
 
@@ -96,7 +97,7 @@ void main() {
       }
 
       // draw cursor
-      cursor.draw(&screen);
+      cur.draw(&screen);
 
       vga_blit(&screen);
 
