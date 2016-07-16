@@ -1,10 +1,9 @@
 #include <kernel/image.h>
 
-void image_draw(vga_screen *scr, 
-  dword xorigin, dword yorigin, 
-  dword width, dword height, 
+void image_draw(vga_screen *scr,
+  dword xorigin, dword yorigin,
+  dword width, dword height,
   sbyte *buf) {
-
   for (dword x = 0; x < width; x++) {
     for (dword y = 0; y < height; y++) {
       dword pixel_index = width * y + x;

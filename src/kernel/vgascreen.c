@@ -95,38 +95,38 @@ void vga_write_registers(uint8_t *regs) {
   /* write MISCELLANEOUS reg */
   outb(VGA_MISC_WRITE, *regs);
   regs++;
-   
+
   /* write SEQUENCER regs */
   for (i = 0; i < VGA_NUM_SEQ_REGS; i++) {
     outb(VGA_SEQ_INDEX, i);
     outb(VGA_SEQ_DATA, *regs);
     regs++;
   }
-   
+
   /* unlock CRTC registers */
   outb(VGA_CRTC_INDEX, 0x03);
   outb(VGA_CRTC_DATA, inb(VGA_CRTC_DATA) | 0x80);
   outb(VGA_CRTC_INDEX, 0x11);
   outb(VGA_CRTC_DATA, inb(VGA_CRTC_DATA) & ~0x80);
-  
+
   /* make sure they remain unlocked */
   regs[0x03] |= 0x80;
   regs[0x11] &= ~0x80;
-  
+
   /* write CRTC regs */
   for (i = 0; i < VGA_NUM_CRTC_REGS; i++) {
     outb(VGA_CRTC_INDEX, i);
     outb(VGA_CRTC_DATA, *regs);
     regs++;
   }
-  
+
   /* write GRAPHICS CONTROLLER regs */
   for (i = 0; i < VGA_NUM_GC_REGS; i++) {
     outb(VGA_GC_INDEX, i);
     outb(VGA_GC_DATA, *regs);
     regs++;
   }
-  
+
   /* write ATTRIBUTE CONTROLLER regs */
   for (i = 0; i < VGA_NUM_AC_REGS; i++) {
     (void)inb(VGA_INSTAT_READ);
@@ -134,7 +134,7 @@ void vga_write_registers(uint8_t *regs) {
     outb(VGA_AC_WRITE, *regs);
     regs++;
   }
-   
+
   /* lock 16-color palette and unblank display */
   (void)inb(VGA_INSTAT_READ);
   outb(VGA_AC_INDEX, 0x20);
@@ -148,8 +148,8 @@ void vga_init_colors() {
   vga_add_color(COLOR_RED, 170, 0, 0);
   vga_add_color(COLOR_MAGENTA, 170, 0, 170);
   vga_add_color(COLOR_BROWN, 170, 85, 0);
-  vga_add_color(COLOR_LIGHT_GREY, 170, 170, 170);
-  vga_add_color(COLOR_DARK_GREY, 85, 85, 85);
+  vga_add_color(COLOR_LIGHT_GRAY, 170, 170, 170);
+  vga_add_color(COLOR_DARK_GRAY, 85, 85, 85);
   vga_add_color(COLOR_LIGHT_BLUE, 85, 85, 255);
   vga_add_color(COLOR_LIGHT_GREEN, 85, 255, 85);
   vga_add_color(COLOR_LIGHT_CYAN, 85, 255, 255);
@@ -160,26 +160,27 @@ void vga_init_colors() {
 }
 
 void vga_add_color(uint16_t index, uint16_t red, uint16_t green, uint16_t blue) {
-   outb(VGA_DAC_WRITE_INDEX, index);
-   outb(VGA_DAC_DATA, red);
-   outb(VGA_DAC_DATA, green);
-   outb(VGA_DAC_DATA, blue);
+  outb(VGA_DAC_WRITE_INDEX, index);
+  outb(VGA_DAC_DATA, red);
+  outb(VGA_DAC_DATA, green);
+  outb(VGA_DAC_DATA, blue);
 }
 
-void vga_set_pixel(vga_screen *scr, uint16_t x, uint16_t y, uint16_t color) {
+void vga_set_pixel(vga_screen *scr,
+  uint16_t x, uint16_t y,
+  uint16_t color) {
   int index = scr->width * y + x;
-  if (x <= scr->width && y <= scr->height) {
+  if (x < scr->width && y < scr->height) {
     scr->buffer[index] = color;
-    if (scr->memory[index] != color) {
-      scr->dirty = true;
-    }
   }
 }
 
-void vga_fill_rect(vga_screen *scr, uint16_t origin_x, uint16_t origin_y, uint16_t width, uint16_t height, uint16_t color) {
-  uint16_t x, y;
-  for (y = 0; y < height; y++) {
-    for (x = 0; x < width; x++) {
+void vga_fill_rect(vga_screen *scr,
+  uint16_t origin_x, uint16_t origin_y,
+  uint16_t width, uint16_t height,
+  uint16_t color) {
+  for (uint16_t y = 0; y < height; y++) {
+    for (uint16_t x = 0; x < width; x++) {
       vga_set_pixel(scr, x + origin_x, y + origin_y, color);
     }
   }
@@ -190,11 +191,8 @@ void vga_clear_screen(vga_screen *scr, uint8_t color) {
 }
 
 void vga_blit(vga_screen *scr) {
-  if (scr->dirty) {
-    // copy buffer to vga memory
-    memcpy(scr->memory, scr->buffer, sizeof(uint8_t) * scr->width * scr->height);
-    scr->dirty = false;
-  }
+  // copy buffer to vga memory
+  memcpy(scr->memory, scr->buffer, sizeof(uint8_t) * scr->width * scr->height);
 }
 
 vga_screen vga_init_320_200_256() {
@@ -204,7 +202,6 @@ vga_screen vga_init_320_200_256() {
   screen.bpp = 256;
   screen.memory = (uint8_t*)VGA_ADDRESS;
   screen.buffer = (uint8_t*)calloc(sizeof(uint8_t) * screen.width * screen.height);
-  screen.dirty = true;
 
   if (screen.buffer == NULL) {
     printf("Could not create screen buffer - not enough memory");
@@ -214,8 +211,8 @@ vga_screen vga_init_320_200_256() {
   //enables the mode 13 state
   vga_write_registers(mode_320_200_256);
   vga_init_colors();
-  
+
   vga_clear_screen(&screen, COLOR_BLACK);
-  
+
   return screen;
 }

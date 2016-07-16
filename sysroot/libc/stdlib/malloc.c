@@ -1,13 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#define _32BIT
-#if defined(_32BIT)
 #define	HEAP_SIZE	1000000u
-#else
-#define	HEAP_SIZE	32768u
-#endif
-
 #define	MALLOC_MAGIC 0x6D92	/* must be < 0x8000 */
 
 typedef struct _malloc {
@@ -62,6 +56,40 @@ static void *kbrk(int *delta) {
   old_brk = g_kbrk;
   g_kbrk = new_brk;
   return old_brk;
+}
+
+void free(void *blk) {
+  malloc_t *m, *n;
+
+  m = (malloc_t *)((char *)blk - sizeof(malloc_t));
+  if (m->magic != MALLOC_MAGIC) {
+    printf("*** attempt to free() block at 0x%p "
+      "with bad magic value\n", blk);
+    return;
+  }
+
+  n = (malloc_t *)g_heap_bot;
+  if (n->magic != MALLOC_MAGIC) {
+    printf("*** kernel heap is corrupt in free()\n");
+    return;
+  }
+  for (; n != NULL; n = n->next) {
+    if (n == m)
+      break;
+  }
+
+  if (n == NULL) {
+    printf("*** attempt to free() block at 0x%p "
+      "that is not in the heap\n", blk);
+    return;
+  }
+  m->used = 0;
+  for (m = (malloc_t *)g_heap_bot; m != NULL; m = m->next) {
+    while (!m->used && m->next != NULL && !m->next->used) {
+      m->size += sizeof(malloc_t) + m->next->size;
+      m->next = m->next->next;
+    }
+  }
 }
 
 void *malloc(size_t size) {
@@ -128,42 +156,10 @@ void *malloc(size_t size) {
 
 void *calloc(size_t size) {
   void *ptr = malloc(size);
-  memset(ptr, 0, size);
+  if (ptr != NULL) {
+    memset(ptr, 0, size);
+  }
   return ptr;
-}
-
-void free(void *blk) {
-  malloc_t *m, *n;
-
-  m = (malloc_t *)((char *)blk - sizeof(malloc_t));
-  if (m->magic != MALLOC_MAGIC) {
-    printf("*** attempt to free() block at 0x%p "
-      "with bad magic value\n", blk);
-    return;
-  }
-
-  n = (malloc_t *)g_heap_bot;
-  if (n->magic != MALLOC_MAGIC) {
-    printf("*** kernel heap is corrupt in free()\n");
-    return;
-  }
-  for (; n != NULL; n = n->next) {
-    if (n == m)
-      break;
-  }
-
-  if (n == NULL) {
-    printf("*** attempt to free() block at 0x%p "
-      "that is not in the heap\n", blk);
-    return;
-  }
-  m->used = 0;
-  for (m = (malloc_t *)g_heap_bot; m != NULL; m = m->next) {
-    while (!m->used && m->next != NULL && !m->next->used) {
-      m->size += sizeof(malloc_t) + m->next->size;
-      m->next = m->next->next;
-    }
-  }
 }
 
 void *realloc(void *blk, size_t size) {

@@ -45,7 +45,7 @@ void init() {
   printf("Year: %d\n", time_getyear());
   printf("Welcome to TangOS\n\n");
 
-  terminal_setcolor(make_color(COLOR_LIGHT_GREY, COLOR_BLACK));
+  terminal_setcolor(make_color(COLOR_WHITE, COLOR_BLACK));
 
   printf("\n");
 }
@@ -55,18 +55,17 @@ extern "C"
 #endif
 void main() {
   printf("Type \"vga\" to enter VGA mode... ");
-	
-	char cmd_str[128];
-	terminal_readstring(cmd_str, 128);
-	
-	if (!strcmp(cmd_str, "vga")) {
-	  // enter graphics mode
+
+  char cmd_str[128];
+  terminal_readstring(cmd_str, 128);
+
+  if (!strcmp(cmd_str, "vga")) {
+    // enter graphics mode
     vga_screen screen = vga_init_320_200_256();
     gui_cursor cursor;
-	
+
     while (true) {
-      PAUSE; // wait for an interrupt
-      
+
       cursor.x += mouse_dx;
       cursor.y += mouse_dy;
       mouse_dx = 0, mouse_dy = 0;
@@ -75,28 +74,33 @@ void main() {
       if (cursor.x > 318) cursor.x = 318;
       if (cursor.y < 0) cursor.y = 0;
       if (cursor.y > 198) cursor.y = 198;
-      
-      vga_clear_screen(&screen, COLOR_DARK_GREY);
-			
+
+      vga_clear_screen(&screen, COLOR_DARK_GRAY);
+
       image_draw(&screen,
         15, 15,
-        img_error_small_width, img_error_small_height, 
+        img_error_small_width, img_error_small_height,
         img_error_small_data);
 
-      image_draw(&screen,
-        20 + img_error_small_width, 15,
-        img_warning_small_width, img_warning_small_height,
-        img_warning_small_data);
+      { // warning message
+        int msg_x = 45,  msg_y = 45,
+            msg_w = 100, msg_h = 28;
 
-      // some random rectangles
-      //vga_fill_rect(&screen, 5, 10, 50, 25, COLOR_RED);
-      //vga_fill_rect(&screen, 50, 80, 25, 75, COLOR_GREEN);
+        vga_fill_rect(&screen, msg_x + 2, msg_y + 2, msg_w, msg_h, COLOR_BLACK);
+        vga_fill_rect(&screen, msg_x,     msg_y,     msg_w, msg_h, COLOR_RED);
+
+        image_draw(&screen,
+          msg_x + 2, msg_y + (msg_h/2 - img_warning_small_height/2),
+          img_warning_small_width, img_warning_small_height,
+          img_warning_small_data);
+      }
 
       // draw cursor
       cursor.draw(&screen);
 
       vga_blit(&screen);
-      //vga_fill_rect(&screen, mx, my, 2, 2, COLOR_MAGENTA);
+
+      PAUSE; // wait for an interrupt
     }
   } else {
     printf("Cancelled... Press any key to reboot\n");

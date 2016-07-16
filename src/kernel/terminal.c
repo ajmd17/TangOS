@@ -12,12 +12,12 @@ uint8_t terminal_color;
 uint16_t *terminal_buffer;
 
 #define TERMINAL_STRING_BUFFER_SIZE 32
-char terminal_string_buffer[TERMINAL_STRING_BUFFER_SIZE];
+static char terminal_string_buffer[TERMINAL_STRING_BUFFER_SIZE];
 
 void terminal_initialize(void) {
   terminal_row = 0;
   terminal_column = 0;
-  terminal_color = make_color(COLOR_LIGHT_GREY, COLOR_BLACK);
+  terminal_color = make_color(COLOR_WHITE, COLOR_BLACK);
   terminal_buffer = TEXT_MODE_MEMORY;
 
   for (size_t y = 0; y < TEXT_MODE_HEIGHT; y++) {
@@ -42,9 +42,7 @@ void terminal_putchar(char c) {
     ++terminal_row;
     terminal_column = 0;
   } else if (c == '\t') { // tab
-    for (int i = 0; i < 2; i++) {
-      terminal_putchar(' ');
-    }
+    terminal_putchar(' ');
   } else if (c == 8) { // backspace
     --terminal_column;
     terminal_putentryat('\0', terminal_color, terminal_column, terminal_row);
@@ -76,7 +74,7 @@ void terminal_readstring(char *data, size_t size) {
     size = TERMINAL_STRING_BUFFER_SIZE - 1;
   }
 
-  memset(terminal_string_buffer, '\0', TERMINAL_STRING_BUFFER_SIZE);
+  memset(data, '\0', size);
 
   char *buffer_ptr = &terminal_string_buffer[0];
   const char *buffer_start = buffer_ptr;
@@ -87,7 +85,7 @@ void terminal_readstring(char *data, size_t size) {
     char ch = keyboard_getchar();
     if (ch == '\n') {
       terminal_putchar(ch);
-      memcpy(data, terminal_string_buffer, num_chars + 1);
+      memcpy(data, terminal_string_buffer, num_chars);
       return;
     } else if (ch == 8) { // backspace
       if (buffer_ptr > buffer_start) { // don't go negative
