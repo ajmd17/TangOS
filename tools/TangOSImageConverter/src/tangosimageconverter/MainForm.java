@@ -7,6 +7,7 @@ package tangosimageconverter;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -34,6 +35,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultEditorKit;
+import static tangosimageconverter.ImageClamper.USABLE_COLORS;
 
 /**
  *
@@ -49,7 +51,26 @@ public class MainForm extends javax.swing.JFrame {
     int imgWidth = 32, imgHeight = 32;
     ArrayList<Integer> colorsUsed = null; // IDs of the used colors
 
-    public String generateCode() {
+    private static int findNearestColor(Color color) {
+        int nearestColorIndex = -1;
+        double nearestDistance = Double.MAX_VALUE;
+
+        for (int i = 0; i < ImageClamper.USABLE_COLORS.size(); i++) {
+            double dst = ImageClamper.colorDistance(color, ImageClamper.USABLE_COLORS.get(i));
+            if (dst < nearestDistance) {
+                nearestColorIndex = i;
+                nearestDistance = dst;
+            }
+        }
+
+        if (nearestColorIndex == -1) {
+            System.out.println("Color not found = " + color);
+        }
+        
+        return nearestColorIndex;
+    }
+
+    public String processImage() {
         if (img == null) {
             return "";
         }
@@ -61,20 +82,23 @@ public class MainForm extends javax.swing.JFrame {
             if (!Character.isAlphabetic(imgName.charAt(i))
                     && !Character.isDigit(imgName.charAt(i))
                     && imgName.charAt(i) != '_') {
-
+                
+                realImgName += "_";
                 invalidCharacters = true;
             } else {
                 realImgName += imgName.charAt(i);
             }
         }
         if (invalidCharacters) {
-            JOptionPane.showMessageDialog(this, "\"" + imgName + "\" contains invalid characters.\nThey were removed.");
+            JOptionPane.showMessageDialog(this, "\"" + imgName + "\" contains invalid characters.\nThey were replaced with underscores.");
         }
 
         if (!Character.isAlphabetic(realImgName.charAt(0)) && realImgName.charAt(0) != '_') {
-            JOptionPane.showMessageDialog(this, "Invalid name for variable: \"" + imgName + "\".\nPrefixing variable name with \"img_\".");
+            JOptionPane.showMessageDialog(this, "Variable names must begin with a letter or underscore.\nPrefixing variable name with an underscore.");
             realImgName = "img_" + realImgName;
         }
+        
+        realImgName = realImgName.toLowerCase();
 
         txtImgName.setText(realImgName);
 
@@ -83,7 +107,7 @@ public class MainForm extends javax.swing.JFrame {
         res += "static dword " + realImgName + "_width = " + imgWidth + ";\n";
         res += "static dword " + realImgName + "_height = " + imgHeight + ";\n";
         res += "static sbyte " + realImgName + "_data[] = {\n  ";
-
+        boolean invalidColor = false;
         int lineLength = 0;
         for (int x = 0; x < imgWidth; x++) {
             for (int y = 0; y < imgHeight; y++) {
@@ -93,15 +117,19 @@ public class MainForm extends javax.swing.JFrame {
                     lineLength += 1;
                 } else {
                     Color color = new Color(clr);
-                    Integer index = ImageClamper.USABLE_COLORS.indexOf(color);
-
+                    Integer index = findNearestColor(color);
+                    if (index == -1) {
+                        invalidColor = true;
+                        resizedImg.setRGB(y, x, new Color(0, 0, 0, 0).getRGB());
+                    } else {
+                        resizedImg.setRGB(y, x, ImageClamper.USABLE_COLORS.get(index).getRGB());
+                    }
                     res += index.toString();
-                    lineLength += 1;//index.toString().length();
+                    lineLength += 1;
                 }
 
                 if (x < imgWidth - 1 || y < imgHeight - 1) {
                     res += ", ";
-                    //lineLength += 2;
                 }
 
                 if (lineLength >= imgWidth) {
@@ -113,6 +141,14 @@ public class MainForm extends javax.swing.JFrame {
 
         res += "\n};\n";
         res += "\n#endif\n";
+
+        if (invalidColor) {
+            JOptionPane.showMessageDialog(this, "Some colors were unaccounted for.");
+        }
+        
+        btnSave.setEnabled(true);
+        imgName = realImgName;
+
         return res;
     }
 
@@ -126,6 +162,8 @@ public class MainForm extends javax.swing.JFrame {
         g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 
+        txtCode.setText(processImage());
+
         int displayWidth = imgWidth * 4;
         int displayHeight = imgHeight * 4;
 
@@ -133,8 +171,6 @@ public class MainForm extends javax.swing.JFrame {
 
         imgLabel.setText("");
         imgLabel.setIcon(new ImageIcon(resizedImg.getScaledInstance(displayWidth, displayHeight, Image.SCALE_SMOOTH)));
-
-        txtCode.setText(generateCode());
     }
 
     private void saveAsSource() {
@@ -169,6 +205,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
+        txtCode.setFont(new Font("monospaced", Font.PLAIN, 12));
         txtCode.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(final MouseEvent e) {
@@ -227,6 +264,7 @@ public class MainForm extends javax.swing.JFrame {
         lblDisplayingAt = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtImgName = new javax.swing.JTextField();
+        btnSave = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TangOS Image Converter");
@@ -259,7 +297,7 @@ public class MainForm extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(imgLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+            .addComponent(imgLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
         );
 
         jSplitPane1.setLeftComponent(jPanel1);
@@ -301,10 +339,19 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        btnSave.setText("Save...");
+        btnSave.setEnabled(false);
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,13 +370,15 @@ public class MainForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 236, Short.MAX_VALUE)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtImgName, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtImgName, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnSave)))
                 .addContainerGap())
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -343,7 +392,10 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(txtImgName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSplitPane1))
+                .addComponent(jSplitPane1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnSave)
+                .addContainerGap())
         );
 
         pack();
@@ -356,10 +408,9 @@ public class MainForm extends javax.swing.JFrame {
         try {
             File file = chooser.getSelectedFile();
             imgName = file.getName().replaceFirst("[.][^.]+$", "");
-            BufferedImage tmpImg = ImageIO.read(file);
-            img = tmpImg;
+            img = ImageIO.read(file);
             txtPath.setText(file.getAbsolutePath());
-            colorsUsed = ImageClamper.clampImage(img);
+            //ImageClamper.clampImage(img);
             reloadImage();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error while loading image: " + e.getMessage());
@@ -396,7 +447,7 @@ public class MainForm extends javax.swing.JFrame {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             // reload code
             imgName = txtImgName.getText();
-            txtCode.setText(generateCode());
+            txtCode.setText(processImage());
         }
     }//GEN-LAST:event_txtImgNameKeyReleased
 
@@ -407,11 +458,16 @@ public class MainForm extends javax.swing.JFrame {
     private void txtImgNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtImgNameFocusLost
         if (!imgName.equals(txtImgName.getText())) {
             imgName = txtImgName.getText();
-            txtCode.setText(generateCode());
+            txtCode.setText(processImage());
         }
     }//GEN-LAST:event_txtImgNameFocusLost
 
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        saveAsSource();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSave;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel imgLabel;
     private javax.swing.JButton jButton1;
