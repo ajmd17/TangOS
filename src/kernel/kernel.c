@@ -21,8 +21,16 @@
 #include <kernel/irq.h>
 #include <kernel/isrs.h>
 #include <kernel/image.h>
+
 #include <img/img_error_small.h>
 #include <img/img_warn_small.h>
+#include <img/img_info_small.h>
+#include <img/img_trash_small.h>
+#include <img/img_pencil_small.h>
+#include <img/img_folder_small.h>
+#include <img/img_poop_small.h>
+#include <img/img_smile_small.h>
+
 #include <img/font/img_dejavu_sans_mono.h>
 #include <gui/gui.hpp>
 
@@ -83,6 +91,36 @@ void main() {
         15, 15,
         img_error_small_width, img_error_small_height,
         img_error_small_data);
+
+      image_draw(&screen,
+        35, 15,
+        img_info_small_width, img_info_small_height,
+        img_info_small_data);
+
+      image_draw(&screen,
+        55, 15,
+        img_trash_small_width, img_trash_small_height,
+        img_trash_small_data);
+
+      image_draw(&screen,
+        75, 15,
+        img_pencil_small_width, img_pencil_small_height,
+        img_pencil_small_data);
+
+      image_draw(&screen,
+        95, 15,
+        img_folder_small_width, img_folder_small_height,
+        img_folder_small_data);
+
+      image_draw(&screen,
+        115, 15,
+        img_poop_small_width, img_poop_small_height,
+        img_poop_small_data);
+
+      image_draw(&screen,
+        135, 15,
+        img_smile_small_width, img_smile_small_height,
+        img_smile_small_data);
 
       { // warning messagebox
         int msg_x = 45,  msg_y = 45,
