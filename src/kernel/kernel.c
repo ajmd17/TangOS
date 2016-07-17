@@ -23,6 +23,7 @@
 #include <kernel/image.h>
 #include <img/img_error_small.h>
 #include <img/img_warn_small.h>
+#include <img/font/img_dejavu_sans_mono.h>
 #include <gui/gui.hpp>
 
 #if defined(__cplusplus)
@@ -83,11 +84,11 @@ void main() {
         img_error_small_width, img_error_small_height,
         img_error_small_data);
 
-      { // warning message
+      { // warning messagebox
         int msg_x = 45,  msg_y = 45,
             msg_w = 100, msg_h = 28;
 
-        vga_fill_rect(&screen, msg_x + 2, msg_y + 2, msg_w, msg_h, COLOR_BLACK);
+        vga_fill_rect(&screen, msg_x + 3, msg_y + 3, msg_w, msg_h, COLOR_BLACK);
         vga_fill_rect(&screen, msg_x,     msg_y,     msg_w, msg_h, COLOR_RED);
 
         image_draw(&screen,
@@ -95,12 +96,17 @@ void main() {
           img_warning_small_width, img_warning_small_height,
           img_warning_small_data);
 
-        image_draw_subimage(&screen,
-          0, 0,
-          8, 10,
+        image_draw(&screen,
+          msg_x + 2, msg_y,
+          img_dejavu_sans_mono_width, img_dejavu_sans_mono_height,
+          img_dejavu_sans_mono_data);
+
+        /*image_draw_subimage(&screen,
+          3, 3,
+          8, 8,
           35, 20, 
           img_error_small_width, img_error_small_height,
-          img_error_small_data);
+          img_error_small_data);*/
       }
 
       // draw cursor

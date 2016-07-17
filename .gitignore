@@ -6,3 +6,5 @@
 *.iso
 *.bin
 trace-*
+/tools/BitmapFont/nbproject/private/
+/tools/BitmapFont/build/
