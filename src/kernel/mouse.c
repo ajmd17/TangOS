@@ -3,7 +3,18 @@
 #include <kernel/irq.h>
 #include <kernel/types.h>
 
+#include <stdio.h>
+
 #define MOUSE_IRQ 12
+#define MOUSE_MAX_CALLBACKS 32
+#define PROCESS_MOUSE_EVENTS(EVENT_TYPE) \
+  do { \
+    for (int i = 0; i < num_callbacks; i++) { \
+      if (callbacks[i].type == EVENT_TYPE) { \
+        callbacks[i].callback(); \
+      } \
+    } \
+  } while (0)
 
 byte mouse_cycle = 0;
 int mouse_byte[3];
@@ -11,6 +22,23 @@ int mouse_byte[3];
 // definition of mouse positions
 int mouse_dx = 0;
 int mouse_dy = 0;
+
+static mouse_event_t callbacks[MOUSE_MAX_CALLBACKS];
+size_t num_callbacks = 0;
+bool mouse_left_clicked = false;
+bool mouse_right_clicked = false;
+bool mouse_middle_clicked = false;
+
+bool mouse_bind_event(mouse_event_type type, mouse_event_callback callback) {
+  if (num_callbacks < MOUSE_MAX_CALLBACKS) {
+    mouse_event_t evt;
+    evt.type = type;
+    evt.callback = callback;
+    callbacks[num_callbacks++] = evt;
+    return true;
+  }
+  return false;
+}
 
 void outport60(byte data) {
   volatile byte good = 0x02;
@@ -62,6 +90,49 @@ void mouse_handler(regs_t *regs) {
     } else {
       mouse_dy = (int)(mouse_byte[2] * -1);
     }
+
+    if (mouse_byte[0] & 0x1) {
+      if (!mouse_left_clicked) {
+        PROCESS_MOUSE_EVENTS(mouse_left_click_event);
+      } else {
+        PROCESS_MOUSE_EVENTS(mouse_left_drag_event);
+      }
+      mouse_left_clicked = true;
+    } else {
+      if (mouse_left_clicked) {
+        PROCESS_MOUSE_EVENTS(mouse_left_released_event);
+      }
+      mouse_left_clicked = false;
+    }
+
+    if (mouse_byte[0] & 0x2) {
+      if (!mouse_right_clicked) {
+        PROCESS_MOUSE_EVENTS(mouse_right_click_event);
+      } else {
+        PROCESS_MOUSE_EVENTS(mouse_right_drag_event);
+      }
+      mouse_right_clicked = true;
+    } else {
+      if (mouse_right_clicked) {
+        PROCESS_MOUSE_EVENTS(mouse_right_released_event);
+      }
+      mouse_right_clicked = false;
+    }
+
+    if (mouse_byte[0] & 0x4) {
+      if (!mouse_middle_clicked) {
+        PROCESS_MOUSE_EVENTS(mouse_middle_click_event);
+      } else {
+        PROCESS_MOUSE_EVENTS(mouse_middle_drag_event);
+      }
+      mouse_middle_clicked = true;
+    } else {
+      if (mouse_middle_clicked) {
+        PROCESS_MOUSE_EVENTS(mouse_middle_released_event);
+      }
+      mouse_middle_clicked = false;
+    }
+
     mouse_cycle = 0;
     break;
   }

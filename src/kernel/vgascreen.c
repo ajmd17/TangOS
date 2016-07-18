@@ -89,7 +89,7 @@ uint8_t mode_320_200_256[] = {
   0x41, 0x00, 0x0F, 0x00, 0x00
 };
 
-void vga_write_registers(uint8_t *regs) {
+void vga_write_registers_320_200_256(uint8_t *regs) {
   uint16_t i;
 
   /* write MISCELLANEOUS reg */
@@ -140,6 +140,13 @@ void vga_write_registers(uint8_t *regs) {
   outb(VGA_AC_INDEX, 0x20);
 }
 
+void vga_add_color(uint16_t index, uint16_t red, uint16_t green, uint16_t blue) {
+  outb(VGA_DAC_WRITE_INDEX, index);
+  outb(VGA_DAC_DATA, red);
+  outb(VGA_DAC_DATA, green);
+  outb(VGA_DAC_DATA, blue);
+}
+
 void vga_init_colors() {
   vga_add_color(COLOR_BLACK, 0, 0, 0);
   vga_add_color(COLOR_BLUE, 0, 0, 170);
@@ -157,13 +164,6 @@ void vga_init_colors() {
   vga_add_color(COLOR_LIGHT_MAGENTA, 255, 85, 255);
   vga_add_color(COLOR_YELLOW, 255, 255, 85);
   vga_add_color(COLOR_WHITE, 255, 255, 255);
-}
-
-void vga_add_color(uint16_t index, uint16_t red, uint16_t green, uint16_t blue) {
-  outb(VGA_DAC_WRITE_INDEX, index);
-  outb(VGA_DAC_DATA, red);
-  outb(VGA_DAC_DATA, green);
-  outb(VGA_DAC_DATA, blue);
 }
 
 void vga_set_pixel(vga_screen *scr,
@@ -209,7 +209,7 @@ vga_screen vga_init_320_200_256() {
   }
 
   //enables the mode 13 state
-  vga_write_registers(mode_320_200_256);
+  vga_write_registers_320_200_256(mode_320_200_256);
   vga_init_colors();
 
   vga_clear_screen(&screen, COLOR_BLACK);
