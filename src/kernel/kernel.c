@@ -31,8 +31,12 @@
 #include <img/img_poop_small.h>
 #include <img/img_smile_small.h>
 
+#include <img/cursor/img_cursor_black.h>
+
 #include <img/font/img_dejavu_sans_mono.h>
+
 #include <gui/gui.hpp>
+#include <gui/font.h>
 
 #if defined(__cplusplus)
 extern "C"
@@ -71,10 +75,16 @@ void main() {
   if (!strcmp(cmd_str, "vga")) {
     // enter graphics mode
     vga_screen screen = vga_init_320_200_256();
+
+    font_sheet_t font;
+    font.char_width = 11;
+    font.char_height = 11;
+    font.sheet_width = img_dejavu_sans_mono_width;
+    font.sheet_height = img_dejavu_sans_mono_height;
+    font.sheet_data_ptr = &img_dejavu_sans_mono_data[0];
+
     gui::cursor cur;
-
     while (true) {
-
       cur.x += mouse_dx;
       cur.y += mouse_dy;
       mouse_dx = 0, mouse_dy = 0;
@@ -114,8 +124,8 @@ void main() {
 
       image_draw(&screen,
         115, 15,
-        img_poop_small_width, img_poop_small_height,
-        img_poop_small_data);
+        img_warning_small_width, img_warning_small_height,
+        img_warning_small_data);
 
       image_draw(&screen,
         135, 15,
@@ -123,32 +133,31 @@ void main() {
         img_smile_small_data);
 
       { // warning messagebox
-        int msg_x = 45,  msg_y = 45,
-            msg_w = 100, msg_h = 28;
+        int msg_x = 45, msg_y = 45,
+          msg_w = 210, msg_h = 45;
 
         vga_fill_rect(&screen, msg_x + 3, msg_y + 3, msg_w, msg_h, COLOR_BLACK);
-        vga_fill_rect(&screen, msg_x,     msg_y,     msg_w, msg_h, COLOR_RED);
+        vga_fill_rect(&screen, msg_x, msg_y, msg_w, msg_h, COLOR_RED);
 
-        image_draw(&screen,
-          msg_x + 2, msg_y + (msg_h/2 - img_warning_small_height/2),
+        /*image_draw(&screen,
+          msg_x + 2, msg_y + (msg_h / 2 - img_warning_small_height / 2),
           img_warning_small_width, img_warning_small_height,
-          img_warning_small_data);
+          img_warning_small_data);*/
 
-        image_draw(&screen,
-          msg_x + 2, msg_y,
-          img_dejavu_sans_mono_width, img_dejavu_sans_mono_height,
-          img_dejavu_sans_mono_data);
+        image_draw(&screen, 
+          msg_x + 2, msg_y + (msg_h / 2 - img_warning_small_height / 2),
+          img_poop_small_width, img_poop_small_height,
+          img_poop_small_data);
 
-        /*image_draw_subimage(&screen,
-          3, 3,
-          8, 8,
-          35, 20, 
-          img_error_small_width, img_error_small_height,
-          img_error_small_data);*/
+        font_draw_string(&screen, &font,
+          msg_x + 8 + img_warning_small_width, msg_y + 12,
+          "Welcome to TangOS!\nBeware of crappy bugs ;)");
       }
 
-      // draw cursor
-      cur.draw(&screen);
+      image_draw(&screen,
+        cur.x, cur.y,
+        img_cursor_black_width, img_cursor_black_height,
+        img_cursor_black_data);
 
       vga_blit(&screen);
 

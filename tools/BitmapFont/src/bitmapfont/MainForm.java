@@ -63,7 +63,7 @@ public class MainForm extends javax.swing.JFrame {
         int y = yOrigin;
 
         int charSize = (int) (Math.round(Math.sqrt(imgWidth)));
-
+        System.out.println("charSize = " + charSize);
         for (int i = 33; i < 127; i++) {
             if (jCheckBox1.isSelected()) {
                 g.drawRect(x, y, charSize, charSize);
