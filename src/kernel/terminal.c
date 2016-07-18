@@ -37,7 +37,7 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) {
   terminal_buffer[index] = make_vgaentry(c, color);
 }
 
-void terminal_putchar(char c) {
+void terminal_putchar(uchar c) {
   if (c == '\n') { // return
     ++terminal_row;
     terminal_column = 0;
@@ -46,6 +46,10 @@ void terminal_putchar(char c) {
   } else if (c == 8) { // backspace
     --terminal_column;
     terminal_putentryat('\0', terminal_color, terminal_column, terminal_row);
+  } else if (c == KEY_LEFT_ARROW) { 
+    --terminal_column;  
+  } else if (c == KEY_RIGHT_ARROW) { 
+    ++terminal_column;  
   } else {
     terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
     if (++terminal_column == TEXT_MODE_WIDTH) {
@@ -78,11 +82,12 @@ void terminal_readstring(char *data, size_t size) {
 
   char *buffer_ptr = &terminal_string_buffer[0];
   const char *buffer_start = buffer_ptr;
+  char *buffer_end = buffer_ptr;
   size_t num_chars = 0;
 
   while (true) {
     num_chars = buffer_ptr - buffer_start;
-    char ch = keyboard_getchar();
+    uchar ch = keyboard_getchar();
     if (ch == '\n') {
       terminal_putchar(ch);
       memcpy(data, terminal_string_buffer, num_chars);
@@ -92,10 +97,22 @@ void terminal_readstring(char *data, size_t size) {
         terminal_putchar(ch);
         *(buffer_ptr--) = '\0';
       }
-      continue;
+    } else if (ch == KEY_LEFT_ARROW) {
+      if (buffer_ptr > buffer_start) { // don't go negative
+        terminal_putchar(ch);
+        buffer_ptr--;
+      }
+    } else if (ch == KEY_RIGHT_ARROW) {
+        if (num_chars < size && buffer_ptr < buffer_end) {
+          terminal_putchar(ch);
+          buffer_ptr++;
+        }
     } else if (num_chars < size) {
       terminal_putchar(ch);
       *(buffer_ptr++) = ch;
+      if (buffer_ptr > buffer_end) {
+        buffer_end = buffer_ptr;      
+      }
     }
   }
 }

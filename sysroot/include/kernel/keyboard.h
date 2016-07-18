@@ -1,6 +1,7 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
+#include <kernel/types.h>
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -62,9 +63,14 @@
 
 #define KEY_SPACE ' '
 
+#define KEY_LEFT_ARROW 128
+#define KEY_RIGHT_ARROW 129
+#define KEY_UP_ARROW 130
+#define KEY_DOWN_ARROW 131
+
 extern bool keyboard_keys[256];
 
 void keyboard_install(void);
-char keyboard_getchar();
+uchar keyboard_getchar();
 
 #endif

@@ -49,10 +49,11 @@
 ./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-g++ -Isysroot/include/ -c src/kernel/gdt.c -o obj/gdt.o -ffreestanding -O2 -w
 ./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-g++ -Isysroot/include/ -c src/kernel/isrs.c -o obj/isrs.o -ffreestanding -O2 -w
 ./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-g++ -Isysroot/include/ -c src/kernel/image.c -o obj/image.o -ffreestanding -O2 -w
+./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-g++ -Isysroot/include/ -c src/gui/font.c -o obj/font.o -ffreestanding -O2 -w
 
 
 #link files together
-./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-g++ -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib obj/crti.o obj/gdt_flush.o obj/isr_load.o obj/idt_load.o obj/irq_handle.o obj/boot.o obj/kernel.o obj/itoa.o obj/puts.o obj/putchar.o obj/printf.o obj/abort.o obj/memcmp.o obj/malloc.o obj/memcpy.o obj/memmove.o obj/memset.o obj/strlen.o obj/strcmp.o obj/terminal.o obj/vgascreen.o obj/keyboard.o obj/mouse.o obj/power.o obj/idt.o obj/irq.o obj/gdt.o obj/isrs.o obj/image.o -lgcc
+./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-g++ -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib obj/crti.o obj/gdt_flush.o obj/isr_load.o obj/idt_load.o obj/irq_handle.o obj/boot.o obj/kernel.o obj/itoa.o obj/puts.o obj/putchar.o obj/printf.o obj/abort.o obj/memcmp.o obj/malloc.o obj/memcpy.o obj/memmove.o obj/memset.o obj/strlen.o obj/strcmp.o obj/terminal.o obj/vgascreen.o obj/keyboard.o obj/mouse.o obj/power.o obj/idt.o obj/irq.o obj/gdt.o obj/isrs.o obj/image.o obj/font.o -lgcc
 
 	qemu-system-i386 -kernel myos.bin
 

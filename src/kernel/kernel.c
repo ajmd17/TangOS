@@ -151,7 +151,7 @@ void main() {
 
         font_draw_string(&screen, &font,
           msg_x + 8 + img_warning_small_width, msg_y + 12,
-          "Welcome to TangOS!\nBeware of crappy bugs ;)");
+          "Holy fut"); //Welcome to TangOS!\nBeware of crappy bugs ;)
       }
 
       image_draw(&screen,

@@ -3,6 +3,7 @@
 #include <kernel/scancodes.h>
 #include <kernel/irq.h>
 #include <kernel/terminal.h>
+#include <kernel/types.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -11,11 +12,11 @@
 #define IS_KEY_SHIFT(x) x == SCANCODE_LEFT_SHIFT || x == SCANCODE_RIGHT_SHIFT
 
 bool keyboard_keys[256]; // extern
-volatile char keyboard_lastchar;
+volatile uchar keyboard_lastchar;
 volatile int keyboard_irq_state;
 bool keyboard_shift_pressed = false;
 
-char keycode2char(int keycode) {
+uchar keycode2char(int keycode) {
   if (keycode != SCANCODE_ERROR) {
     switch (keycode) {
     case SCANCODE_1: return (!keyboard_shift_pressed) ? '1' : '!';
@@ -69,6 +70,11 @@ char keycode2char(int keycode) {
     case SCANCODE_PERIOD: return (!keyboard_shift_pressed) ? '.' : '>';
     case SCANCODE_FORWARDSLASH: return (!keyboard_shift_pressed) ? '/' : '?';
     case SCANCODE_SPACEBAR: return ' ';
+    case SCANCODE_LEFT_ARROW: return KEY_LEFT_ARROW;
+    case SCANCODE_RIGHT_ARROW: return KEY_RIGHT_ARROW;
+    case SCANCODE_UP_ARROW: return KEY_UP_ARROW;
+    case SCANCODE_DOWN_ARROW: return KEY_DOWN_ARROW;
+    
     }
   }
   return '\0';
@@ -81,14 +87,14 @@ void keyboard_handler(regs_t *regs) {
     if (IS_KEY_SHIFT(keyreleased)) {
       keyboard_shift_pressed = false;
     } else {
-      char ch = keycode2char(keyreleased);
+      uchar ch = keycode2char(keyreleased);
       keyboard_keys[ch] = false;
     }
   } else if (keycode != SCANCODE_ERROR) {
     if (IS_KEY_SHIFT(keycode)) {
       keyboard_shift_pressed = true;
     } else {
-      char ch = keycode2char(keycode);
+      uchar ch = keycode2char(keycode);
       if (!keyboard_keys[ch]) {
         keyboard_lastchar = ch;
         keyboard_keys[ch] = true;
@@ -107,7 +113,7 @@ void keyboard_install(void) {
   irq_install_handler(KEYBOARD_IRQ, keyboard_handler);
 }
 
-char keyboard_getchar() {
+uchar keyboard_getchar() {
   while (!keyboard_irq_state);
   keyboard_irq_state = 0;
   return keyboard_lastchar;
