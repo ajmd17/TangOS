@@ -9,13 +9,13 @@ typedef void(*mouse_event_callback)();
 enum mouse_event_type {
   mouse_unknown_event,
   mouse_left_click_event,
-  mouse_left_released_event,
+  mouse_left_release_event,
   mouse_left_drag_event,
   mouse_right_click_event,
-  mouse_right_released_event,
+  mouse_right_release_event,
   mouse_right_drag_event,
   mouse_middle_click_event,
-  mouse_middle_released_event,
+  mouse_middle_release_event,
   mouse_middle_drag_event,
 };
 

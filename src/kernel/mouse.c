@@ -100,7 +100,7 @@ void mouse_handler(regs_t *regs) {
       mouse_left_clicked = true;
     } else {
       if (mouse_left_clicked) {
-        PROCESS_MOUSE_EVENTS(mouse_left_released_event);
+        PROCESS_MOUSE_EVENTS(mouse_left_release_event);
       }
       mouse_left_clicked = false;
     }
@@ -114,7 +114,7 @@ void mouse_handler(regs_t *regs) {
       mouse_right_clicked = true;
     } else {
       if (mouse_right_clicked) {
-        PROCESS_MOUSE_EVENTS(mouse_right_released_event);
+        PROCESS_MOUSE_EVENTS(mouse_right_release_event);
       }
       mouse_right_clicked = false;
     }
@@ -128,7 +128,7 @@ void mouse_handler(regs_t *regs) {
       mouse_middle_clicked = true;
     } else {
       if (mouse_middle_clicked) {
-        PROCESS_MOUSE_EVENTS(mouse_middle_released_event);
+        PROCESS_MOUSE_EVENTS(mouse_middle_release_event);
       }
       mouse_middle_clicked = false;
     }

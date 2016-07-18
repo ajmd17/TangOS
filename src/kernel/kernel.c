@@ -75,7 +75,7 @@ void init() {
 extern "C"
 #endif
 void main() {
-  mouse_bind_event(mouse_left_released_event, left_click);
+  mouse_bind_event(mouse_left_drag_event, left_click);
 
   printf("Type \"vga\" to enter VGA mode... ");
 
@@ -141,7 +141,7 @@ void main() {
         int msg_x = 45, msg_y = 45,
           msg_w = 210, msg_h = 45;
 
-        vga_fill_rect(screen_ptr, msg_x + 3, msg_y + 3, msg_w, msg_h, COLOR_BLACK);
+        vga_fill_rect(screen_ptr, msg_x + 1, msg_y + 1, msg_w, msg_h, COLOR_BLACK);
         vga_fill_rect(screen_ptr, msg_x, msg_y, msg_w, msg_h, COLOR_LIGHT_BLUE);
 
         /*image_draw(&screen,
@@ -156,13 +156,49 @@ void main() {
 
         font_draw_string(screen_ptr, &dejavu_sans_mono,
           msg_x + 8 + img_warning_small_width, msg_y + 12,
-          "It's dangerous to go alone,\ntake this!"); //Welcome to TangOS!\nBeware of crappy bugs ;)
+          "It's dangerous to go alone,\ntake this!");
+
+        int button_x = msg_x + 160, 
+          button_y = msg_y + 28,
+          button_w = 45, 
+          button_h = 13;
+
+        vga_fill_rect(screen_ptr,
+          button_x, button_y,
+          button_w, button_h,
+          COLOR_LIGHT_GRAY);
+
+        vga_fill_rect(screen_ptr,
+          button_x, button_y + button_h,
+          button_w + 1, 1,
+          COLOR_DARK_GRAY);
+
+        vga_fill_rect(screen_ptr,
+          button_x + button_w, button_y,
+          1, button_h,
+          COLOR_DARK_GRAY);
+
+        vga_fill_rect(screen_ptr,
+          button_x, button_y,
+          1, button_h,
+          COLOR_WHITE);
+
+        vga_fill_rect(screen_ptr,
+          button_x, button_y,
+          button_w, 1,
+          COLOR_WHITE);
+
+        font_draw_string(screen_ptr, &dejavu_sans_mono,
+          button_x + 6, button_y + 2,
+          "Take");
       }
 
       image_draw(screen_ptr,
         smiley_x, smiley_y,
         img_smile_small_width, img_smile_small_height,
         img_smile_small_data);
+
+
 
       // cursor
       image_draw(screen_ptr,
