@@ -31,13 +31,13 @@
 #include <img/img_poop_small.h>
 #include <img/img_smile_small.h>
 
-#include <img/cursor/img_cursor_black.h>
-#include <img/cursor/img_cursor_black.h>
+#include <img/cursor/img_cursor_icecream.h>
 
 #include <img/font/img_consolas.h>
 #include <img/font/img_dejavu_sans_mono.h>
 
 #include <gui/gui.hpp>
+#include <gui/widget.hpp>
 #include <gui/font.h>
 
 vga_screen *screen_ptr = NULL;
@@ -107,6 +107,7 @@ void main() {
 
       vga_clear_screen(screen_ptr, COLOR_DARK_GRAY);
 
+      //drawing random icons
       image_draw(screen_ptr,
         15, 15,
         img_error_small_width, img_error_small_height,
@@ -138,58 +139,57 @@ void main() {
         img_warning_small_data);
 
       { // warning messagebox
-        int msg_x = 45, msg_y = 45,
-          msg_w = 210, msg_h = 45;
+        gui::widget msg(45, 45, 210, 45);
+        gui::widget msg_dec(msg.get_x(), 
+          msg.get_y() - 10,
+          msg.get_width(),
+          10);
 
-        vga_fill_rect(screen_ptr, msg_x + 1, msg_y + 1, msg_w, msg_h, COLOR_BLACK);
-        vga_fill_rect(screen_ptr, msg_x, msg_y, msg_w, msg_h, COLOR_LIGHT_BLUE);
+        vga_fill_rect(screen_ptr, msg_dec.get_x() + 1, msg_dec.get_y() + 1, msg_dec.get_width(), msg_dec.get_height(), COLOR_BLACK);
+        vga_fill_rect(screen_ptr, msg_dec.get_x(), msg_dec.get_y(), msg_dec.get_width(), msg_dec.get_height(), COLOR_BLUE);
 
-        /*image_draw(&screen,
-          msg_x + 2, msg_y + (msg_h / 2 - img_warning_small_height / 2),
-          img_warning_small_width, img_warning_small_height,
-          img_warning_small_data);*/
+        vga_fill_rect(screen_ptr, msg.get_x() + 1, msg.get_y() + 1, msg.get_width(), msg.get_height(), COLOR_BLACK);
+        vga_fill_rect(screen_ptr, msg.get_x(), msg.get_y(), msg.get_width(), msg.get_height(), COLOR_LIGHT_BLUE);
+
 
         image_draw(screen_ptr,
-          msg_x + 2, msg_y + (msg_h / 2 - img_warning_small_height / 2),
+          msg.get_x() + 2, msg.get_y() + (msg.get_height() / 2 - img_warning_small_height / 2),
           img_poop_small_width, img_poop_small_height,
           img_poop_small_data);
 
         font_draw_string(screen_ptr, &dejavu_sans_mono,
-          msg_x + 8 + img_warning_small_width, msg_y + 12,
+          msg.get_x() + 8 + img_warning_small_width, msg.get_y() + 12,
           "It's dangerous to go alone,\ntake this!");
 
-        int button_x = msg_x + 160, 
-          button_y = msg_y + 28,
-          button_w = 45, 
-          button_h = 13;
+        gui::widget button(msg.get_x() + 160, msg.get_y() + 28, 45, 13);
 
         vga_fill_rect(screen_ptr,
-          button_x, button_y,
-          button_w, button_h,
+          button.get_x(), button.get_y(),
+          button.get_width(), button.get_height(),
           COLOR_LIGHT_GRAY);
 
         vga_fill_rect(screen_ptr,
-          button_x, button_y + button_h,
-          button_w + 1, 1,
+          button.get_x(), button.get_y() + button.get_height(),
+          button.get_width() + 1, 1,
           COLOR_DARK_GRAY);
 
         vga_fill_rect(screen_ptr,
-          button_x + button_w, button_y,
-          1, button_h,
+          button.get_x() + button.get_width(), button.get_y(),
+          1, button.get_height(),
           COLOR_DARK_GRAY);
 
         vga_fill_rect(screen_ptr,
-          button_x, button_y,
-          1, button_h,
+          button.get_x(), button.get_y(),
+          1, button.get_height(),
           COLOR_WHITE);
 
         vga_fill_rect(screen_ptr,
-          button_x, button_y,
-          button_w, 1,
+          button.get_x(), button.get_y(),
+          button.get_width(), 1,
           COLOR_WHITE);
 
         font_draw_string(screen_ptr, &dejavu_sans_mono,
-          button_x + 6, button_y + 2,
+          button.get_x() + 6, button.get_y() + 2,
           "Take");
       }
 
@@ -203,8 +203,8 @@ void main() {
       // cursor
       image_draw(screen_ptr,
         cur.x, cur.y,
-        img_cursor_black_width, img_cursor_black_height,
-        img_cursor_black_data);
+        img_cursor_icecream_width, img_cursor_icecream_height,
+        img_cursor_icecream_data);
 
       vga_blit(screen_ptr);
 

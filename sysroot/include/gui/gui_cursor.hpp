@@ -16,45 +16,6 @@ public:
   }
 
   void draw(vga_screen *screen) {
-    //Right side of cursor
-    vga_set_pixel(screen, x, y, outside_color);
-    vga_set_pixel(screen, x + 1, y + 1, outside_color);
-    vga_set_pixel(screen, x + 2, y + 2, outside_color);
-    vga_set_pixel(screen, x + 3, y + 3, outside_color);
-    vga_set_pixel(screen, x + 4, y + 4, outside_color);
-    vga_set_pixel(screen, x + 5, y + 5, outside_color);
-
-    //Left side of cursor
-    vga_set_pixel(screen, x, y + 1, outside_color);
-    vga_set_pixel(screen, x, y + 2, outside_color);
-    vga_set_pixel(screen, x, y + 3, outside_color);
-    vga_set_pixel(screen, x, y + 4, outside_color);
-    vga_set_pixel(screen, x, y + 5, outside_color);
-    vga_set_pixel(screen, x, y + 6, outside_color);
-    vga_set_pixel(screen, x, y + 7, outside_color);
-
-    //Bottom of cursor
-    vga_set_pixel(screen, x + 1, y + 7, outside_color);
-    vga_set_pixel(screen, x + 2, y + 7, outside_color);
-    vga_set_pixel(screen, x + 3, y + 6, outside_color);
-    vga_set_pixel(screen, x + 4, y + 6, outside_color);
-
-    //Inside of cursor
-    vga_set_pixel(screen, x + 1, y + 2, inside_color);
-    vga_set_pixel(screen, x + 1, y + 3, inside_color);
-    vga_set_pixel(screen, x + 1, y + 4, inside_color);
-    vga_set_pixel(screen, x + 1, y + 5, inside_color);
-    vga_set_pixel(screen, x + 1, y + 6, inside_color);
-
-    vga_set_pixel(screen, x + 2, y + 3, inside_color);
-    vga_set_pixel(screen, x + 2, y + 4, inside_color);
-    vga_set_pixel(screen, x + 2, y + 5, inside_color);
-    vga_set_pixel(screen, x + 2, y + 6, inside_color);
-
-    vga_set_pixel(screen, x + 3, y + 4, inside_color);
-    vga_set_pixel(screen, x + 3, y + 5, inside_color);
-
-    vga_set_pixel(screen, x + 4, y + 5, inside_color);
   }
 
 private:
