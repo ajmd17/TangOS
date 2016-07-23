@@ -150,10 +150,10 @@ void main() {
           msg.get_width(),
           10);
 
-        vga_fill_rect(screen_ptr, msg_dec.get_x() + 1, msg_dec.get_y() + 1, msg_dec.get_width(), msg_dec.get_height(), COLOR_BLACK);
+        vga_fill_rect(screen_ptr, msg_dec.get_x() + 2, msg_dec.get_y() + 2, msg_dec.get_width(), msg_dec.get_height(), COLOR_BLACK);
         vga_fill_rect(screen_ptr, msg_dec.get_x(), msg_dec.get_y(), msg_dec.get_width(), msg_dec.get_height(), COLOR_BLUE);
 
-        vga_fill_rect(screen_ptr, msg.get_x() + 1, msg.get_y() + 1, msg.get_width(), msg.get_height(), COLOR_BLACK);
+        vga_fill_rect(screen_ptr, msg.get_x() + 2, msg.get_y() + 2, msg.get_width(), msg.get_height(), COLOR_BLACK);
         vga_fill_rect(screen_ptr, msg.get_x(), msg.get_y(), msg.get_width(), msg.get_height(), COLOR_LIGHT_BLUE);
 
 
