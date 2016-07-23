@@ -31,7 +31,8 @@
 #include <img/img_poop_small.h>
 #include <img/img_smile_small.h>
 
-#include <img/cursor/img_cursor_icecream.h>
+#include <img/cursor/img_cursor_crab.h>
+#include <img/cursor/img_cursor_crab_clicked.h>
 
 #include <img/font/img_consolas.h>
 #include <img/font/img_dejavu_sans_mono.h>
@@ -45,10 +46,6 @@ int smiley_x = 135, smiley_y = 15;
 gui::cursor cur;
 
 void left_click() {
-  if (screen_ptr != NULL) {
-    smiley_x = cur.x - 8;
-    smiley_y = cur.y - 8;
-  }
 }
 
 #if defined(__cplusplus)
@@ -75,7 +72,7 @@ void init() {
 extern "C"
 #endif
 void main() {
-  mouse_bind_event(mouse_left_drag_event, left_click);
+  mouse_bind_event(mouse_left_click_event, left_click);
 
   printf("Type \"vga\" to enter VGA mode... ");
 
@@ -165,11 +162,9 @@ void main() {
           img_poop_small_width, img_poop_small_height,
           img_poop_small_data);
 
-        if (button_test_hit(&btn_take, cur.x, cur.y)) {
-          font_draw_string(screen_ptr, &dejavu_sans_mono,
-            msg.get_x() + 8 + img_warning_small_width, msg.get_y() + 12,
-            "It's dangerous to go alone,\ntake this!");
-        }
+        font_draw_string(screen_ptr, &dejavu_sans_mono,
+          msg.get_x() + 8 + img_warning_small_width, msg.get_y() + 12,
+          "It's dangerous to go alone,\ntake this!");
 
 
         button_draw(&btn_take, screen_ptr, &dejavu_sans_mono);
@@ -183,10 +178,17 @@ void main() {
 
 
       // cursor
-      image_draw(screen_ptr,
-        cur.x, cur.y,
-        img_cursor_icecream_width, img_cursor_icecream_height,
-        img_cursor_icecream_data);
+      if (mouse_left_clicked) {
+        image_draw(screen_ptr,
+          cur.x, cur.y,
+          img_cursor_crab_clicked_width, img_cursor_crab_clicked_height,
+          img_cursor_crab_clicked_data);
+      } else {
+        image_draw(screen_ptr,
+          cur.x, cur.y,
+          img_cursor_crab_width, img_cursor_crab_height,
+          img_cursor_crab_data);
+      }
 
       vga_blit(screen_ptr);
 
