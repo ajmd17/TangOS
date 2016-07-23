@@ -38,7 +38,7 @@
 
 #include <gui/gui.hpp>
 #include <gui/widget.hpp>
-#include <gui/font.h>
+#include <gui/button.h>
 
 vga_screen *screen_ptr = NULL;
 int smiley_x = 135, smiley_y = 15;
@@ -140,6 +140,14 @@ void main() {
 
       { // warning messagebox
         gui::widget msg(45, 45, 210, 45);
+        
+        button_t btn_take;
+        btn_take.x = msg.get_x() + 160;
+        btn_take.y = msg.get_y() + 28;
+        btn_take.width = 45; 
+        btn_take.height = 13;
+        strcpy(btn_take.text, "Take");
+
         gui::widget msg_dec(msg.get_x(), 
           msg.get_y() - 10,
           msg.get_width(),
@@ -157,40 +165,14 @@ void main() {
           img_poop_small_width, img_poop_small_height,
           img_poop_small_data);
 
-        font_draw_string(screen_ptr, &dejavu_sans_mono,
-          msg.get_x() + 8 + img_warning_small_width, msg.get_y() + 12,
-          "It's dangerous to go alone,\ntake this!");
+        if (button_test_hit(&btn_take, cur.x, cur.y)) {
+          font_draw_string(screen_ptr, &dejavu_sans_mono,
+            msg.get_x() + 8 + img_warning_small_width, msg.get_y() + 12,
+            "It's dangerous to go alone,\ntake this!");
+        }
 
-        gui::widget button(msg.get_x() + 160, msg.get_y() + 28, 45, 13);
 
-        vga_fill_rect(screen_ptr,
-          button.get_x(), button.get_y(),
-          button.get_width(), button.get_height(),
-          COLOR_LIGHT_GRAY);
-
-        vga_fill_rect(screen_ptr,
-          button.get_x(), button.get_y() + button.get_height(),
-          button.get_width() + 1, 1,
-          COLOR_DARK_GRAY);
-
-        vga_fill_rect(screen_ptr,
-          button.get_x() + button.get_width(), button.get_y(),
-          1, button.get_height(),
-          COLOR_DARK_GRAY);
-
-        vga_fill_rect(screen_ptr,
-          button.get_x(), button.get_y(),
-          1, button.get_height(),
-          COLOR_WHITE);
-
-        vga_fill_rect(screen_ptr,
-          button.get_x(), button.get_y(),
-          button.get_width(), 1,
-          COLOR_WHITE);
-
-        font_draw_string(screen_ptr, &dejavu_sans_mono,
-          button.get_x() + 6, button.get_y() + 2,
-          "Take");
+        button_draw(&btn_take, screen_ptr, &dejavu_sans_mono);
       }
 
       image_draw(screen_ptr,

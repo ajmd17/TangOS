@@ -1,6 +1,9 @@
 #ifndef WIDGET_HPP
 #define WIDGET_HPP
 
+#include <kernel/vgascreen.h>
+#include <gui/font.h>
+
 namespace gui {
 class widget {
 public:
@@ -22,6 +25,10 @@ public:
   }
 
   virtual void on_click() {
+    // to be overridden
+  }
+
+  virtual void draw(vga_screen *scr, font_sheet_t *fnt) {
     // to be overridden
   }
 
