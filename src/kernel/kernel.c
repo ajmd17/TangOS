@@ -31,21 +31,46 @@
 #include <img/img_poop_small.h>
 #include <img/img_smile_small.h>
 
-#include <img/cursor/img_cursor_crab.h>
-#include <img/cursor/img_cursor_crab_clicked.h>
+#include <img/cursor/img_cursor_p_1.h>
+#include <img/cursor/img_cursor_p_2.h>
+#include <img/cursor/img_cursor_p_3.h>
+#include <img/cursor/img_cursor_p_4.h>
+#include <img/cursor/img_cursor_p_5.h>
 
 #include <img/font/img_consolas.h>
 #include <img/font/img_dejavu_sans_mono.h>
 
 #include <gui/gui.hpp>
+#include <gui/workspace.h>
 #include <gui/widget.hpp>
 #include <gui/button.h>
 
 vga_screen *screen_ptr = NULL;
+
+// workspace holds all windows and on screen elements
+workspace_t *workspace = NULL;
+// a welcome messagebox
+window_t *welcome_msg = NULL;
+
+int background_color = COLOR_DARK_GRAY;
+
 int smiley_x = 135, smiley_y = 15;
 gui::cursor cur;
 
 void left_click() {
+  if (workspace != NULL) {
+    click_workspace(workspace, cur.x, cur.y);
+  }
+}
+
+void ok_clicked() {
+  // close the welcome message
+  if (welcome_msg != NULL) {
+    if (!remove_window_from_workspace(workspace, welcome_msg)) {
+      free_window(welcome_msg);
+      welcome_msg = NULL;
+    }
+  }
 }
 
 #if defined(__cplusplus)
@@ -72,7 +97,8 @@ void init() {
 extern "C"
 #endif
 void main() {
-  mouse_bind_event(mouse_left_click_event, left_click);
+
+  mouse_bind_event(mouse_left_release_event, left_click);
 
   printf("Type \"vga\" to enter VGA mode... ");
 
@@ -84,13 +110,50 @@ void main() {
     vga_screen screen = vga_init_320_200_256();
     screen_ptr = &screen;
 
+    workspace = alloc_workspace();
+    if (workspace == NULL) {
+      // not enough memory to alloc workspace!
+      while(true) PAUSE;
+    }
+
+
     font_sheet_t dejavu_sans_mono;
     dejavu_sans_mono.char_width = 11;
     dejavu_sans_mono.char_height = 11;
     dejavu_sans_mono.sheet_width = img_dejavu_sans_mono_width;
     dejavu_sans_mono.sheet_height = img_dejavu_sans_mono_height;
     dejavu_sans_mono.sheet_data_ptr = &img_dejavu_sans_mono_data[0];
+    set_workspace_font(workspace, &dejavu_sans_mono);
 
+    { // show a welcome message
+      welcome_msg = alloc_window("Welcome");
+      welcome_msg->x = 50;
+      welcome_msg->y = 50;
+      welcome_msg->width = 150;
+
+      { // create OK button
+        widget_t *ok_btn = alloc_widget(WIDGET_TYPE_BUTTON, 
+          "Ok", 
+          welcome_msg->width - 25, 
+          welcome_msg->height - 30, ok_clicked);
+        ok_btn->width = 20;
+
+        add_widget_to_window(welcome_msg, ok_btn);
+      }
+
+      { // create 'welcome' label
+        widget_t *welcome_label = alloc_widget(WIDGET_TYPE_LABEL, 
+            "Welcome to tangOS!\nWatch out for bugs!", 
+            4, 4, NULL);
+        add_widget_to_window(welcome_msg, welcome_label);
+      }
+
+      add_window_to_workspace(workspace, welcome_msg);
+    }
+
+    // workspace now owns welcome_msg and will be automatically freed.
+
+    int time = 0, time_delay = 50;
     while (true) {
       cur.x += mouse_dx;
       cur.y += mouse_dy;
@@ -102,7 +165,7 @@ void main() {
       if (cur.y < 0) cur.y = 0;
       else if (cur.y > 198) cur.y = 198;
 
-      vga_clear_screen(screen_ptr, COLOR_DARK_GRAY);
+      vga_clear_screen(screen_ptr, background_color);
 
       //drawing random icons
       image_draw(screen_ptr,
@@ -135,7 +198,7 @@ void main() {
         img_warning_small_width, img_warning_small_height,
         img_warning_small_data);
 
-      { // warning messagebox
+      /*{ // warning messagebox
         gui::widget msg(45, 45, 210, 45);
         
         button_t btn_take;
@@ -168,7 +231,7 @@ void main() {
 
 
         button_draw(&btn_take, screen_ptr, &dejavu_sans_mono);
-      }
+      }*/
 
       image_draw(screen_ptr,
         smiley_x, smiley_y,
@@ -176,19 +239,58 @@ void main() {
         img_smile_small_data);
 
 
+      draw_workspace(workspace, screen_ptr);
 
       // cursor
       if (mouse_left_clicked) {
-        image_draw(screen_ptr,
-          cur.x, cur.y,
-          img_cursor_crab_clicked_width, img_cursor_crab_clicked_height,
-          img_cursor_crab_clicked_data);
+        if (time < time_delay) {
+          unsigned int cur_width, cur_height;
+          char *cur_data;
+
+          if (time < time_delay / 6) {
+            cur_width = img_cursor_p_1_width;
+            cur_height = img_cursor_p_1_height;
+            cur_data = img_cursor_p_1_data;
+          } else if (time < time_delay / 5) {
+            cur_width = img_cursor_p_2_width;
+            cur_height = img_cursor_p_2_height;
+            cur_data = img_cursor_p_2_data;
+          } else if (time < time_delay / 4) {
+            
+            cur_width = img_cursor_p_3_width;
+            cur_height = img_cursor_p_3_height;
+            cur_data = img_cursor_p_3_data;
+          } else if (time < time_delay / 3) {
+            
+            cur_width = img_cursor_p_4_width;
+            cur_height = img_cursor_p_4_height;
+            cur_data = img_cursor_p_4_data;
+          } else {
+            
+            cur_width = img_cursor_p_5_width;
+            cur_height = img_cursor_p_5_height;
+            cur_data = img_cursor_p_5_data;
+          }
+        
+          image_draw(screen_ptr,
+            cur.x, cur.y,
+            cur_width, cur_height,
+            cur_data);
+
+          ++time;
+        } else {
+          time = 0;
+
+        }
       } else {
         image_draw(screen_ptr,
-          cur.x, cur.y,
-          img_cursor_crab_width, img_cursor_crab_height,
-          img_cursor_crab_data);
+            cur.x, cur.y,
+            img_cursor_p_1_width, img_cursor_p_1_height,
+            img_cursor_p_1_data);
+          time = 0;
       }
+
+
 
       vga_blit(screen_ptr);
 
@@ -198,5 +300,11 @@ void main() {
     printf("Cancelled... Press any key to reboot\n");
     keyboard_getchar();
     reboot();
+  }
+
+exit:
+  if (workspace != NULL) {
+    free_workspace(workspace);
+    workspace = NULL;
   }
 }
