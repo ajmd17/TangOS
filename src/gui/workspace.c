@@ -61,7 +61,7 @@ bool remove_window_from_workspace(workspace_t *workspace, window_t *window) {
   free_window(workspace->windows[window_id]);
   workspace->windows[window_id] = NULL;
   workspace->num_windows--;
-  
+
   return true;
 }
 

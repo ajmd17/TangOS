@@ -30,6 +30,7 @@
 #include <img/img_folder_small.h>
 #include <img/img_poop_small.h>
 #include <img/img_smile_small.h>
+#include <img/img_tangos_logo.h>
 
 #include <img/cursor/img_cursor_p_1.h>
 #include <img/cursor/img_cursor_p_2.h>
@@ -45,12 +46,17 @@
 #include <gui/widget.hpp>
 #include <gui/button.h>
 
+#include <app/welcom/welcom.h>
+#include <app/tonsole/tonsole.h>
+
 vga_screen *screen_ptr = NULL;
 
 // workspace holds all windows and on screen elements
 workspace_t *workspace = NULL;
-// a welcome messagebox
-window_t *welcome_msg = NULL;
+// a welcome app
+app_t *welcom_app = NULL;
+// a tonsole app
+app_t *tonsole_app = NULL;
 
 int background_color = COLOR_DARK_GRAY;
 
@@ -60,16 +66,6 @@ gui::cursor cur;
 void left_click() {
   if (workspace != NULL) {
     click_workspace(workspace, cur.x, cur.y);
-  }
-}
-
-void ok_clicked() {
-  // close the welcome message
-  if (welcome_msg != NULL) {
-    if (!remove_window_from_workspace(workspace, welcome_msg)) {
-      free_window(welcome_msg);
-      welcome_msg = NULL;
-    }
   }
 }
 
@@ -97,15 +93,16 @@ void init() {
 extern "C"
 #endif
 void main() {
+  bool loaded = false;
 
   mouse_bind_event(mouse_left_release_event, left_click);
 
-  printf("Type \"vga\" to enter VGA mode... ");
+  /*printf("Type \"vga\" to enter VGA mode... ");
 
   char command[4];
   terminal_readstring(command, 4);
 
-  if (!strcmp(command, "vga")) {
+  if (!strcmp(command, "vga")) {*/
     // enter graphics mode
     vga_screen screen = vga_init_320_200_256();
     screen_ptr = &screen;
@@ -116,7 +113,6 @@ void main() {
       while(true) PAUSE;
     }
 
-
     font_sheet_t dejavu_sans_mono;
     dejavu_sans_mono.char_width = 11;
     dejavu_sans_mono.char_height = 11;
@@ -125,33 +121,47 @@ void main() {
     dejavu_sans_mono.sheet_data_ptr = &img_dejavu_sans_mono_data[0];
     set_workspace_font(workspace, &dejavu_sans_mono);
 
-    { // show a welcome message
-      welcome_msg = alloc_window("Welcome");
-      welcome_msg->x = 50;
-      welcome_msg->y = 50;
-      welcome_msg->width = 150;
+    while (true) { // display boot splash
 
-      { // create OK button
-        widget_t *ok_btn = alloc_widget(WIDGET_TYPE_BUTTON, 
-          "Ok", 
-          welcome_msg->width - 25, 
-          welcome_msg->height - 30, ok_clicked);
-        ok_btn->width = 20;
+      vga_clear_screen(screen_ptr, background_color);
 
-        add_widget_to_window(welcome_msg, ok_btn);
+      //draw logo
+      image_draw(screen_ptr,
+        (320/2) - (img_tangos_logo_width/2), (200/2) - (img_tangos_logo_height/2) - 10,
+        img_tangos_logo_width, img_tangos_logo_height,
+        img_tangos_logo_data);
+
+
+      font_draw_string(screen_ptr, &dejavu_sans_mono, 
+        (320/2) - 60, 40, "welcome to TangOS");
+
+      font_draw_string(screen_ptr, &dejavu_sans_mono, 
+        (320/2) - 50, 40+img_tangos_logo_height+30, "click to login");
+
+      vga_blit(screen_ptr);
+
+      PAUSE;
+
+      if (mouse_left_clicked) {
+        break;
       }
-
-      { // create 'welcome' label
-        widget_t *welcome_label = alloc_widget(WIDGET_TYPE_LABEL, 
-            "Welcome to tangOS!\nWatch out for bugs!", 
-            4, 4, NULL);
-        add_widget_to_window(welcome_msg, welcome_label);
-      }
-
-      add_window_to_workspace(workspace, welcome_msg);
     }
 
-    // workspace now owns welcome_msg and will be automatically freed.
+    welcom_app = alloc_app(welcom_init, welcom_update, welcom_close);
+    welcom_app->init_func(workspace);
+    /// todo: update function and close function, managment of app
+    welcom_app->close_func();
+    // deallocate app
+    free_app(welcom_app);
+    welcom_app = NULL;
+
+    tonsole_app = alloc_app(tonsole_init, tonsole_update, tonsole_close);
+    tonsole_app->init_func(workspace);
+    /// todo: update function and close function, managment of app
+    tonsole_app->close_func();
+    // deallocate app
+    free_app(tonsole_app);
+    tonsole_app = NULL;
 
     int time = 0, time_delay = 50;
     while (true) {
@@ -296,11 +306,11 @@ void main() {
 
       PAUSE; // wait for an interrupt
     }
-  } else {
+  /*} else {
     printf("Cancelled... Press any key to reboot\n");
     keyboard_getchar();
     reboot();
-  }
+  }*/
 
 exit:
   if (workspace != NULL) {

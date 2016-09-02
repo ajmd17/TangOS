@@ -22,7 +22,6 @@ void free_workspace(workspace_t *workspace);
 bool add_window_to_workspace(workspace_t *workspace, window_t *window);
 // remove the window from the workspace, returns true on success.
 bool remove_window_from_workspace(workspace_t *workspace, window_t *window);
-
 // set the font for the workspace
 void set_workspace_font(workspace_t *workspace, font_sheet_t *font);
 
