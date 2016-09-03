@@ -30,7 +30,7 @@
 #include <img/img_folder_small.h>
 #include <img/img_poop_small.h>
 #include <img/img_smile_small.h>
-#include <img/img_tangos_logo.h>
+#include <img/img_tangy_logo.h>
 
 #include <img/cursor/img_cursor_p_1.h>
 #include <img/cursor/img_cursor_p_2.h>
@@ -48,6 +48,10 @@
 
 #include <app/welcom/welcom.h>
 #include <app/tonsole/tonsole.h>
+
+#include <fs/ext2.h>
+
+#include <util/logging.h>
 
 vga_screen *screen_ptr = NULL;
 
@@ -97,8 +101,7 @@ void main() {
 
   mouse_bind_event(mouse_left_release_event, left_click);
 
-  /*printf("Type \"vga\" to enter VGA mode... ");
-
+ /* printf("Type \"vga\" to enter VGA mode... ");
   char command[4];
   terminal_readstring(command, 4);
 
@@ -133,10 +136,10 @@ void main() {
 
 
       font_draw_string(screen_ptr, &dejavu_sans_mono, 
-        (320/2) - 60, 40, "welcome to TangOS");
+        (320/2) - 55, 40, "welcome to TangOS");
 
       font_draw_string(screen_ptr, &dejavu_sans_mono, 
-        (320/2) - 50, 40+img_tangos_logo_height+30, "click to login");
+        (320/2) - 45, 40+img_tangos_logo_height+30, "click to login");
 
       vga_blit(screen_ptr);
 

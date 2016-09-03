@@ -20,6 +20,9 @@ typedef struct {
   uint y;
   uint width;
   uint height;
+  uint text_offset_x;
+  uint text_offset_y;
+
 
   tstr text;
 

@@ -33,6 +33,12 @@ typedef struct {
 
   widget_t *widgets[MAX_WIDGETS_PER_WINDOW];
   uint num_widgets;
+
+  widget_t *close_button;
+  widget_t *max_button;
+  widget_t *min_button;
+
+  bool close_button_clicked;
 } window_t;
 
 window_t *alloc_window(tstr titlestr);

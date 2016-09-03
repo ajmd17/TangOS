@@ -16,6 +16,7 @@ window_t *alloc_window(tstr titlestr) {
   strcpy(win->title, titlestr);
 
   win->font = NULL;
+  win->close_button_clicked = false;
 
   // Set all widgets to NULL.
   for (uint i = 0; i < MAX_WIDGETS_PER_WINDOW; i++) {
@@ -23,6 +24,14 @@ window_t *alloc_window(tstr titlestr) {
   }
 
   win->num_widgets = 0;
+
+  // create special widgets
+  win->close_button = alloc_widget(WIDGET_TYPE_BUTTON, "x",
+    0, -WINDOW_TITLE_BAR_HEIGHT, NULL);
+  win->close_button->width = 8;
+  win->close_button->height = 9;
+  win->close_button->text_offset_x = -1;
+  win->close_button->text_offset_y = 0;
 
   return win;
 }
@@ -34,6 +43,8 @@ void free_window(window_t *window) {
       window->widgets[i] = NULL;
     }
   }
+
+  free_widget(window->close_button);
 
   free(window->title);
   free(window);
@@ -66,6 +77,9 @@ void set_window_font(window_t *window, font_sheet_t *font) {
       set_widget_font(window->widgets[i], font);
     }
   }
+
+  // apply font to special widgets
+  set_widget_font(window->close_button, font);
 }
 
 void click_window(window_t *window, int mx, int my) {
@@ -81,6 +95,22 @@ void click_window(window_t *window, int mx, int my) {
         if (my >= wid_y && my <= wid_y + wid->height) {
           click_widget(wid);
         }
+      }
+    }
+  }
+
+  // check close button
+  {
+    uint wid_x = window->close_button->x + WINDOW_CONTENT_PADDING_X;
+    uint wid_y = window->close_button->y + WINDOW_TITLE_BAR_HEIGHT + WINDOW_CONTENT_PADDING_Y;
+
+    if (mx >= wid_x && mx <= wid_x + window->close_button->width) {
+      if (my >= wid_y && my <= wid_y + window->close_button->height) {
+        // call function to close window here
+        //if (window->close_func != NULL) {
+        //  window->close_func();
+        //}
+        window->close_button_clicked = true;
       }
     }
   }
@@ -112,4 +142,9 @@ void draw_window(window_t *window, vga_screen *screen) {
         window->y + WINDOW_TITLE_BAR_HEIGHT + WINDOW_CONTENT_PADDING_Y);
     }
   }
+
+  // draw special widgets
+  draw_widget(window->close_button, screen, 
+    window->x + WINDOW_CONTENT_PADDING_X, 
+    window->y + WINDOW_TITLE_BAR_HEIGHT + WINDOW_CONTENT_PADDING_Y);
 }

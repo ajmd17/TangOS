@@ -13,7 +13,7 @@ char *itoa(int value, char *str, int base); // converts integer to string
 char *utoa(unsigned value, char *str, int base); // converts unsigned integer to string
 void free(void*);
 void *malloc(size_t);
-void *calloc(size_t);
+void *calloc(size_t, size_t);
 void *realloc(void *blk, size_t size);
 void dump_heap(void);
 

@@ -201,7 +201,7 @@ vga_screen vga_init_320_200_256() {
   screen.height = 200;
   screen.bpp = 256;
   screen.memory = (uint8_t*)VGA_ADDRESS;
-  screen.buffer = (uint8_t*)calloc(sizeof(uint8_t) * screen.width * screen.height);
+  screen.buffer = (uint8_t*)calloc(screen.width * screen.height, sizeof(uint8_t));
 
   if (screen.buffer == NULL) {
     printf("Could not create screen buffer - not enough memory");

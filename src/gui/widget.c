@@ -9,6 +9,8 @@ widget_t *alloc_widget(uint type, tstr text, uint x, uint y, void(*callback)()) 
   widget->y = y;
   widget->width = 40;
   widget->height = 14;
+  widget->text_offset_x = 2;
+  widget->text_offset_y = 3;
   widget->type = type;
   widget->callback = callback;
 
@@ -92,5 +94,5 @@ void draw_widget_as_button(widget_t *widget, vga_screen *screen,
     COLOR_WHITE);
   
   font_draw_string(screen, widget->font, 
-    x + 2, y + 3, widget->text);
+    x + widget->text_offset_x, y + widget->text_offset_y, widget->text);
 }

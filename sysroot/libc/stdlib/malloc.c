@@ -154,10 +154,10 @@ void *malloc(size_t size) {
   return (char *)n + sizeof(malloc_t);
 }
 
-void *calloc(size_t size) {
-  void *ptr = malloc(size);
+void *calloc(size_t num, size_t size) {
+  void *ptr = malloc(num * size);
   if (ptr != NULL) {
-    memset(ptr, 0, size);
+    memset(ptr, 0, num * size);
   }
   return ptr;
 }

@@ -87,6 +87,10 @@ void click_workspace(workspace_t *workspace, int mx, int my) {
           int offsetx = mx - win->x;
           int offsety = my - win->y;
           click_window(win, offsetx, offsety);
+
+          if (win->close_button_clicked) {
+            remove_window_from_workspace(workspace, win);
+          }
         }
       }
     }
