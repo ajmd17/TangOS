@@ -49,7 +49,6 @@
 #include <app/welcom/welcom.h>
 #include <app/tonsole/tonsole.h>
 
-#include <fs/ext2.h>
 
 #include <util/logging.h>
 
@@ -67,10 +66,50 @@ int background_color = COLOR_DARK_GRAY;
 int smiley_x = 135, smiley_y = 15;
 gui::cursor cur;
 
+/*static const char *commands[] = {
+  "help",
+  "quit",
+  "start"
+};
+
+#define COMMANDS_SIZE 3*/
+
+typedef struct {
+  char *name;
+  void (*callback)();
+} cl_function_t;
+
+cl_function_t *alloc_cl_function(const char *name, void (*callback)()) {
+  cl_function_t *func = (cl_function_t*)malloc(sizeof(cl_function_t));
+  // copy string for name
+  int len = strlen(name);
+  func->name = (char*)malloc(len + 1);
+  func->name[len] = '\0';
+  strcpy(func->name, name);
+  // set callback
+  func->callback = callback;
+  return func;
+}
+
+void free_cl_function(cl_function_t *func) {
+  // free the string
+  free(func->name);
+  // free the object
+  free(func);
+}
+
+static cl_function_t *cl_functions[10];
+static int cl_function_counter = 0;
+
 void left_click() {
   if (workspace != NULL) {
     click_workspace(workspace, cur.x, cur.y);
   }
+}
+
+void help_func() {
+  printf("help - shows help menu\n");
+  printf("start - starts TangOS in VGA mode\n");
 }
 
 #if defined(__cplusplus)
@@ -90,7 +129,43 @@ void init() {
   printf("Welcome to TangOS\n");
   terminal_setcolor(make_color(COLOR_WHITE, COLOR_BLACK));
 
-  printf("\n");
+  putchar('\n');
+
+  // set up command line functions
+  cl_functions[cl_function_counter++] = alloc_cl_function("help", help_func);
+
+
+  char command[256];
+
+  while (true) {
+    terminal_setcolor(make_color(COLOR_LIGHT_GREEN, COLOR_BLACK));
+    printf("tangy");
+    terminal_setcolor(make_color(COLOR_LIGHT_RED, COLOR_BLACK));
+    printf("$");
+    terminal_setcolor(make_color(COLOR_WHITE, COLOR_BLACK));
+    printf(" ");
+
+    terminal_readstring(command, 256);
+
+    bool found = false;
+
+    //if (strcmp(command, "quit") == 0) {
+    for (int i = 0; i < cl_function_counter; i++) {
+        if (!strcmp(command, cl_functions[i]->name)) {
+          // trigger function
+          cl_functions[i]->callback();
+          found = true;
+          break;
+        }
+    }
+    if (!found) {
+      if (!strcmp(command, "start")) {
+        break;
+      } else {
+        printf("Invalid command: %s\n", command);
+      }
+    }
+  }
 }
 
 #if defined(__cplusplus)
@@ -135,10 +210,10 @@ void main() {
         img_tangos_logo_data);
 
 
-      font_draw_string(screen_ptr, &dejavu_sans_mono, 
+      font_draw_string(screen_ptr, &dejavu_sans_mono,
         (320/2) - 55, 40, "welcome to TangOS");
 
-      font_draw_string(screen_ptr, &dejavu_sans_mono, 
+      font_draw_string(screen_ptr, &dejavu_sans_mono,
         (320/2) - 45, 40+img_tangos_logo_height+30, "click to login");
 
       vga_blit(screen_ptr);
@@ -213,15 +288,15 @@ void main() {
 
       /*{ // warning messagebox
         gui::widget msg(45, 45, 210, 45);
-        
+
         button_t btn_take;
         btn_take.x = msg.get_x() + 160;
         btn_take.y = msg.get_y() + 28;
-        btn_take.width = 45; 
+        btn_take.width = 45;
         btn_take.height = 13;
         strcpy(btn_take.text, "Take");
 
-        gui::widget msg_dec(msg.get_x(), 
+        gui::widget msg_dec(msg.get_x(),
           msg.get_y() - 10,
           msg.get_width(),
           10);
@@ -269,22 +344,22 @@ void main() {
             cur_height = img_cursor_p_2_height;
             cur_data = img_cursor_p_2_data;
           } else if (time < time_delay / 4) {
-            
+
             cur_width = img_cursor_p_3_width;
             cur_height = img_cursor_p_3_height;
             cur_data = img_cursor_p_3_data;
           } else if (time < time_delay / 3) {
-            
+
             cur_width = img_cursor_p_4_width;
             cur_height = img_cursor_p_4_height;
             cur_data = img_cursor_p_4_data;
           } else {
-            
+
             cur_width = img_cursor_p_5_width;
             cur_height = img_cursor_p_5_height;
             cur_data = img_cursor_p_5_data;
           }
-        
+
           image_draw(screen_ptr,
             cur.x, cur.y,
             cur_width, cur_height,
@@ -314,10 +389,14 @@ void main() {
     keyboard_getchar();
     reboot();
   }*/
-
 exit:
+  // free the workspace
   if (workspace != NULL) {
     free_workspace(workspace);
     workspace = NULL;
+  }
+  // free the command line functions
+  for (int i = 0; i < cl_function_counter; i++) {
+    free_cl_function(cl_functions[i]);
   }
 }

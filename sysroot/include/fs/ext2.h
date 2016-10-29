@@ -2,6 +2,7 @@
 #define EXT2_H
 
 #include <util/tos_types.h>
+#include <fs/fs.h>
 
 #define EXT2_SUPER_MAGIC 0xEF53
 
@@ -162,5 +163,7 @@ typedef struct {
 } ext2_disk_cache_entry_t;
 
 typedef int (*ext2_block_io_t) (void *, uint, uchar *);
+
+fs_node_t * ext2_fs_mount(char * device, char * mount_path);
 
 #endif

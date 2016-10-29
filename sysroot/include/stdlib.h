@@ -4,6 +4,9 @@
 #include <sys/cdefs.h>
 #include <stddef.h>
 
+#define MIN(A, B) ((A) < (B) ? (A) : (B))
+#define MAX(A, B) ((A) > (B) ? (A) : (B))
+
 #ifdef __cplusplus
 extern "C"
 #endif
