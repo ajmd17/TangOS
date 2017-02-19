@@ -48,9 +48,9 @@
 
 #include <app/welcom/welcom.h>
 #include <app/tonsole/tonsole.h>
-
-
 #include <util/logging.h>
+
+#include <kernel/vfs.h>
 
 vga_screen *screen_ptr = NULL;
 
@@ -110,6 +110,8 @@ void left_click() {
 void help_func() {
   printf("help - shows help menu\n");
   printf("start - starts TangOS in VGA mode\n");
+  printf("vls - shows files in vfs\n");
+  printf("vmk - makes file in vfs\n");
 }
 
 #if defined(__cplusplus)
@@ -161,6 +163,14 @@ void init() {
     if (!found) {
       if (!strcmp(command, "start")) {
         break;
+      } 
+      else if (!strcmp(command, "vls")) {
+        for (int fcount = 0; fcount < files_index; fcount++) {
+          File file = get_file(fcount);
+          printf("%s - %s\n", file.name, file.data);
+        }
+      } else if (!strcmp(command, "vmk")) {
+        make_file("dooper", "pooper");
       } else {
         printf("Invalid command: %s\n", command);
       }
