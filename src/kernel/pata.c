@@ -16,17 +16,18 @@ char send_command(char command, int bar) {
     char status;
 
     do {
-        wait_400_ns();
+        wait_400_ns(BAR_0_PRIMARY);
         status = inb(STATUS(bar));
-        if (status == ERROR) 
-            assert(false);
-        else 
+        if (status == ERROR) {
+            assert(0, "ERROR!");
+        }
+        else { 
             return status;
-    } while (inb(BUSY))
+        }
+    } while (inb(BUSY));
 }
 
 void drive_init() {
-    inw();
 }
 
 void bus_enumeration() {
