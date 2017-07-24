@@ -134,7 +134,6 @@ void init() {
   // set up command line functions
   cl_functions[cl_function_counter++] = alloc_cl_function("help", help_func);
 
-
   char command[256];
 
   while (true) {
