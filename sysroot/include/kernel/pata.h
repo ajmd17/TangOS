@@ -7,6 +7,11 @@
 #define MASTER 0
 #define SLAVE 1
 
+typedef enum {
+    BUS_POS_MASTER = MASTER,
+    BUS_POS_SLAVE = SLAVE
+} BusPosition_t;
+
 #define READ_DMA 0xC8
 #define READ_DMA_EXT 0x25
 #define WRITE_DMA 0xCA
@@ -58,5 +63,13 @@ enum { //Error flags
     ATA_ER_TK0NF = 0x02,
     ATA_ER_AMNF  = 0x01
 };
+
+typedef enum {
+    DRIVE_SELECT_SLAVE = 0x10,
+    DRIVE_SELECT_LBA = 0x40,
+    DRIVE_SELECT_DEFAULT = 0xA0
+} DriveSelectValue_t;
+
+void discover_disks(int bar);
 
 #endif

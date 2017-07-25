@@ -55,6 +55,12 @@ int printf(const char *format, ...) {
 			char *s = 0; 
 			itoa(i, s, 10);
 			print(s, strlen(s));
+		} else if (*format == 'x' || *format == 'X') {
+			format++;
+			int i = va_arg(parameters, int);
+			char *s = 0; 
+			itoa(i, s, 16);
+			print(s, strlen(s));
 		} else if (*format == 'u') {
 			format++;
 			int i = (int)va_arg(parameters, unsigned);

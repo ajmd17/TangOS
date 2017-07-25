@@ -6,13 +6,9 @@ path = str("./")
 for dirpath, dirnames, filenames in os.walk(path):
     for file in [f for f in filenames]:
 
-        if file.endswith(".c"):
+        if file.endswith(".c") or file.endswith(".cpp"):
             os.system("./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-g++ -Isysroot/include/ -c {}/{} -o obj/{}.o -ffreestanding -O2 -w".format(dirpath, file, os.path.splitext(file)[0]))
             #print("running C file '{}'".format(os.path.splitext(file)[0] + ".c"))            
-
-        elif file.endswith(".cpp"):
-            os.system("./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-g++ -Isysroot/include/ -c {}{} -o obj/{}.o -ffreestanding -O2 -w".format(dirpath, file, os.path.splitext(file)[0]))
-            #print("running C++ file '{}'".format(file))                                                  
 
 for dirpath, dirnames, filenames in os.walk(path):
     for file in [f for f in filenames]:
@@ -32,5 +28,7 @@ for dirpath, dirnames, filenames in os.walk(path + "/obj"):
 
             
 os.system("{}".format(linkfile))
-os.system("qemu-system-i386 -kernel myos.bin")
+#os.system("grub-mkrescue -o myos.iso myos.bin")
+os.system("qemu-system-i386 -hdd fs.img -kernel myos.bin")
+#os.system("qemu-system-i386 -cdrom main.iso")
 

@@ -2,6 +2,7 @@
 #include <kernel/sys_asm.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void wait_400_ns(int bar) {
     inb(STATUS(bar));
@@ -10,27 +11,29 @@ void wait_400_ns(int bar) {
     inb(STATUS(bar));    
 }
 
-char send_command(char command, int bar) {
+uint8_t send_command(uint8_t command, int bar) {
     outb(COMMAND(bar), command);
+    printf("command = %d\n\n", (int)command);
 
     char status;
-
+    int timeout = 20000000;
+    
     do {
-        wait_400_ns(BAR_0_PRIMARY);
+        wait_400_ns(bar);
         status = inb(STATUS(bar));
-        if (status == ERROR) {
-            assert(0, "ERROR!");
-        }
-        else { 
-            return status;
-        }
-    } while (inb(BUSY));
+        printf("status = %d\n", (int)status);
+        //assert((status & ERROR) == 0, "ERROR!");
+    } while ((status & BUSY) != 0 && (status & ERROR) == 0 && timeout-- > 0);
+
+    //printf("Timeout");
+    return status;
 }
 
 void read_uint16s(uint16_t *data, int len) {
     int i;
     for (i = 0; i < len; i++) {
-        data[i] = (uint16_t)0;
+        data[i] = inw(BAR_0_PRIMARY);
+        //printf("data[%d] = %d", i, data[i]);
     }
 }
 
@@ -52,30 +55,61 @@ void drive_init() {
      char *firmware_rev = get_string(device_info_buffer, 23, 8);     
      char *model_no = get_string(device_info_buffer, 27, 40);   
      unsigned long block_count = ((uint32_t)device_info_buffer[61] << 16 | device_info_buffer[60])-1;  
+     printf("fudge? %s", serial_number);
+     //while (1);
+     free(device_info_buffer);
+     free(serial_number);
+     free(firmware_rev);     
+     free(model_no);
+}
+
+void select_drive(int bar, BusPosition_t bp, char aLbaHigh4, bool setLBA) {
+    uint8_t val = DRIVE_SELECT_DEFAULT;
+
+    if (bp == BUS_POS_SLAVE) {
+        val |= DRIVE_SELECT_SLAVE;
+    }
+
+    if (setLBA) {
+        val |= DRIVE_SELECT_LBA;
+    }
+
+    val |= aLbaHigh4;
+    
+    outb(bar, val);
+    wait_400_ns(bar);
 }
 
 void discover_disks(int bar) {
+    BusPosition_t bp = BUS_POS_MASTER;
+
+    select_drive(bar, bp, 0, false);
+    outb(CONTROL(bar), 0x02);
+
+    select_drive(bar, bp, 0, false);
+
     outb(SECTOR_COUNT(bar), 0);
     outb(LBA0(bar), 0);
     outb(LBA1(bar), 0);
     outb(LBA2(bar), 0);
     
     int val = send_command(IDENTIFY, bar);
-    if (val == ERROR) {
-        assert(0, "NOT A PATA DRIVE!");
-    }
-    else if (val == 0) {
-        assert(0, "NO DRIVE ATTACHED!");
-    }
+    printf("val = %d\n", val);
+
+    assert(val != 0, "No drive attached.");
+    assert((val & ERROR) == 0, "Not a PATA drive");
+
     char status;
     do {
         wait_400_ns(bar);
         status = inb(STATUS(bar));
-        if (status != DRQ && status != ERROR) drive_init();
+        // if ((status & DRQ) == 0 && (status & ERROR) == 0) {
+        //     drive_init();
+        //     break;
+        // }
+    } while ((status & DRQ) == 0 && (status & ERROR) == 0);
 
-    } while (status != DRQ || status != ERROR);
-}
+    printf("STATUS = %d\n", status);
 
-void bus_enumeration() {
-
+    drive_init();
 }

@@ -21,6 +21,7 @@
 #include <kernel/irq.h>
 #include <kernel/isrs.h>
 #include <kernel/image.h>
+#include <kernel/pata.h>
 
 #include <img/img_error_small.h>
 #include <img/img_warn_small.h>
@@ -48,7 +49,6 @@
 
 #include <app/welcom/welcom.h>
 #include <app/tonsole/tonsole.h>
-
 
 #include <util/logging.h>
 
@@ -135,6 +135,8 @@ void init() {
   cl_functions[cl_function_counter++] = alloc_cl_function("help", help_func);
 
   char command[256];
+
+  discover_disks(BAR_0_PRIMARY);
 
   while (true) {
     terminal_setcolor(make_color(COLOR_LIGHT_GREEN, COLOR_BLACK));
