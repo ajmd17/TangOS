@@ -1,6 +1,10 @@
 #ifndef PATA_H
 #define PATA_H
 
+static int error_number = 0;
+
+#define PATA_ERROR(cond) if(!cond) {printf("Error! (E%d)",++error_number);while(1);}
+
 #define PRIMARY 0
 #define SECONDARY 1
 
@@ -71,5 +75,6 @@ typedef enum {
 } DriveSelectValue_t;
 
 void discover_disks(int bar);
+int drive_init();
 
 #endif

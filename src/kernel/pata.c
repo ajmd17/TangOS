@@ -15,24 +15,23 @@ uint8_t send_command(uint8_t command, int bar) {
     outb(COMMAND(bar), command);
     printf("command = %d\n\n", (int)command);
 
-    char status;
+    uint8_t status;
     int timeout = 20000000;
     
     do {
         wait_400_ns(bar);
         status = inb(STATUS(bar));
-        printf("status = %d\n", (int)status);
-        //assert((status & ERROR) == 0, "ERROR!");
-    } while ((status & BUSY) != 0 && (status & ERROR) == 0 && timeout-- > 0);
-
-    //printf("Timeout");
+        //printf("status = %d\n", (int)status);
+        assert((status & ERROR) == 0, "Error! (E0001)");
+    } while ((status & DRQ) == 0 && (status & ERROR) == 0);
+    printf("Stat=%d\n", status);
     return status;
 }
 
 void read_uint16s(uint16_t *data, int len) {
     int i;
     for (i = 0; i < len; i++) {
-        data[i] = inw(BAR_0_PRIMARY);
+        data[i] = inw(BAR_1_PRIMARY);
         //printf("data[%d] = %d", i, data[i]);
     }
 }
@@ -48,7 +47,7 @@ char *get_string(uint16_t *buffer, int start, int len) {
     return new_str;
 }
 
-void drive_init() {
+int drive_init() {
      uint16_t *device_info_buffer = (uint16_t *)malloc(256);
      read_uint16s(device_info_buffer, 256);
      char *serial_number = get_string(device_info_buffer, 10, 20);
@@ -96,18 +95,15 @@ void discover_disks(int bar) {
     int val = send_command(IDENTIFY, bar);
     printf("val = %d\n", val);
 
-    assert(val != 0, "No drive attached.");
     assert((val & ERROR) == 0, "Not a PATA drive");
+    assert(val != 0, "No drive attached.");
 
-    char status;
+    uint8_t status;
     do {
         wait_400_ns(bar);
         status = inb(STATUS(bar));
-        // if ((status & DRQ) == 0 && (status & ERROR) == 0) {
-        //     drive_init();
-        //     break;
-        // }
     } while ((status & DRQ) == 0 && (status & ERROR) == 0);
+
 
     printf("STATUS = %d\n", status);
 
