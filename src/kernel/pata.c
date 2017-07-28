@@ -23,15 +23,18 @@ uint8_t send_command(uint8_t command, int bar) {
         status = inb(STATUS(bar));
         //printf("status = %d\n", (int)status);
         assert((status & ERROR) == 0, "Error! (E0001)");
-    } while ((status & DRQ) == 0 && (status & ERROR) == 0);
-    printf("Stat=%d\n", status);
+    } while ((status & DRQ) == 0 && (status & ERROR) == 0 && timeout-- > 0);
+
+    assert(timeout > 0, "Timed out!");
+
+    printf("command status = %d\n", status);
     return status;
 }
 
-void read_uint16s(uint16_t *data, int len) {
+void read_uint16s(int bar, uint16_t *data, int len) {
     int i;
     for (i = 0; i < len; i++) {
-        data[i] = inw(BAR_1_PRIMARY);
+        data[i] = inw(bar);
         //printf("data[%d] = %d", i, data[i]);
     }
 }
@@ -47,14 +50,14 @@ char *get_string(uint16_t *buffer, int start, int len) {
     return new_str;
 }
 
-int drive_init() {
+int drive_init(int bar) {
      uint16_t *device_info_buffer = (uint16_t *)malloc(256);
-     read_uint16s(device_info_buffer, 256);
+     read_uint16s(bar, device_info_buffer, 256);
      char *serial_number = get_string(device_info_buffer, 10, 20);
      char *firmware_rev = get_string(device_info_buffer, 23, 8);     
      char *model_no = get_string(device_info_buffer, 27, 40);   
      unsigned long block_count = ((uint32_t)device_info_buffer[61] << 16 | device_info_buffer[60])-1;  
-     printf("fudge? %s", serial_number);
+     printf("fudge? %s", model_no);
      //while (1);
      free(device_info_buffer);
      free(serial_number);
@@ -79,7 +82,7 @@ void select_drive(int bar, BusPosition_t bp, char aLbaHigh4, bool setLBA) {
     wait_400_ns(bar);
 }
 
-void discover_disks(int bar) {
+bool discover_disks(int bar) {
     BusPosition_t bp = BUS_POS_MASTER;
 
     select_drive(bar, bp, 0, false);
@@ -95,8 +98,12 @@ void discover_disks(int bar) {
     int val = send_command(IDENTIFY, bar);
     printf("val = %d\n", val);
 
-    assert((val & ERROR) == 0, "Not a PATA drive");
-    assert(val != 0, "No drive attached.");
+    if ((val & ERROR) != 0 || val == 0) {
+        return false;
+    }
+
+    // assert((val & ERROR) == 0, "Not a PATA drive");
+    // assert(val != 0, "No drive attached.");
 
     uint8_t status;
     do {
@@ -104,8 +111,15 @@ void discover_disks(int bar) {
         status = inb(STATUS(bar));
     } while ((status & DRQ) == 0 && (status & ERROR) == 0);
 
+    assert((val & ERROR) == 0 || (status & DRQ) != 0, "Error! (E0002)")
 
-    printf("STATUS = %d\n", status);
+    printf("status = %d\n", status);
 
-    drive_init();
+    drive_init(bar);
+
+    return true;
+}
+
+void find_drive(int bar) {
+    discover_disks(bar);
 }

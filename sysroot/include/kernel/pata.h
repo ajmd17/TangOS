@@ -74,7 +74,6 @@ typedef enum {
     DRIVE_SELECT_DEFAULT = 0xA0
 } DriveSelectValue_t;
 
-void discover_disks(int bar);
-int drive_init();
+void find_drive(int bar);
 
 #endif

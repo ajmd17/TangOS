@@ -136,8 +136,7 @@ void init() {
 
   char command[256];
 
-  discover_disks(BAR_1_PRIMARY);
-  drive_init();
+  find_drive(BAR_1_PRIMARY);
 
   while (true) {
     terminal_setcolor(make_color(COLOR_LIGHT_GREEN, COLOR_BLACK));
