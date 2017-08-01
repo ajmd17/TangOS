@@ -63,7 +63,7 @@ int printf(const char *format, ...) {
 			print(s, strlen(s));
 		} else if (*format == 'u') {
 			format++;
-			int i = (int)va_arg(parameters, unsigned);
+			unsigned i = (unsigned)va_arg(parameters, unsigned);
 			char *s = 0; 
 			itoa(i, s, 10);
 			print(s, strlen(s));

@@ -29,6 +29,6 @@ for dirpath, dirnames, filenames in os.walk(path + "/obj"):
             
 os.system("{}".format(linkfile))
 #os.system("grub-mkrescue -o myos.iso myos.bin")
-os.system("qemu-system-i386 -hda fs.raw -kernel myos.bin")
+os.system("qemu-system-i386 -hda newfs.raw -kernel myos.bin")
 #os.system("qemu-system-i386 -cdrom main.iso")
 

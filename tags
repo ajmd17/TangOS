@@ -1,0 +1,310 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ArrayExplorer	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^class ArrayExplorer(object):$/;"	kind:class	line:322
+BoundPrinter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/bound_registers.py	/^class BoundPrinter:$/;"	kind:class	line:19
+CompoundExplorer	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^class CompoundExplorer(object):$/;"	kind:class	line:367
+DisableFrameFilter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^class DisableFrameFilter(gdb.Command):$/;"	kind:class	line:250
+DisablePrettyPrinter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^class DisablePrettyPrinter (gdb.Command):$/;"	kind:class	line:339
+DisableTypePrinter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^class DisableTypePrinter(_EnableOrDisableCommand):$/;"	kind:class	line:112
+DisableXMethod	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^class DisableXMethod(gdb.Command):$/;"	kind:class	line:240
+EnableFrameFilter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^class EnableFrameFilter(gdb.Command):$/;"	kind:class	line:217
+EnablePrettyPrinter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^class EnablePrettyPrinter (gdb.Command):$/;"	kind:class	line:316
+EnableTypePrinter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^class EnableTypePrinter(_EnableOrDisableCommand):$/;"	kind:class	line:101
+EnableXMethod	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^class EnableXMethod(gdb.Command):$/;"	kind:class	line:213
+ExploreCommand	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^class ExploreCommand(gdb.Command):$/;"	kind:class	line:649
+ExploreTypeCommand	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^class ExploreTypeCommand(gdb.Command):            $/;"	kind:class	line:720
+ExploreUtils	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^class ExploreUtils(object):$/;"	kind:class	line:583
+ExploreValueCommand	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^class ExploreValueCommand(gdb.Command):$/;"	kind:class	line:689
+Explorer	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^class Explorer(object):$/;"	kind:class	line:26
+FlagEnumerationPrinter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^class FlagEnumerationPrinter(PrettyPrinter):$/;"	kind:class	line:238
+FrameDecorator	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^class FrameDecorator(object):$/;"	kind:class	line:27
+FrameDecorator.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	1;"	kind:file	line:1
+FrameIterator	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameIterator.py	/^class FrameIterator(object):$/;"	kind:class	line:19
+FrameIterator.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameIterator.py	1;"	kind:file	line:1
+FrameVars	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^class FrameVars(object):$/;"	kind:class	line:222
+GdbOutputErrorFile	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^class GdbOutputErrorFile (_GdbFile):$/;"	kind:class	line:52
+GdbOutputFile	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^class GdbOutputFile (_GdbFile):$/;"	kind:class	line:46
+GdbSetPythonDirectory	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^def GdbSetPythonDirectory(dir):$/;"	kind:function	line:113
+InfoFrameFilter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^class InfoFrameFilter(gdb.Command):$/;"	kind:class	line:42
+InfoPrettyPrinter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^class InfoPrettyPrinter(gdb.Command):$/;"	kind:class	line:84
+InfoTypePrinter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^class InfoTypePrinter(gdb.Command):$/;"	kind:class	line:22
+InfoXMethod	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^class InfoXMethod(gdb.Command):$/;"	kind:class	line:177
+PYTHONDIR	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^PYTHONDIR = os.path.dirname(os.path.dirname(__file__))$/;"	kind:variable	line:76
+PointerExplorer	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^class PointerExplorer(object):$/;"	kind:class	line:234
+PrettyPrinter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^class PrettyPrinter(object):$/;"	kind:class	line:29
+ReferenceExplorer	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^class ReferenceExplorer(object):$/;"	kind:class	line:300
+RegexpCollectionPrettyPrinter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^class RegexpCollectionPrettyPrinter(PrettyPrinter):$/;"	kind:class	line:152
+RegexpSubprinter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^    class RegexpSubprinter(SubPrettyPrinter):$/;"	kind:class	line:164
+ScalarExplorer	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^class ScalarExplorer(object):$/;"	kind:class	line:189
+SetFilterPrefixCmd	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^class SetFilterPrefixCmd(gdb.Command):$/;"	kind:class	line:28
+SetFrameFilterPriority	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^class SetFrameFilterPriority(gdb.Command):$/;"	kind:class	line:283
+ShowFilterPrefixCmd	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^class ShowFilterPrefixCmd(gdb.Command):$/;"	kind:class	line:36
+ShowFrameFilterPriority	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^class ShowFrameFilterPriority(gdb.Command):$/;"	kind:class	line:369
+SimpleXMethodMatcher	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^class SimpleXMethodMatcher(XMethodMatcher):$/;"	kind:class	line:135
+SimpleXMethodWorker	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^    class SimpleXMethodWorker(XMethodWorker):$/;"	kind:class	line:148
+SubPrettyPrinter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^class SubPrettyPrinter(object):$/;"	kind:class	line:61
+SymValueWrapper	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^class SymValueWrapper(object):$/;"	kind:class	line:206
+TypePrinter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/types.py	/^class TypePrinter(object):$/;"	kind:class	line:113
+TypedefExplorer	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^class TypedefExplorer(object):$/;"	kind:class	line:550
+XMethod	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^class XMethod(object):$/;"	kind:class	line:30
+XMethodMatcher	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^class XMethodMatcher(object):$/;"	kind:class	line:51
+XMethodWorker	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^class XMethodWorker(object):$/;"	kind:class	line:97
+_EnableOrDisableCommand	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^class _EnableOrDisableCommand(gdb.Command):$/;"	kind:class	line:61
+_EnumInstance	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^class _EnumInstance:$/;"	kind:class	line:219
+_ExtendedPrompt	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/prompt.py	/^class _ExtendedPrompt(gdb.Parameter):$/;"	kind:class	line:22
+_GdbFile	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^class _GdbFile (object):$/;"	kind:class	line:27
+_MemEq	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/strfns.py	/^class _MemEq(gdb.Function):$/;"	kind:class	line:23
+_RegEx	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/strfns.py	/^class _RegEx(gdb.Function):$/;"	kind:class	line:85
+_SCALAR_TYPE_LIST	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    _SCALAR_TYPE_LIST = ($/;"	kind:variable	line:32
+_StrEq	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/strfns.py	/^class _StrEq(gdb.Function):$/;"	kind:class	line:65
+_StrLen	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/strfns.py	/^class _StrLen(gdb.Function):$/;"	kind:class	line:48
+__call__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^    def __call__(self, val):$/;"	kind:member	line:197
+__call__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^    def __call__(self, val):$/;"	kind:member	line:251
+__call__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^    def __call__(self, val):$/;"	kind:member	line:56
+__call__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^        def __call__(self, *args):$/;"	kind:member	line:156
+__call__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^    def __call__(self, *args):$/;"	kind:member	line:120
+__doc__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/prompt.py	/^    __doc__ = __doc__ + gdb.prompt.prompt_help()$/;"	kind:variable	line:35
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def __init__(self, base):$/;"	kind:member	line:60
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def __init__(self, frame):$/;"	kind:member	line:227
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def __init__(self, symbol, value):$/;"	kind:member	line:209
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameIterator.py	/^    def __init__(self, frame_obj):$/;"	kind:member	line:23
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/bound_registers.py	/^    def __init__ (self, val):$/;"	kind:member	line:22
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def __init__(self):$/;"	kind:member	line:661
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def __init__(self):$/;"	kind:member	line:701
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def __init__(self):$/;"	kind:member	line:733
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def __init__(self):$/;"	kind:member	line:233
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def __init__(self):$/;"	kind:member	line:266
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def __init__(self):$/;"	kind:member	line:300
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def __init__(self):$/;"	kind:member	line:31
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def __init__(self):$/;"	kind:member	line:38
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def __init__(self):$/;"	kind:member	line:383
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def __init__(self):$/;"	kind:member	line:48
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^    def __init__ (self):$/;"	kind:member	line:98
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^    def __init__(self):$/;"	kind:member	line:330
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^    def __init__(self):$/;"	kind:member	line:353
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/prompt.py	/^    def __init__(self):$/;"	kind:member	line:40
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^    def __init__ (self):$/;"	kind:member	line:28
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^    def __init__(self):$/;"	kind:member	line:109
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^    def __init__(self):$/;"	kind:member	line:120
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^    def __init__(self, setting, name):$/;"	kind:member	line:62
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^    def __init__(self):$/;"	kind:member	line:196
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^    def __init__(self):$/;"	kind:member	line:232
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^    def __init__(self):$/;"	kind:member	line:259
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/strfns.py	/^  def __init__(self):$/;"	kind:member	line:32
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/strfns.py	/^  def __init__(self):$/;"	kind:member	line:57
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/strfns.py	/^  def __init__(self):$/;"	kind:member	line:78
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/strfns.py	/^  def __init__(self):$/;"	kind:member	line:95
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^        def __init__(self, name, regexp, gen_printer):$/;"	kind:member	line:165
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^    def __init__(self, enum_type):$/;"	kind:member	line:247
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^    def __init__(self, enumerators, val):$/;"	kind:member	line:220
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^    def __init__(self, name):$/;"	kind:member	line:171
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^    def __init__(self, name):$/;"	kind:member	line:71
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^    def __init__(self, name, subprinters=None):$/;"	kind:member	line:51
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/types.py	/^    def __init__(self, name):$/;"	kind:member	line:128
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^        def __init__(self, method_function, arg_types):$/;"	kind:member	line:149
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^    def __init__(self, name):$/;"	kind:member	line:46
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^    def __init__(self, name):$/;"	kind:member	line:72
+__init__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^    def __init__(self, name, class_matcher, method_matcher, method_function,$/;"	kind:member	line:160
+__init__.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	1;"	kind:file	line:1
+__init__.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/__init__.py	1;"	kind:file	line:1
+__init__.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/__init__.py	1;"	kind:file	line:1
+__iter__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameIterator.py	/^    def __iter__(self):$/;"	kind:member	line:32
+__next__	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameIterator.py	/^    def __next__(self):$/;"	kind:member	line:50
+_complete_frame_filter_list	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^def _complete_frame_filter_list(text, word, all_flag):$/;"	kind:function	line:158
+_complete_frame_filter_name	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^def _complete_frame_filter_name(word, printer_dict):$/;"	kind:function	line:195
+_do_enable_frame_filter	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^def _do_enable_frame_filter(command_tuple, flag):$/;"	kind:function	line:132
+_enable_parse_arg	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^def _enable_parse_arg(cmd_name, arg):$/;"	kind:function	line:108
+_get_real_field_count	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def _get_real_field_count(fields):$/;"	kind:member	line:383
+_get_some_type_recognizers	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/types.py	/^def _get_some_type_recognizers(result, plist):$/;"	kind:function	line:136
+_is_limited_frame	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def _is_limited_frame(frame):$/;"	kind:member	line:64
+_lookup_xmethod_matcher	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^def _lookup_xmethod_matcher(locus, name):$/;"	kind:function	line:219
+_parse_pri_arg	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def _parse_pri_arg(self, arg):$/;"	kind:member	line:305
+_parse_pri_arg	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def _parse_pri_arg(self, arg):$/;"	kind:member	line:388
+_print_fields	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def _print_fields(print_list):$/;"	kind:member	line:371
+_prompt_bs	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def _prompt_bs(attr):$/;"	kind:function	line:58
+_prompt_esc	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def _prompt_esc(attr):$/;"	kind:function	line:54
+_prompt_frame	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def _prompt_frame(attr):$/;"	kind:function	line:42
+_prompt_n	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def _prompt_n(attr):$/;"	kind:function	line:62
+_prompt_noprint_begin	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def _prompt_noprint_begin(attr):$/;"	kind:function	line:74
+_prompt_noprint_end	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def _prompt_noprint_end(attr):$/;"	kind:function	line:78
+_prompt_object_attr	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def _prompt_object_attr(func, what, attr, nattr):$/;"	kind:function	line:26
+_prompt_param	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def _prompt_param(attr):$/;"	kind:function	line:70
+_prompt_pwd	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def _prompt_pwd(ignore):$/;"	kind:function	line:22
+_prompt_r	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def _prompt_r(attr):$/;"	kind:function	line:66
+_prompt_thread	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def _prompt_thread(attr):$/;"	kind:function	line:46
+_prompt_version	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def _prompt_version(attr):$/;"	kind:function	line:50
+_set_filter_priority	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def _set_filter_priority(self, command_tuple):$/;"	kind:member	line:328
+_sort_list	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/frames.py	/^def _sort_list():$/;"	kind:function	line:135
+_validate_xmethod_matcher	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^def _validate_xmethod_matcher(matcher):$/;"	kind:function	line:200
+add_printer	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^    def add_printer(self, name, regexp, gen_printer):$/;"	kind:member	line:174
+add_some	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^    def add_some(self, result, word, printers):$/;"	kind:member	line:88
+address	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def address(self):$/;"	kind:member	line:122
+apply_type_recognizers	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/types.py	/^def apply_type_recognizers(recognizers, type_obj):$/;"	kind:function	line:158
+auto_load_packages	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^def auto_load_packages():$/;"	kind:function	line:91
+basestring	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    basestring = str$/;"	kind:variable	line:25
+basestring	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^    basestring = str$/;"	kind:variable	line:26
+basestring	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^    basestring = str$/;"	kind:variable	line:26
+before_prompt_hook	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/prompt.py	/^    def before_prompt_hook(self, current):$/;"	kind:member	line:59
+bound_registers.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/bound_registers.py	1;"	kind:file	line:1
+build.py	build.py	1;"	kind:file	line:1
+build_pretty_printer	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/bound_registers.py	/^def build_pretty_printer ():$/;"	kind:function	line:39
+check_args	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def check_args(name, arg_str):$/;"	kind:member	line:587
+close	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^    def close(self):$/;"	kind:member	line:32
+complete	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def complete(self, text, word):$/;"	kind:member	line:236
+complete	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def complete(self, text, word):$/;"	kind:member	line:270
+complete	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def complete(self, text, word):$/;"	kind:member	line:355
+complete	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def complete(self, text, word):$/;"	kind:member	line:435
+complete	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^    def complete(self, text, word):$/;"	kind:member	line:93
+count_all_enabled_printers	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^def count_all_enabled_printers():$/;"	kind:function	line:186
+count_enabled_printers	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^def count_enabled_printers(pretty_printers):$/;"	kind:function	line:167
+deep_items	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/types.py	/^def deep_items (type_):$/;"	kind:function	line:94
+do_enable_pretty_printer	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^def do_enable_pretty_printer (arg, flag):$/;"	kind:function	line:279
+do_enable_pretty_printer_1	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^def do_enable_pretty_printer_1 (pretty_printers, name_re, subname_re, flag):$/;"	kind:function	line:221
+elided	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def elided(self):$/;"	kind:member	line:77
+elinos.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/system-gdbinit/elinos.py	1;"	kind:file	line:1
+elinos_init	i686-elf-4.9.1-Linux-x86_64/share/gdb/system-gdbinit/elinos.py	/^def elinos_init():$/;"	kind:function	line:58
+enabled_string	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def enabled_string(state):$/;"	kind:member	line:52
+enabled_string	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^    def enabled_string(printer):$/;"	kind:member	line:103
+encoding	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^    encoding = "UTF-8"$/;"	kind:variable	line:29
+errors	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^    errors = "strict"$/;"	kind:variable	line:30
+execute_frame_filters	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/frames.py	/^def execute_frame_filters(frame, frame_low, frame_high):$/;"	kind:function	line:154
+explore.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	1;"	kind:file	line:1
+explore_expr	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_expr(expr, value, is_child):$/;"	kind:member	line:193
+explore_expr	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_expr(expr, value, is_child):$/;"	kind:member	line:238
+explore_expr	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_expr(expr, value, is_child):$/;"	kind:member	line:304
+explore_expr	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_expr(expr, value, is_child):$/;"	kind:member	line:326
+explore_expr	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_expr(expr, value, is_child):$/;"	kind:member	line:392
+explore_expr	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_expr(expr, value, is_child):$/;"	kind:member	line:554
+explore_expr	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_expr(expr, value, is_child):$/;"	kind:member	line:66
+explore_type	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_type(name, datatype, is_child):$/;"	kind:member	line:209
+explore_type	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_type(name, datatype, is_child):$/;"	kind:member	line:286
+explore_type	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_type(name, datatype, is_child):$/;"	kind:member	line:313
+explore_type	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_type(name, datatype, is_child):$/;"	kind:member	line:355
+explore_type	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_type(name, datatype, is_child):$/;"	kind:member	line:473
+explore_type	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_type(name, datatype, is_child):$/;"	kind:member	line:567
+explore_type	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def explore_type(name, datatype, is_child):$/;"	kind:member	line:92
+fetch_b	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def fetch_b(self, sym):$/;"	kind:member	line:239
+fetch_frame_args	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def fetch_frame_args(self):$/;"	kind:member	line:279
+fetch_frame_locals	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def fetch_frame_locals(self):$/;"	kind:member	line:255
+filename	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def filename(self):$/;"	kind:member	line:131
+flush	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^    def flush(self):$/;"	kind:member	line:43
+frame_args	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def frame_args(self):$/;"	kind:member	line:147
+frame_filters	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^frame_filters = {}$/;"	kind:variable	line:73
+frame_filters.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	1;"	kind:file	line:1
+frame_locals	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def frame_locals(self):$/;"	kind:member	line:163
+frames.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/frames.py	1;"	kind:file	line:1
+function	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def function(self):$/;"	kind:member	line:85
+get_arg_types	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^        def get_arg_types(self):$/;"	kind:member	line:153
+get_arg_types	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^    def get_arg_types(self):$/;"	kind:member	line:109
+get_basic_type	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/types.py	/^def get_basic_type(type_):$/;"	kind:function	line:22
+get_elinos_environment	i686-elf-4.9.1-Linux-x86_64/share/gdb/system-gdbinit/elinos.py	/^def get_elinos_environment():$/;"	kind:function	line:27
+get_enabled	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/frames.py	/^def get_enabled(filter_item):$/;"	kind:function	line:56
+get_filter_priority	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def get_filter_priority(self, frame_filters, name):$/;"	kind:member	line:411
+get_global_method_matchers	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^def get_global_method_matchers(locus_re, matcher_re):$/;"	kind:function	line:64
+get_method_matchers_in_loci	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^def get_method_matchers_in_loci(loci, locus_re, matcher_re):$/;"	kind:function	line:85
+get_priority	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/frames.py	/^def get_priority(filter_item):$/;"	kind:function	line:25
+get_set_string	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/prompt.py	/^    def get_set_string (self):$/;"	kind:member	line:53
+get_show_string	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/prompt.py	/^    def get_show_string (self, pvalue):$/;"	kind:member	line:47
+get_status_string	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^    def get_status_string(method):$/;"	kind:function	line:120
+get_type_from_str	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def get_type_from_str(type_str):$/;"	kind:member	line:609
+get_type_recognizers	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/types.py	/^def get_type_recognizers():$/;"	kind:function	line:144
+get_value_from_str	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def get_value_from_str(value_str):$/;"	kind:member	line:632
+guard_expr	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def guard_expr(expr):$/;"	kind:member	line:42
+has_field	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/types.py	/^def has_field(type_, field):$/;"	kind:function	line:42
+inferior_frame	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def inferior_frame(self):$/;"	kind:member	line:197
+init_env	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def init_env():$/;"	kind:member	line:118
+instantiate	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/types.py	/^    def instantiate(self):$/;"	kind:member	line:132
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def invoke(self, arg_str, from_tty):$/;"	kind:member	line:666
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def invoke(self, arg_str, from_tty):$/;"	kind:member	line:705
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def invoke(self, arg_str, from_tty):$/;"	kind:member	line:737
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def invoke(self, arg, from_tty):$/;"	kind:member	line:245
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def invoke(self, arg, from_tty):$/;"	kind:member	line:279
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def invoke(self, arg, from_tty):$/;"	kind:member	line:364
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def invoke(self, arg, from_tty):$/;"	kind:member	line:445
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def invoke(self, arg, from_tty):$/;"	kind:member	line:95
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^    def invoke(self, arg, from_tty):$/;"	kind:member	line:152
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^    def invoke(self, arg, from_tty):$/;"	kind:member	line:334
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^    def invoke(self, arg, from_tty):$/;"	kind:member	line:357
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^    def invoke(self, arg, from_tty):$/;"	kind:member	line:45
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^    def invoke(self, arg, from_tty):$/;"	kind:member	line:74
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^    def invoke(self, arg, from_tty):$/;"	kind:member	line:200
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^    def invoke(self, arg, from_tty):$/;"	kind:member	line:236
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^    def invoke(self, arg, from_tty):$/;"	kind:member	line:263
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/strfns.py	/^  def invoke(self, a):$/;"	kind:member	line:60
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/strfns.py	/^  def invoke(self, a, b):$/;"	kind:member	line:81
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/strfns.py	/^  def invoke(self, a, b, length):$/;"	kind:member	line:35
+invoke	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/strfns.py	/^  def invoke(self, string, regex):$/;"	kind:member	line:98
+invoke1	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^    def invoke1(self, title, printer_list,$/;"	kind:member	line:145
+is_scalar_type	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def is_scalar_type(type):$/;"	kind:member	line:140
+isatty	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^    def isatty(self):$/;"	kind:member	line:36
+line	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def line(self):$/;"	kind:member	line:179
+linkfile	build.py	/^            linkfile = "{} obj\/{}".format(linkfile, file)$/;"	kind:variable	line:27
+linkfile	build.py	/^linkfile = ".\/i686-elf-4.9.1-Linux-x86_64\/bin\/i686-elf-g++ -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib "$/;"	kind:variable	line:20
+list_frame_filters	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def list_frame_filters(self, frame_filters):$/;"	kind:member	line:59
+list_pretty_printers	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^    def list_pretty_printers(self, pretty_printers, name_re, subname_re):$/;"	kind:member	line:123
+list_type_printers	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^    def list_type_printers(self, type_printers):$/;"	kind:member	line:32
+long	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^    long = int$/;"	kind:variable	line:27
+long	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^    long = int$/;"	kind:variable	line:27
+make_enum_dict	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/types.py	/^def make_enum_dict(enum_type):$/;"	kind:function	line:72
+match	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^    def match(self, class_type, method_name):$/;"	kind:member	line:188
+match	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^    def match(self, class_type, method_name):$/;"	kind:member	line:82
+next	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameIterator.py	/^    def next(self):$/;"	kind:member	line:35
+packages	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^packages = [$/;"	kind:variable	line:82
+parse_printer_regexps	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^def parse_printer_regexps(arg):$/;"	kind:function	line:24
+parse_xm_command_args	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^def parse_xm_command_args(arg):$/;"	kind:function	line:30
+path	build.py	/^path = str(".\/")$/;"	kind:variable	line:4
+pluralize	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^def pluralize(text, n, suffix="s"):$/;"	kind:function	line:205
+pretty_printers	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^pretty_printers = []$/;"	kind:variable	line:66
+pretty_printers.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	1;"	kind:file	line:1
+print_list	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/frame_filters.py	/^    def print_list(self, title, filter_list, blank_line):$/;"	kind:member	line:89
+print_xm_info	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^def print_xm_info(xm_dict, name_re):$/;"	kind:function	line:118
+printer_enabled_p	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^def printer_enabled_p(printer):$/;"	kind:function	line:76
+printer_name	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^    def printer_name(printer):$/;"	kind:member	line:111
+printing.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	1;"	kind:file	line:1
+prompt.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/prompt.py	1;"	kind:file	line:1
+prompt.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	1;"	kind:file	line:1
+prompt_help	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def prompt_help():$/;"	kind:function	line:96
+prompt_hook	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^prompt_hook = None$/;"	kind:variable	line:59
+prompt_substitutions	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^prompt_substitutions = {$/;"	kind:variable	line:82
+raw_input	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    raw_input = input$/;"	kind:variable	line:24
+register_pretty_printer	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^def register_pretty_printer(obj, printer, replace=False):$/;"	kind:function	line:76
+register_pretty_printer_commands	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^def register_pretty_printer_commands():$/;"	kind:function	line:362
+register_type_printer	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/types.py	/^def register_type_printer(locus, printer):$/;"	kind:function	line:168
+register_xmethod_commands	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^def register_xmethod_commands():$/;"	kind:function	line:267
+register_xmethod_matcher	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	/^def register_xmethod_matcher(locus, matcher, replace=False):$/;"	kind:function	line:226
+return_list	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/frames.py	/^def return_list(name):$/;"	kind:function	line:90
+return_to_enclosing_type	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def return_to_enclosing_type():$/;"	kind:member	line:174
+return_to_enclosing_type_prompt	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def return_to_enclosing_type_prompt():$/;"	kind:member	line:181
+return_to_parent_value	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def return_to_parent_value():$/;"	kind:member	line:159
+return_to_parent_value_prompt	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    def return_to_parent_value_prompt():$/;"	kind:member	line:166
+set_doc	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/prompt.py	/^    set_doc = "Set the extended prompt."$/;"	kind:variable	line:37
+set_enabled	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/frames.py	/^def set_enabled(filter_item, state):$/;"	kind:function	line:78
+set_priority	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/frames.py	/^def set_priority(filter_item, priority):$/;"	kind:function	line:45
+set_some	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	/^    def set_some(self, name, printers):$/;"	kind:member	line:66
+set_xm_status	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^def set_xm_status(arg, status):$/;"	kind:function	line:158
+set_xm_status1	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^def set_xm_status1(xm_dict, name_re, status):$/;"	kind:function	line:141
+show_doc	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/prompt.py	/^    show_doc = "Show the extended prompt."$/;"	kind:variable	line:38
+show_pretty_printer_enabled_summary	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/pretty_printers.py	/^def show_pretty_printer_enabled_summary():$/;"	kind:function	line:213
+strfns.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/function/strfns.py	1;"	kind:file	line:1
+substitute_prompt	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/prompt.py	/^def substitute_prompt(prompt):$/;"	kind:function	line:110
+symbol	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def symbol(self):$/;"	kind:member	line:217
+to_string	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/bound_registers.py	/^    def to_string (self):$/;"	kind:member	line:25
+to_string	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/printing.py	/^    def to_string(self):$/;"	kind:member	line:224
+type_code_to_explorer_map	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/explore.py	/^    type_code_to_explorer_map = { }$/;"	kind:variable	line:30
+type_printers	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^type_printers = []$/;"	kind:variable	line:69
+type_printers.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/type_printers.py	1;"	kind:file	line:1
+types.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/types.py	1;"	kind:file	line:1
+validate_xm_regexp	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	/^def validate_xm_regexp(part_name, regexp):$/;"	kind:function	line:23
+value	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/FrameDecorator.py	/^    def value(self):$/;"	kind:member	line:213
+warn	i686-elf-4.9.1-Linux-x86_64/share/gdb/system-gdbinit/elinos.py	/^def warn(msg):$/;"	kind:function	line:23
+write	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^    def write(self, s):$/;"	kind:member	line:47
+write	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^    def write(self, s):$/;"	kind:member	line:53
+writelines	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^    def writelines(self, iterable):$/;"	kind:member	line:39
+wrs-linux.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/system-gdbinit/wrs-linux.py	1;"	kind:file	line:1
+xmethod.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/xmethod.py	1;"	kind:file	line:1
+xmethods	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/__init__.py	/^xmethods = []$/;"	kind:variable	line:71
+xmethods.py	i686-elf-4.9.1-Linux-x86_64/share/gdb/python/gdb/command/xmethods.py	1;"	kind:file	line:1
