@@ -45,7 +45,7 @@ typedef enum {
 #define STATUS(BAR_0) BAR_0+7  //read only
 #define CONTROL(BAR_1) BAR_1+2
 
-enum { //Status flags
+enum { //Status 
     NONE       = 0x00,
     BUSY       = 0x80,
     ATA_SR_DRD = 0x40,
@@ -75,5 +75,6 @@ typedef enum {
 } DriveSelectValue_t;
 
 bool discover_disks(int bar);
+void run_drives();
 
 #endif

@@ -69,7 +69,7 @@ gui::cursor cur;
 /*static const char *commands[] = {
   "help",
   "quit",
-  "start"
+  "start"-
 };
 
 #define COMMANDS_SIZE 3*/
@@ -115,6 +115,7 @@ void help_func() {
 #if defined(__cplusplus)
 extern "C"
 #endif
+
 void init() {
   gdt_install();
   idt_install();
@@ -136,7 +137,7 @@ void init() {
 
   char command[256];
 
-  discover_disks(BAR_0_PRIMARY);
+  run_drives();
 
   while (true) {
     terminal_setcolor(make_color(COLOR_LIGHT_GREEN, COLOR_BLACK));

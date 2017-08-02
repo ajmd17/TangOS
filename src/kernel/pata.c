@@ -12,16 +12,16 @@ void wait_400_ns(int bar) {
 }
 
 uint8_t send_command(uint8_t command, int bar) {
-    outb(COMMAND(bar), command);
-    printf("command = %d\n\n", (int)command);
+    outb(COMMAND(BAR_0_PRIMARY), command);
+    printf("command = %d\n", (int)command);
 
     uint8_t status;
     int timeout = 20000000;
-    
+    //while (1);
     do {
         wait_400_ns(bar);
         status = inb(STATUS(bar));
-        printf("status = %d\n", status);
+        //printf("status = %d\n", status);
         assert((status & ERROR) == 0, "Error! (E0001)");
     } while ((status & BUSY) != 0 && (status & ERROR) == 0 && timeout-- > 0);
 
@@ -35,7 +35,7 @@ void read_uint16s(int bar, uint16_t *data, int len) {
     int i;
     for (i = 0; i < len; i++) {
         data[i] = inw(bar);
-        printf("data[%d] = %d", i, data[i]);
+        //printf("data[%d] = %d", i, data[i]);
     }
 }
 
@@ -57,7 +57,7 @@ int drive_init(int bar) {
      char *firmware_rev = get_string(device_info_buffer, 23, 8);     
      char *model_no = get_string(device_info_buffer, 27, 40);   
      unsigned long block_count = ((uint64_t)device_info_buffer[61] << 16 | device_info_buffer[60])-1;  
-     printf("block_count = %u\n", block_count);
+    //  printf("block_count = %u\n", block_count);
      //while (1);
      free(device_info_buffer);
      free(serial_number);
@@ -96,8 +96,9 @@ bool discover_disks(int bar) {
     int val = send_command(IDENTIFY, bar);
     printf("val = %d\n", val);
 
-    //assert((val & ERROR) == 0, "Not a PATA drive\n");
+    assert((val & ERROR) == 0, "Not a PATA drive\n");
     //assert(val != 0, "No drive attached.\n");
+    if (val == 0) return false;
 
     uint8_t status;
     do {
@@ -105,11 +106,26 @@ bool discover_disks(int bar) {
         status = inb(STATUS(bar));
     } while ((status & DRQ) == 0 && (status & ERROR) == 0);
 
-    assert((val & ERROR) == 0 || (status & DRQ) != 0, "Error! (E0002)")
+    assert((status & ERROR) == 0 || (status & DRQ) != 0, "Error! (E0002)")
 
     printf("status = %d\n", status);
 
     drive_init(bar);
 
     return true;
+}
+
+void run_drives() {
+    if (discover_disks(BAR_0_PRIMARY) == false) {
+        printf("\n");
+        if (discover_disks(BAR_0_SECONDARY) == false) {
+            printf("\n");            
+            if (discover_disks(BAR_1_PRIMARY) == false) {
+                printf("\n");
+                if (discover_disks(BAR_1_SECONDARY) == false) {
+                    assert(0, "\nSomething smells broken...\n");
+                }
+            }
+        }
+    }
 }
