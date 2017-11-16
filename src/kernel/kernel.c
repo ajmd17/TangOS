@@ -1,5 +1,5 @@
 #if !defined(__cplusplus)
-#include <stdbool.h> /* C doesn't have booleans by default. */
+#include <stdbool.h>
 #endif
 
 #include <stddef.h>
@@ -21,7 +21,7 @@
 #include <kernel/irq.h>
 #include <kernel/isrs.h>
 #include <kernel/image.h>
-#include <kernel/pata.h>
+#include <kernel/ata_pio.h>
 
 #include <img/img_error_small.h>
 #include <img/img_warn_small.h>
@@ -75,41 +75,41 @@ gui::cursor cur;
 #define COMMANDS_SIZE 3*/
 
 typedef struct {
-  char *name;
-  void (*callback)();
+    char *name;
+    void (*callback)();
 } cl_function_t;
 
 cl_function_t *alloc_cl_function(const char *name, void (*callback)()) {
-  cl_function_t *func = (cl_function_t*)malloc(sizeof(cl_function_t));
-  // copy string for name
-  int len = strlen(name);
-  func->name = (char*)malloc(len + 1);
-  func->name[len] = '\0';
-  strcpy(func->name, name);
-  // set callback
-  func->callback = callback;
-  return func;
+    cl_function_t *func = (cl_function_t*)malloc(sizeof(cl_function_t));
+    // copy string for name
+    int len = strlen(name);
+    func->name = (char*)malloc(len + 1);
+    func->name[len] = '\0';
+    strcpy(func->name, name);
+    // set callback
+    func->callback = callback;
+    return func;
 }
 
 void free_cl_function(cl_function_t *func) {
-  // free the string
-  free(func->name);
-  // free the object
-  free(func);
+    // free the string
+    free(func->name);
+    // free the object
+    free(func);
 }
 
 static cl_function_t *cl_functions[10];
 static int cl_function_counter = 0;
 
 void left_click() {
-  if (workspace != NULL) {
-    click_workspace(workspace, cur.x, cur.y);
-  }
+    if (workspace != NULL) {
+        click_workspace(workspace, cur.x, cur.y);
+    }
 }
 
 void help_func() {
-  printf("help - shows help menu\n");
-  printf("start - starts TangOS in VGA mode\n");
+    printf("help - shows help menu\n");
+    printf("start - starts TangOS in VGA mode\n");
 }
 
 #if defined(__cplusplus)
@@ -117,80 +117,83 @@ extern "C"
 #endif
 
 void init() {
-  gdt_install();
-  idt_install();
-  isrs_install();
-  irq_install();
+    gdt_install();
+    idt_install();
+    isrs_install();
+    irq_install();
 
-  mouse_install();
-  keyboard_install();
+    mouse_install();
+    keyboard_install();
 
-  terminal_initialize();
-  terminal_setcolor(make_color(COLOR_LIGHT_RED, COLOR_BLACK));
-  printf("Welcome to TangOS\n");
-  terminal_setcolor(make_color(COLOR_WHITE, COLOR_BLACK));
 
-  putchar('\n');
-
-  // set up command line functions
-  cl_functions[cl_function_counter++] = alloc_cl_function("help", help_func);
-
-  char command[256];
-
-  run_drives();
-
-  while (true) {
-    terminal_setcolor(make_color(COLOR_LIGHT_GREEN, COLOR_BLACK));
-    printf("tangy");
+    terminal_initialize();
     terminal_setcolor(make_color(COLOR_LIGHT_RED, COLOR_BLACK));
-    printf("$");
+    printf("Welcome to TangOS\n");
     terminal_setcolor(make_color(COLOR_WHITE, COLOR_BLACK));
-    printf(" ");
+    
+    putchar('\n');
 
-    terminal_readstring(command, 256);
+    ata_pio_install();
 
-    bool found = false;
+    size_t lba = 5000000;
 
-    //if (strcmp(command, "quit") == 0) {
-    for (int i = 0; i < cl_function_counter; i++) {
-        if (!strcmp(command, cl_functions[i]->name)) {
-          // trigger function
-          cl_functions[i]->callback();
-          found = true;
-          break;
+    //write(lba, "NUGGG", 1);
+
+	char *buf;
+    buf = read(lba, 1);
+    printf("STRING: %s\n", buf);
+    free(buf);
+
+    // set up command line functions
+    cl_functions[cl_function_counter++] = alloc_cl_function("help", help_func);
+
+    char command[256];
+    while (true) {
+        terminal_setcolor(make_color(COLOR_LIGHT_GREEN, COLOR_BLACK));
+        printf("tangy");
+        terminal_setcolor(make_color(COLOR_LIGHT_RED, COLOR_BLACK));
+        printf("$");
+        terminal_setcolor(make_color(COLOR_WHITE, COLOR_BLACK));
+        printf(" ");
+
+        terminal_readstring(command, 256);
+
+        bool found = false;
+
+        //if (strcmp(command, "quit") == 0) {
+        for (int i = 0; i < cl_function_counter; i++) {
+            if (!strcmp(command, cl_functions[i]->name)) {
+                // trigger function
+                cl_functions[i]->callback();
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            if (!strcmp(command, "start")) {
+                break;
+            } else {
+                printf("Invalid command: %s\n", command);
+            }
         }
     }
-    if (!found) {
-      if (!strcmp(command, "start")) {
-        break;
-      } else {
-        printf("Invalid command: %s\n", command);
-      }
-    }
-  }
 }
 
 #if defined(__cplusplus)
 extern "C"
 #endif
 void main() {
-  bool loaded = false;
+    bool loaded = false;
 
-  mouse_bind_event(mouse_left_release_event, left_click);
-
- /* printf("Type \"vga\" to enter VGA mode... ");
-  char command[4];
-  terminal_readstring(command, 4);
-
-  if (!strcmp(command, "vga")) {*/
-    // enter graphics mode
+    mouse_bind_event(mouse_left_release_event, left_click);
     vga_screen screen = vga_init_320_200_256();
     screen_ptr = &screen;
 
     workspace = alloc_workspace();
     if (workspace == NULL) {
-      // not enough memory to alloc workspace!
-      while(true) PAUSE;
+        // not enough memory to alloc workspace!
+        puts("Not enough memory to allocate workspace. halting...");
+        while(true) PAUSE;
     }
 
     font_sheet_t dejavu_sans_mono;
@@ -202,29 +205,27 @@ void main() {
     set_workspace_font(workspace, &dejavu_sans_mono);
 
     while (true) { // display boot splash
-
-      vga_clear_screen(screen_ptr, background_color);
-
-      //draw logo
-      image_draw(screen_ptr,
+        vga_clear_screen(screen_ptr, background_color);
+        //draw logo
+        image_draw(screen_ptr,
         (320/2) - (img_tangos_logo_width/2), (200/2) - (img_tangos_logo_height/2) - 10,
         img_tangos_logo_width, img_tangos_logo_height,
         img_tangos_logo_data);
 
 
-      font_draw_string(screen_ptr, &dejavu_sans_mono,
+        font_draw_string(screen_ptr, &dejavu_sans_mono,
         (320/2) - 55, 40, "welcome to TangOS");
 
-      font_draw_string(screen_ptr, &dejavu_sans_mono,
+        font_draw_string(screen_ptr, &dejavu_sans_mono,
         (320/2) - 45, 40+img_tangos_logo_height+30, "click to login");
 
-      vga_blit(screen_ptr);
+        vga_blit(screen_ptr);
 
-      PAUSE;
+        PAUSE;
 
-      if (mouse_left_clicked) {
-        break;
-      }
+        if (mouse_left_clicked) {
+            break;
+        }
     }
 
     welcom_app = alloc_app(welcom_init, welcom_update, welcom_close);
@@ -245,146 +246,141 @@ void main() {
 
     int time = 0, time_delay = 50;
     while (true) {
-      cur.x += mouse_dx;
-      cur.y += mouse_dy;
-      mouse_dx = 0, mouse_dy = 0;
-      // clip in bounds
-      if (cur.x < 0) cur.x = 0;
-      else if (cur.x > 318) cur.x = 318;
+        cur.x += mouse_dx;
+        cur.y += mouse_dy;
+        mouse_dx = 0, mouse_dy = 0;
+        // clip in bounds
+        if (cur.x < 0) cur.x = 0;
+        else if (cur.x > 318) cur.x = 318;
 
-      if (cur.y < 0) cur.y = 0;
-      else if (cur.y > 198) cur.y = 198;
+        if (cur.y < 0) cur.y = 0;
+        else if (cur.y > 198) cur.y = 198;
 
-      vga_clear_screen(screen_ptr, background_color);
+        vga_clear_screen(screen_ptr, background_color);
 
-      //drawing random icons
-      image_draw(screen_ptr,
-        15, 15,
-        img_error_small_width, img_error_small_height,
-        img_error_small_data);
-
-      image_draw(screen_ptr,
-        35, 15,
-        img_info_small_width, img_info_small_height,
-        img_info_small_data);
-
-      image_draw(screen_ptr,
-        55, 15,
-        img_trash_small_width, img_trash_small_height,
-        img_trash_small_data);
-
-      image_draw(screen_ptr,
-        75, 15,
-        img_pencil_small_width, img_pencil_small_height,
-        img_pencil_small_data);
-
-      image_draw(screen_ptr,
-        95, 15,
-        img_folder_small_width, img_folder_small_height,
-        img_folder_small_data);
-
-      image_draw(screen_ptr,
-        115, 15,
-        img_warning_small_width, img_warning_small_height,
-        img_warning_small_data);
-
-      /*{ // warning messagebox
-        gui::widget msg(45, 45, 210, 45);
-
-        button_t btn_take;
-        btn_take.x = msg.get_x() + 160;
-        btn_take.y = msg.get_y() + 28;
-        btn_take.width = 45;
-        btn_take.height = 13;
-        strcpy(btn_take.text, "Take");
-
-        gui::widget msg_dec(msg.get_x(),
-          msg.get_y() - 10,
-          msg.get_width(),
-          10);
-
-        vga_fill_rect(screen_ptr, msg_dec.get_x() + 2, msg_dec.get_y() + 2, msg_dec.get_width(), msg_dec.get_height(), COLOR_BLACK);
-        vga_fill_rect(screen_ptr, msg_dec.get_x(), msg_dec.get_y(), msg_dec.get_width(), msg_dec.get_height(), COLOR_BLUE);
-
-        vga_fill_rect(screen_ptr, msg.get_x() + 2, msg.get_y() + 2, msg.get_width(), msg.get_height(), COLOR_BLACK);
-        vga_fill_rect(screen_ptr, msg.get_x(), msg.get_y(), msg.get_width(), msg.get_height(), COLOR_LIGHT_BLUE);
-
+        //drawing random icons
+        image_draw(screen_ptr,
+            15, 15,
+            img_error_small_width, img_error_small_height,
+            img_error_small_data);
 
         image_draw(screen_ptr,
-          msg.get_x() + 2, msg.get_y() + (msg.get_height() / 2 - img_warning_small_height / 2),
-          img_poop_small_width, img_poop_small_height,
-          img_poop_small_data);
+            35, 15,
+            img_info_small_width, img_info_small_height,
+            img_info_small_data);
 
-        font_draw_string(screen_ptr, &dejavu_sans_mono,
-          msg.get_x() + 8 + img_warning_small_width, msg.get_y() + 12,
-          "It's dangerous to go alone,\ntake this!");
+        image_draw(screen_ptr,
+            55, 15,
+            img_trash_small_width, img_trash_small_height,
+            img_trash_small_data);
+
+        image_draw(screen_ptr,
+            75, 15,
+            img_pencil_small_width, img_pencil_small_height,
+            img_pencil_small_data);
+
+        image_draw(screen_ptr,
+            95, 15,
+            img_folder_small_width, img_folder_small_height,
+            img_folder_small_data);
+
+        image_draw(screen_ptr,
+            115, 15,
+            img_warning_small_width, img_warning_small_height,
+            img_warning_small_data);
+
+        /*{ // warning messagebox
+            gui::widget msg(45, 45, 210, 45);
+
+            button_t btn_take;
+            btn_take.x = msg.get_x() + 160;
+            btn_take.y = msg.get_y() + 28;
+            btn_take.width = 45;
+            btn_take.height = 13;
+            strcpy(btn_take.text, "Take");
+
+            gui::widget msg_dec(msg.get_x(),
+            msg.get_y() - 10,
+            msg.get_width(),
+            10);
+
+            vga_fill_rect(screen_ptr, msg_dec.get_x() + 2, msg_dec.get_y() + 2, msg_dec.get_width(), msg_dec.get_height(), COLOR_BLACK);
+            vga_fill_rect(screen_ptr, msg_dec.get_x(), msg_dec.get_y(), msg_dec.get_width(), msg_dec.get_height(), COLOR_BLUE);
+
+            vga_fill_rect(screen_ptr, msg.get_x() + 2, msg.get_y() + 2, msg.get_width(), msg.get_height(), COLOR_BLACK);
+            vga_fill_rect(screen_ptr, msg.get_x(), msg.get_y(), msg.get_width(), msg.get_height(), COLOR_LIGHT_BLUE);
 
 
-        button_draw(&btn_take, screen_ptr, &dejavu_sans_mono);
-      }*/
+            image_draw(screen_ptr,
+            msg.get_x() + 2, msg.get_y() + (msg.get_height() / 2 - img_warning_small_height / 2),
+            img_poop_small_width, img_poop_small_height,
+            img_poop_small_data);
 
-      image_draw(screen_ptr,
-        smiley_x, smiley_y,
-        img_smile_small_width, img_smile_small_height,
-        img_smile_small_data);
+            font_draw_string(screen_ptr, &dejavu_sans_mono,
+            msg.get_x() + 8 + img_warning_small_width, msg.get_y() + 12,
+            "It's dangerous to go alone,\ntake this!");
 
 
-      draw_workspace(workspace, screen_ptr);
+            button_draw(&btn_take, screen_ptr, &dejavu_sans_mono);
+        }*/
 
-      // cursor
-      if (mouse_left_clicked) {
-        if (time < time_delay) {
-          unsigned int cur_width, cur_height;
-          char *cur_data;
+        image_draw(screen_ptr,
+            smiley_x, smiley_y,
+            img_smile_small_width, img_smile_small_height,
+            img_smile_small_data);
 
-          if (time < time_delay / 6) {
-            cur_width = img_cursor_p_1_width;
-            cur_height = img_cursor_p_1_height;
-            cur_data = img_cursor_p_1_data;
-          } else if (time < time_delay / 5) {
-            cur_width = img_cursor_p_2_width;
-            cur_height = img_cursor_p_2_height;
-            cur_data = img_cursor_p_2_data;
-          } else if (time < time_delay / 4) {
 
-            cur_width = img_cursor_p_3_width;
-            cur_height = img_cursor_p_3_height;
-            cur_data = img_cursor_p_3_data;
-          } else if (time < time_delay / 3) {
+        draw_workspace(workspace, screen_ptr);
 
-            cur_width = img_cursor_p_4_width;
-            cur_height = img_cursor_p_4_height;
-            cur_data = img_cursor_p_4_data;
-          } else {
+        // cursor
+        if (mouse_left_clicked) {
+            if (time < time_delay) {
+            unsigned int cur_width, cur_height;
+            char *cur_data;
 
-            cur_width = img_cursor_p_5_width;
-            cur_height = img_cursor_p_5_height;
-            cur_data = img_cursor_p_5_data;
-          }
+            if (time < time_delay / 6) {
+                cur_width = img_cursor_p_1_width;
+                cur_height = img_cursor_p_1_height;
+                cur_data = img_cursor_p_1_data;
+            } else if (time < time_delay / 5) {
+                cur_width = img_cursor_p_2_width;
+                cur_height = img_cursor_p_2_height;
+                cur_data = img_cursor_p_2_data;
+            } else if (time < time_delay / 4) {
 
-          image_draw(screen_ptr,
-            cur.x, cur.y,
-            cur_width, cur_height,
-            cur_data);
+                cur_width = img_cursor_p_3_width;
+                cur_height = img_cursor_p_3_height;
+                cur_data = img_cursor_p_3_data;
+            } else if (time < time_delay / 3) {
+                cur_width = img_cursor_p_4_width;
+                cur_height = img_cursor_p_4_height;
+                cur_data = img_cursor_p_4_data;
+            } else {
+                cur_width = img_cursor_p_5_width;
+                cur_height = img_cursor_p_5_height;
+                cur_data = img_cursor_p_5_data;
+            }
 
-          ++time;
+            image_draw(screen_ptr,
+                cur.x, cur.y,
+                cur_width, cur_height,
+                cur_data);
+
+            ++time;
+            } else {
+                time = 0;
+            }
         } else {
-          time = 0;
-
+            image_draw(screen_ptr,
+                cur.x, cur.y,
+                img_cursor_p_1_width, img_cursor_p_1_height,
+                img_cursor_p_1_data);
+            time = 0;
         }
-      } else {
-        image_draw(screen_ptr,
-            cur.x, cur.y,
-            img_cursor_p_1_width, img_cursor_p_1_height,
-            img_cursor_p_1_data);
-          time = 0;
-      }
 
+        vga_blit(screen_ptr);
 
-
-      vga_blit(screen_ptr);
-
-      PAUSE; // wait for an interrupt
+        PAUSE; // wait for an interrupt
     }
   /*} else {
     printf("Cancelled... Press any key to reboot\n");
@@ -392,13 +388,13 @@ void main() {
     reboot();
   }*/
 exit:
-  // free the workspace
-  if (workspace != NULL) {
-    free_workspace(workspace);
-    workspace = NULL;
-  }
-  // free the command line functions
-  for (int i = 0; i < cl_function_counter; i++) {
-    free_cl_function(cl_functions[i]);
-  }
+    // free the workspace
+    if (workspace != NULL) {
+        free_workspace(workspace);
+        workspace = NULL;
+    }
+    // free the command line functions
+    for (int i = 0; i < cl_function_counter; i++) {
+        free_cl_function(cl_functions[i]);
+    }
 }

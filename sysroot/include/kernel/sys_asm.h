@@ -41,6 +41,13 @@ static inline void outw(uint16_t port, uint16_t val) {
     asm volatile ("outw %0, %1" : : "a"(val), "Nd"(port));
 }
 
+// static inline void outsl(int port, const void *address, int count) {
+//     asm volatile ("cld\n\trepne\n\toutsl"		:
+// 			      "=S" (address), "=c" (count)		:
+// 			      "d" (port), "0" (address), "1" (count)	:
+// 			      "cc");
+// }
+
 static inline uint8_t inb(uint16_t port) {
     uint8_t ret;
     asm volatile ("inb %1, %0"

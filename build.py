@@ -26,9 +26,20 @@ for dirpath, dirnames, filenames in os.walk(path + "/obj"):
             #print("linking .o file '{}'".format(file))
             linkfile = "{} obj/{}".format(linkfile, file)
 
-            
+linkfile += " -lgcc"
+#make bootable iso
+
 os.system("{}".format(linkfile))
+
+
+os.system("""
+mkdir -p isodir/boot/grub
+cp ./myos.bin isodir/boot/myos.bin
+cp grub.cfg isodir/boot/grub/grub.cfg
+grub-mkrescue -o myos.iso isodir
+""")
+
 #os.system("grub-mkrescue -o myos.iso myos.bin")
-os.system("qemu-system-i386 -hda newfs.raw -kernel myos.bin")
+#os.system("qemu-system-i386 -hda newfs.raw -kernel myos.bin")
 #os.system("qemu-system-i386 -cdrom main.iso")
 
