@@ -10,6 +10,11 @@ unsigned short disk_info[256];
 unsigned char pio_48_supported = 0;
 unsigned int sector_count = 0;
 
+void cache_flush() {
+	outb(0x1F7, 0xE7); //send cache flush command
+	while ((inb(0x1F7) & (0x80 | 0x40)) != 0x40); //wait for DRIVE READY and BUSY bit to clear	
+}
+
 void ata_pio_install() {
 	char detect;
 	unsigned int i, tmp2;
@@ -66,7 +71,7 @@ void ata_pio_install() {
 	sector_count = tmp2;
 }
 
-void ata_pio_read(size_t lba, char *buff, size_t count) {
+void ata_pio_read(size_t lba, uint8_t *buff, size_t count) {
 	while ((inb(0x1F7) & (0x80 | 0x40)) != 0x40); //wait for DRIVE READY and BUSY bit to clear	
 
 	size_t bytes_read;
@@ -110,10 +115,10 @@ void ata_pio_read(size_t lba, char *buff, size_t count) {
 		bytes_read++;
 	}
 
-	printf("reading at %d, read %d bytes\n", lba, bytes_read);
+	//printf("reading at %d, read %d bytes\n", lba, bytes_read);
 }
 
-void ata_pio_write(size_t lba, char *data, size_t n_sectors) {
+void ata_pio_write(size_t lba, uint8_t *data, unsigned data_len, size_t n_sectors) {
 	if (n_sectors > 256) {
 		printf("ata_pio_write(): number of sectors to write is too great(%d/256)... HALTING...", n_sectors);
 		PAUSE;
@@ -129,22 +134,37 @@ void ata_pio_write(size_t lba, char *data, size_t n_sectors) {
 	outb(0x1F7, 0x30); //initialize write command
 
 	int i;
-	for (i = 0; i < strlen(data); i++) {
+	for (i = 0; i < data_len; i++) {
 		while ((inb(0x1F7) & (0x80 | 0x40)) != 0x40); //wait for DRIVE READY and BUSY bit to clear
 		outb(0x1F0, data[i]); //write to io port
+		cache_flush();
 	}
 
-	char *temp_buf = (char *)malloc(128);
+	uint8_t *temp_buf = (uint8_t *)malloc(512);
 	ata_pio_read(lba, temp_buf, 1);
 	free(temp_buf);
 }
 
-void write(size_t lba, char *data, size_t n_sectors) {
-	ata_pio_write(lba, data, n_sectors);
+void write(size_t lba, uint8_t *data, unsigned data_len, size_t n_sectors) {
+	ata_pio_write(lba, data, data_len, n_sectors);
 }
 
-char *read(size_t lba, size_t sector_count) {
-	char *buffer = (char *)malloc(512);
+uint8_t *read(size_t lba, size_t sector_count) {
+	uint8_t *buffer = (uint8_t *)malloc(sizeof(uint8_t)*512);
 	ata_pio_read(lba, buffer, sector_count);
 	return buffer;
+}
+
+size_t lba_max_size() {
+	size_t max_lba = 0;
+	outb(0x1F7, 0x27); //read native max address
+	while ((inb(0x1F7) & (0x80 | 0x40)) != 0x40); //wait for DRIVE READY and BUSY bit to clear
+	max_lba =  (unsigned long long )inb(0x1F7+3);
+	max_lba += (unsigned long long )inb(0x1F7+4) << 8;
+	max_lba += (unsigned long long )inb(0x1F7+5) << 16;
+	outb(0x3F4, 0x80); //set HOB
+	max_lba += (unsigned long long )inb(0x1F7+3) << 24;
+	max_lba += (unsigned long long )inb(0x1F7+4) << 32;
+	max_lba += (unsigned long long )inb(0x1F7+5) << 40;
+	return max_lba;
 }

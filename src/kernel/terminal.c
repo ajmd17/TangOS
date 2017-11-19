@@ -127,3 +127,26 @@ void terminal_cursorpos(int row, int col) {
   outb(0x3D4, 0x0E);
   outb(0x3D5, (unsigned char)((position >> 8) & 0xFF));
 }
+
+
+void debug_print(enum debug_flags flag, char *message) {
+    unsigned char close = 0;
+    switch(flag) {
+        case ERROR:
+            terminal_setcolor(make_color(COLOR_WHITE, COLOR_RED));
+            printf("Error");
+            close = 1;
+            break;
+        case INFO:
+            terminal_setcolor(make_color(COLOR_WHITE, COLOR_LIGHT_BLUE));
+            printf("Info");
+            break;
+        case WARNING:
+            terminal_setcolor(make_color(COLOR_WHITE, COLOR_YELLOW));
+            printf("Warning");
+            break;
+    };
+    terminal_setcolor(make_color(COLOR_WHITE, COLOR_BLACK));
+    printf(": %s\n");
+    if (close) PAUSE;
+}

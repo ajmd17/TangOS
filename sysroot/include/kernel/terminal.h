@@ -5,6 +5,12 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
+
+enum debug_flags {
+    ERROR,
+    INFO,
+    WARNING,
+};
  
 void terminal_initialize(void);
 void terminal_setcolor(uint8_t);
@@ -13,5 +19,7 @@ void terminal_write(const char *data, size_t size);
 void terminal_writestring(const char *data);
 void terminal_readstring(char *data, size_t size);
 void terminal_cursorpos(int row, int col);
+
+void debug_print(enum debug_flags flag, char *message);
 
 #endif

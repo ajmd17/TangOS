@@ -23,6 +23,8 @@
 #include <kernel/image.h>
 #include <kernel/ata_pio.h>
 
+#include <kernel/mbr.h>
+
 #include <img/img_error_small.h>
 #include <img/img_warn_small.h>
 #include <img/img_info_small.h>
@@ -125,7 +127,6 @@ void init() {
     mouse_install();
     keyboard_install();
 
-
     terminal_initialize();
     terminal_setcolor(make_color(COLOR_LIGHT_RED, COLOR_BLACK));
     printf("Welcome to TangOS\n");
@@ -134,15 +135,55 @@ void init() {
     putchar('\n');
 
     ata_pio_install();
+    mbr_init();
 
-    size_t lba = 5000000;
+    read_partitions_into_memory();
 
-    //write(lba, "NUGGG", 1);
+    mbr_t *mbr = get_mbr();
 
-	char *buf;
-    buf = read(lba, 1);
-    printf("STRING: %s\n", buf);
-    free(buf);
+    uint8_t *out_dat = (uint8_t *)malloc(20);
+    out_dat[0] = 83;
+    out_dat[1] = 113;
+    out_dat[2] = 117;
+    out_dat[3] = 105;
+    out_dat[4] = 100;
+    out_dat[5] = 0;
+
+    write_to_partition(__PARTITION_2, 10, out_dat, 6);
+    free(out_dat);
+
+    uint8_t *in_dat;
+    in_dat = read_from_partition(__PARTITION_2, 10, 1);
+    int i;
+    printf("in_dat = ");
+    for (i = 0; i < 6; i++) {
+        printf("%c, ", in_dat[i]);
+    }
+    printf("\n");
+    free(in_dat);
+    // int i;
+    // int usable_parts = 0;
+    // for (i = 0; i < 4; i++) {
+    //     if (1) {//!mbr->partitions[i].error) {
+    //         printf("part #%d LBA: %d\n", i, mbr->partitions[i].lba_first_sector);
+    //         usable_parts++;
+    //     }
+    // }
+    // printf("Usable Partitions: %d/4\n", usable_parts);
+
+
+
+
+    mbr_destroy();
+
+    // size_t lba = 5000000;
+
+    // write(lba, "NUGGG", 1);
+
+	// char *buf;
+    // buf = read(lba, 1);
+    // printf("STRING: %s\n", buf);
+    // free(buf);
 
     // set up command line functions
     cl_functions[cl_function_counter++] = alloc_cl_function("help", help_func);
