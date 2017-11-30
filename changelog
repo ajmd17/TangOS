@@ -1,0 +1,10 @@
+---v0.3.7---
+- added ata pio r/w
+
+---v0.3.9---
+- added MBR partition table + partition relative reading and writing
+
+---v0.4.13---
+- FAT32 r/w
+- version numbering
+- easy access to ata r/w

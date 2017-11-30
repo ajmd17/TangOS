@@ -22,8 +22,11 @@
 #include <kernel/isrs.h>
 #include <kernel/image.h>
 #include <kernel/ata_pio.h>
+#include <kernel/os.h>
 
 #include <kernel/mbr.h>
+
+#include <fs/fat32.h>
 
 #include <img/img_error_small.h>
 #include <img/img_warn_small.h>
@@ -129,7 +132,7 @@ void init() {
 
     terminal_initialize();
     terminal_setcolor(make_color(COLOR_LIGHT_RED, COLOR_BLACK));
-    printf("Welcome to TangOS\n");
+    printf("Welcome to TangOS v%d.%d.%d\n", VERSION_MAJOR, VERSION_MINOR, VERSION_REVISION);
     terminal_setcolor(make_color(COLOR_WHITE, COLOR_BLACK));
     
     putchar('\n');
@@ -139,7 +142,11 @@ void init() {
 
     read_partitions_into_memory();
 
+    fat32_startup(PARTITION_3);
+
     mbr_t *mbr = get_mbr();
+
+    //set_sysid(PARTITION_3);
 
     uint8_t *out_dat = (uint8_t *)malloc(20);
     out_dat[0] = 83;
@@ -148,31 +155,40 @@ void init() {
     out_dat[3] = 105;
     out_dat[4] = 100;
     out_dat[5] = 0;
-
-    write_to_partition(__PARTITION_2, 10, out_dat, 6);
+    write_cluster(128, out_dat, 6);
     free(out_dat);
 
-    uint8_t *in_dat;
-    in_dat = read_from_partition(__PARTITION_2, 10, 1);
+    uint8_t *data = (uint8_t *)malloc(512);
+    read_clusters(128, 4, data);
     int i;
-    printf("in_dat = ");
-    for (i = 0; i < 6; i++) {
-        printf("%c, ", in_dat[i]);
+    for (i = 0; i < 100; i++) {
+        printf("%c,", data[i]);
     }
-    printf("\n");
-    free(in_dat);
-    // int i;
-    // int usable_parts = 0;
-    // for (i = 0; i < 4; i++) {
-    //     if (1) {//!mbr->partitions[i].error) {
-    //         printf("part #%d LBA: %d\n", i, mbr->partitions[i].lba_first_sector);
-    //         usable_parts++;
-    //     }
-    // }
-    // printf("Usable Partitions: %d/4\n", usable_parts);
+    free(data);
 
+    // uint8_t *out_dat = (uint8_t *)malloc(20);
+    // out_dat[0] = 83;
+    // out_dat[1] = 113;
+    // out_dat[2] = 117;
+    // out_dat[3] = 105;
+    // out_dat[4] = 100;
+    // out_dat[5] = 0;
 
+    // write_to_partition(PARTITION_3, 10, out_dat, 6);
+    // free(out_dat);
 
+    // uint8_t *in_dat;
+    // in_dat = read_from_partition(PARTITION_3, 10, 1);
+    // printf("in_dat: %s\n", in_dat);
+    // free(in_dat);
+    int usable_parts = 0;
+    for (i = 0; i < 4; i++) {
+        if (!mbr->partitions[i].error) {
+            printf("part #%d LBA: %d\n", i, mbr->partitions[i].lba_first_sector);
+            usable_parts++;
+        }
+    }
+    printf("Usable Partitions: %d/4\n", usable_parts);
 
     mbr_destroy();
 

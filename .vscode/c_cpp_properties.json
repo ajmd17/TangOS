@@ -33,7 +33,8 @@
                 "/usr/include",
                 "/usr/include/x86_64-linux-gnu",
                 "${workspaceRoot}",
-                "${workspaceRoot}/sysroot/include"
+                "${workspaceRoot}/sysroot/include",
+                "${workspaceRoot}/sysroot/include/kernel"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",

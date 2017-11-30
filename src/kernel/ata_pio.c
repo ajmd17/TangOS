@@ -4,6 +4,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <kernel/sys_asm.h>
+#include <kernel/ata_pio.h>
+#include <kernel/os.h>
 
 unsigned char primary_detected = 0;
 unsigned short disk_info[256];
@@ -36,9 +38,11 @@ void ata_pio_install() {
 
 	if (detect != 0) {
 		primary_detected = 1;
+		#if DEBUG_PRINT
 		puts("drive detected\n");
+		#endif
 	} else {
-		puts("drive does not exist\n");
+		puts("Drive does not exist.\n");
 		return;
 	}
 
@@ -46,7 +50,7 @@ void ata_pio_install() {
 	detect += inb(0x1F5);
 
 	if (detect > 0) {
-		puts("disk is not PATA compatible.\n");
+		puts("Disk is not PATA compatible.\n");
 		return;
 	}
 
@@ -57,17 +61,23 @@ void ata_pio_install() {
 
 	if ((disk_info[83] & 0x10) == 0x10) {
 		pio_48_supported = 1;
+		#if DEBUG_PRINT
 		puts("PIO 48 read supported\n");
+		#endif
 	} else {
-		puts("PIO read 48 not supported");
 		tmp2 = disk_info[83];
+		#if DEBUG_PRINT
+		puts("PIO read 48 not supported");
 		printf("word 83 = %x\n", tmp2);
+		#endif
 	}
 
 	tmp2 = disk_info[60]; //word size
 	tmp2 = tmp2 << 16;
 	tmp2 += disk_info[61];
+	#if DEBUG_PRINT
 	printf("disk supports %d total lba addressable sectors\n", tmp2);
+	#endif
 	sector_count = tmp2;
 }
 
@@ -119,10 +129,6 @@ void ata_pio_read(size_t lba, uint8_t *buff, size_t count) {
 }
 
 void ata_pio_write(size_t lba, uint8_t *data, unsigned data_len, size_t n_sectors) {
-	if (n_sectors > 256) {
-		printf("ata_pio_write(): number of sectors to write is too great(%d/256)... HALTING...", n_sectors);
-		PAUSE;
-	}
 	outb(0x1F2, n_sectors); //set number of sectors
 	//Send the low 8 bits of the LBA to port 0x1F3:
 	outb(0x1F3, (unsigned char) lba);
@@ -145,14 +151,21 @@ void ata_pio_write(size_t lba, uint8_t *data, unsigned data_len, size_t n_sector
 	free(temp_buf);
 }
 
-void write(size_t lba, uint8_t *data, unsigned data_len, size_t n_sectors) {
-	ata_pio_write(lba, data, data_len, n_sectors);
-}
-
-uint8_t *read(size_t lba, size_t sector_count) {
-	uint8_t *buffer = (uint8_t *)malloc(sizeof(uint8_t)*512);
-	ata_pio_read(lba, buffer, sector_count);
-	return buffer;
+uint8_t *ata_pio_rw(enum ATA_RW mode, size_t pos, uint8_t *rw_dat, unsigned data_len, size_t n_sectors) {
+	switch(mode) {
+		case READ:
+			ata_pio_read(pos, rw_dat, n_sectors);
+			break;
+		case WRITE:
+			ata_pio_write(pos, rw_dat, data_len, n_sectors);
+			break;
+		case READ_SECTOR:
+			ata_pio_read(pos*512, rw_dat, n_sectors);
+			break;
+		case WRITE_SECTOR:
+			ata_pio_write(pos*512, rw_dat, data_len, n_sectors);
+			break;
+	};
 }
 
 size_t lba_max_size() {

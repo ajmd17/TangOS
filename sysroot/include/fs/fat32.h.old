@@ -1,0 +1,31 @@
+#ifndef FAT32_H
+#define FAT32_H
+
+#include <kernel/mbr.h>
+#include <stdint.h>
+#include <stddef.h>
+
+typedef struct {
+    unsigned bytes_per_cluster;
+    unsigned bytes_per_sector;
+    unsigned cluster_count;
+    size_t   data_sector;
+    unsigned reserved_sectors_count;
+    unsigned data_sector_count;
+    unsigned fat_sector_count;
+    unsigned num_of_fats;
+    unsigned root_cluster;
+    unsigned root_entry_count;
+    unsigned sectors_per_cluster;
+    unsigned total_sector_count;
+} fat_t;
+
+#define FILE_HANDLES 4
+#define FAT_FLAG_OPEN 0x02
+#define FAT_MAX_PATH 256
+
+void fat32_startup(enum PARTITION_N part_n);
+void read_clusters(unsigned cluster, unsigned n_clusters, uint8_t *data);
+void write_cluster(unsigned cluster, uint8_t *data, unsigned data_len);
+
+#endif

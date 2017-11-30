@@ -1,0 +1,87 @@
+#include <fs/fat32.h>
+#include <kernel/ata_pio.h>
+#include <kernel/byte_converter.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#include <kernel/os.h>
+
+static fat_t fat;
+
+typedef struct {
+	int parentStartCluster;
+	int startCluster;
+	int currentClusterIdx;
+	int currentCluster;
+	short currentSector;
+	short currentByte;
+	unsigned int pos;
+	unsigned char flags;
+	unsigned char attributes;
+	unsigned char mode;
+	unsigned int size;
+	char filename[FAT_MAX_PATH];
+} file_t;
+
+typedef struct {
+
+} file_entry_t;
+
+file_t fat_fopen(uint8_t *filename, const uint8_t *mode) {
+    file_t *fp;
+    
+}
+
+file_t get_free_handle() {
+    int i;
+    file_t *fp;
+    for (i = 0; i < FILE_HANDLES; i++) {
+        fp = &tf_file_handles[i];
+        if (fp->flags & FAT_FLAG_OPEN) continue;
+        fp->flags = FAT_FLAG_OPEN;
+        return fp;
+    }
+    return (void *)0;
+}
+
+void fat32_startup(enum PARTITION_N part_n) {
+    //loading bios parameter block
+    set_def_partition(part_n);
+
+    uint8_t *bpb = (uint8_t *)malloc(512);
+    read(READ, 0, bpb, 512);
+
+    if (bpb[510] != 0x55 || bpb[511] != 0xAA) {
+        //non valid filesystem
+        return;
+    }
+
+    //valid fat filesystem
+
+    fat.bytes_per_sector = to_uint16(bpb, 11);
+    fat.sectors_per_cluster = bpb[13];
+    fat.bytes_per_cluster = fat.bytes_per_sector*fat.sectors_per_cluster;
+    fat.reserved_sectors_count = to_uint16(bpb, 14);
+    fat.num_of_fats = bpb[16];
+    fat.root_entry_count = to_uint16(bpb, 17);
+    fat.total_sector_count = to_uint16(bpb, 19);
+
+    if (fat.total_sector_count == 0) {
+        fat.total_sector_count = to_uint32(bpb, 32);
+    }
+
+    //get sector count(FAT32 only)
+    fat.fat_sector_count = to_uint32(bpb, 36);
+    fat.data_sector_count = fat.total_sector_count - (
+                            fat.reserved_sectors_count+
+                            fat.num_of_fats
+                            *
+                            fat.fat_sector_count);
+    fat.cluster_count = fat.data_sector_count/fat.sectors_per_cluster;
+    
+    fat.root_cluster = to_uint32(bpb, 44);
+    fat.data_sector = fat.reserved_sectors_count+fat.num_of_fats*fat.fat_sector_count;
+
+    free(bpb);
+}
+

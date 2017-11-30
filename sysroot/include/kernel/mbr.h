@@ -1,18 +1,22 @@
 #ifndef MBR_H
 #define MBR_H
 
+#include <stddef.h>
 #include <stdint.h>
 
-#define __PARTITION_ENTRY_1 0x1BE
-#define __PARTITION_ENTRY_2 0x1CE
-#define __PARTITION_ENTRY_3 0x1DE
-#define __PARTITION_ENTRY_4 0x1EE
+#include <kernel/ata_pio.h>
 
-enum __PARTITION_N {
-    __PARTIIION_1,
-    __PARTITION_2,
-    __PARTITION_3,
-    __PARTITION_4
+#define PARTITION_ENTRY_1 0x1BE
+#define PARTITION_ENTRY_2 0x1CE
+#define PARTITION_ENTRY_3 0x1DE
+#define PARTITION_ENTRY_4 0x1EE
+
+enum PARTITION_N {
+    NONE,
+    PARTIIION_1,
+    PARTITION_2,
+    PARTITION_3,
+    PARTITION_4
 };
 
 typedef struct {
@@ -31,8 +35,12 @@ typedef struct {
 
 void mbr_init();
 void read_partitions_into_memory();
-void write_to_partition(enum __PARTITION_N part_n, size_t rel_lba, uint8_t *data, int data_len);
-uint8_t *read_from_partition(enum __PARTITION_N part_n, size_t rel_lba, unsigned sec_amt);
+void set_sysid(enum PARTITION_N part_n);
+void set_def_partition(enum PARTITION_N part_n);
+void write_to_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_lba, uint8_t *data, int data_len);
+void read_from_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_lba, unsigned sec_amt, uint8_t *buf);
+void read(enum ATA_RW mode, size_t rel_lba, uint8_t *buf, size_t buf_size);
+void write(enum ATA_RW mode, size_t rel_lba, uint8_t *dat, size_t dat_len);
 mbr_t *get_mbr();
 void mbr_destroy();
 
