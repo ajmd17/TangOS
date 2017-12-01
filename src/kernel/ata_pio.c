@@ -81,7 +81,7 @@ void ata_pio_install() {
 	sector_count = tmp2;
 }
 
-void ata_pio_read(size_t lba, uint8_t *buff, size_t count) {
+void ata_pio_read(size_t lba, size_t buf_s_pos, uint8_t *buff, size_t count) {
 	while ((inb(0x1F7) & (0x80 | 0x40)) != 0x40); //wait for DRIVE READY and BUSY bit to clear	
 
 	size_t bytes_read;
@@ -119,8 +119,8 @@ void ata_pio_read(size_t lba, uint8_t *buff, size_t count) {
 		word = 0;
 		word = inw(0x1F0);
 
-		buff[bytes_read * 2] = word & 0xFF;
-		buff[(bytes_read * 2) + 1] = word >> 8;
+		buff[buf_s_pos+(bytes_read * 2)] = word & 0xFF;
+		buff[buf_s_pos+((bytes_read * 2) + 1)] = word >> 8;
 
 		bytes_read++;
 	}
@@ -147,20 +147,20 @@ void ata_pio_write(size_t lba, uint8_t *data, unsigned data_len, size_t n_sector
 	}
 
 	uint8_t *temp_buf = (uint8_t *)malloc(512);
-	ata_pio_read(lba, temp_buf, 1);
+	ata_pio_read(lba, 0, temp_buf, 1);
 	free(temp_buf);
 }
 
-uint8_t *ata_pio_rw(enum ATA_RW mode, size_t pos, uint8_t *rw_dat, unsigned data_len, size_t n_sectors) {
+uint8_t *ata_pio_rw(enum ATA_RW mode, size_t pos, size_t buf_s_pos, uint8_t *rw_dat, unsigned data_len, size_t n_sectors) {
 	switch(mode) {
 		case READ:
-			ata_pio_read(pos, rw_dat, n_sectors);
+			ata_pio_read(pos, buf_s_pos, rw_dat, n_sectors);
 			break;
 		case WRITE:
 			ata_pio_write(pos, rw_dat, data_len, n_sectors);
 			break;
 		case READ_SECTOR:
-			ata_pio_read(pos*512, rw_dat, n_sectors);
+			ata_pio_read(pos*512, buf_s_pos, rw_dat, n_sectors);
 			break;
 		case WRITE_SECTOR:
 			ata_pio_write(pos*512, rw_dat, data_len, n_sectors);

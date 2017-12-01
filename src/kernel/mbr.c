@@ -50,12 +50,12 @@ unsigned char parse_partition(partition_t *part, uint8_t *mbr_dat, size_t loc) {
 void set_sysid(enum PARTITION_N part_n) {
     unsigned part_pos = PARTITION_ENTRY_1+(part_n*10);
     uint8_t sysid = 0x0C; //FAT32 LBA addressing
-    ata_pio_rw(WRITE, part_pos+4, &sysid, 1, 1);
+    ata_pio_rw(WRITE, part_pos+4, 0, &sysid, 1, 1);
 }
 
 void read_partitions_into_memory() {
     uint8_t *mbr_dat = (uint8_t *)malloc(512);
-    ata_pio_rw(READ, 0, mbr_dat, 512, 1);
+    ata_pio_rw(READ, 0, 0, mbr_dat, 512, 1);
 
     mbr.signature[0] = mbr_dat[510];
     mbr.signature[1] = mbr_dat[511];
@@ -86,7 +86,6 @@ static enum PARTITION_N def_part = NONE;
 void set_def_partition(enum PARTITION_N part_n) {
     if (def_part == NONE) def_part = part_n;
 }
-
 void write_to_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_lba, uint8_t *data, int data_len, int sector_len) {
     if (mode == READ || mode == READ_SECTOR) {
         printf("write_to_partition: reading is not for use in writing function!\n");
@@ -96,7 +95,7 @@ void write_to_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_lb
 
     part = &mbr.partitions[part_n];
     ata_pio_rw(mode, part->lba_first_sector+rel_lba,
-               data, data_len, sector_len);
+               0, data, data_len, sector_len);
 }
 
 void read_from_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_lba, unsigned sec_amt, uint8_t *buf) {
@@ -106,7 +105,7 @@ void read_from_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_l
     }
     partition_t *part;
     part = &mbr.partitions[part_n];
-    ata_pio_rw(mode, part->lba_first_sector+rel_lba, buf, NULL, sec_amt);
+    ata_pio_rw(mode, part->lba_first_sector+rel_lba, 0, buf, NULL, sec_amt);
 }
 
 void read(enum ATA_RW mode, size_t rel_lba, uint8_t *buf, size_t buf_size) {

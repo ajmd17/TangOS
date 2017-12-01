@@ -143,6 +143,7 @@ void init() {
     read_partitions_into_memory();
 
     fat32_startup(PARTITION_3);
+    fat_init();
 
     mbr_t *mbr = get_mbr();
 
@@ -155,32 +156,17 @@ void init() {
     out_dat[3] = 105;
     out_dat[4] = 100;
     out_dat[5] = 0;
-    write_cluster(128, out_dat, 6);
+
+    write_to_partition(PARTITION_3, WRITE, 10, out_dat, 6, 1);
     free(out_dat);
 
-    uint8_t *data = (uint8_t *)malloc(512);
-    read_clusters(128, 4, data);
+    uint8_t *in_dat;
+    in_dat = (uint8_t *)malloc(20);
+    read_from_partition(PARTITION_3, READ, 10, 1, in_dat);
+    printf("in_dat: %s\n", in_dat);
+    free(in_dat);
+
     int i;
-    for (i = 0; i < 100; i++) {
-        printf("%c,", data[i]);
-    }
-    free(data);
-
-    // uint8_t *out_dat = (uint8_t *)malloc(20);
-    // out_dat[0] = 83;
-    // out_dat[1] = 113;
-    // out_dat[2] = 117;
-    // out_dat[3] = 105;
-    // out_dat[4] = 100;
-    // out_dat[5] = 0;
-
-    // write_to_partition(PARTITION_3, 10, out_dat, 6);
-    // free(out_dat);
-
-    // uint8_t *in_dat;
-    // in_dat = read_from_partition(PARTITION_3, 10, 1);
-    // printf("in_dat: %s\n", in_dat);
-    // free(in_dat);
     int usable_parts = 0;
     for (i = 0; i < 4; i++) {
         if (!mbr->partitions[i].error) {

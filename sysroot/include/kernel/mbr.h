@@ -37,7 +37,7 @@ void mbr_init();
 void read_partitions_into_memory();
 void set_sysid(enum PARTITION_N part_n);
 void set_def_partition(enum PARTITION_N part_n);
-void write_to_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_lba, uint8_t *data, int data_len);
+void write_to_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_lba, uint8_t *data, int data_len, int sector_len);
 void read_from_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_lba, unsigned sec_amt, uint8_t *buf);
 void read(enum ATA_RW mode, size_t rel_lba, uint8_t *buf, size_t buf_size);
 void write(enum ATA_RW mode, size_t rel_lba, uint8_t *dat, size_t dat_len);
