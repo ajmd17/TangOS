@@ -108,13 +108,19 @@ void read_from_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_l
     ata_pio_rw(mode, part->lba_first_sector+rel_lba, 0, buf, NULL, sec_amt);
 }
 
-void read(enum ATA_RW mode, size_t rel_lba, uint8_t *buf, size_t buf_size) {
-    int sector_amt = ceil(buf_size/512)+1;
+void read(enum ATA_RW mode, size_t rel_lba, uint8_t *buf, size_t buf_size, int sector_amt) {
+    if (def_part == NONE) {
+        printf("read(): partition set to NONE; skipping\n");
+        return;
+    }
     read_from_partition(def_part, mode, rel_lba, sector_amt, buf);
 }
 
-void write(enum ATA_RW mode, size_t rel_lba, uint8_t *dat, size_t dat_len) {
-    int sector_amt = ceil(dat_len/512)+1;
+void write(enum ATA_RW mode, size_t rel_lba, uint8_t *dat, size_t dat_len, int sector_amt) {
+    if (def_part == NONE) {
+        printf("write(): partition set to NONE; skipping\n");
+        return;
+    }
     write_to_partition(def_part, mode, rel_lba, dat, dat_len, sector_amt);
 }
 
