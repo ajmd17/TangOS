@@ -7,7 +7,7 @@ for dirpath, dirnames, filenames in os.walk(path):
     for file in [f for f in filenames]:
 
         if file.endswith(".c") or file.endswith(".cpp"):
-            os.system("./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-g++ -Isysroot/include/ -c {}/{} -o obj/{}.o -ffreestanding -O2 -w".format(dirpath, file, os.path.splitext(file)[0]))
+            os.system("./i686-elf-4.9.1-Linux-x86_64/bin/i686-elf-g++ -Isysroot/include/ -c {}/{} -o obj/{}.o -ffreestanding -O2 -Wall -Wextra -pedantic -w".format(dirpath, file, os.path.splitext(file)[0]))
             #print("running C file '{}'".format(os.path.splitext(file)[0] + ".c"))            
 
 for dirpath, dirnames, filenames in os.walk(path):

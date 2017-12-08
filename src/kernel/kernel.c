@@ -143,7 +143,7 @@ void init() {
     read_partitions_into_memory();
 
     fat32_startup(PARTITION_3);
-    fat_init();
+    //fat_init();
 
     mbr_t *mbr = get_mbr();
 
