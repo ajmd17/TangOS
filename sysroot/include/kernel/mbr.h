@@ -25,6 +25,7 @@ typedef struct {
 	uint8_t       type;
 	uint32_t      lba_first_sector;
 	uint32_t      sector_count;
+    uint32_t      lba_end_sector;
 } partition_t;
 
 typedef struct {

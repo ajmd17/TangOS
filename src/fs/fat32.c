@@ -36,6 +36,8 @@ void fat32_startup(enum PARTITION_N part_n) {
     //loading bios parameter block
     set_def_partition(part_n);
 
+    // write(WRITE, 16, 2, 1, 1);
+
     uint8_t *bpb = (uint8_t *)malloc(512);
     read(READ, 0, bpb, 512, 1);
 
@@ -45,6 +47,8 @@ void fat32_startup(enum PARTITION_N part_n) {
     }
 
     //valid fat filesystem
+
+    printf("num of fats: %d\n", bpb[16]);
 
     fat.bytes_per_sector = to_uint16(bpb, 11);
     fat.sectors_per_cluster = bpb[13];
@@ -107,4 +111,11 @@ void trim_spaces(char *c) {
         c++;
     }
     if (*c == ' ') *c = '\0';
+}
+
+void assign_value(uint8_t *n_bpb, uint8_t *value, int offset, int len) {
+    int i;
+    for (i = 0; i < len; i++) {
+        value[i] = n_bpb[i+offset];
+    }
 }

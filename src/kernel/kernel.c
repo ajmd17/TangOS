@@ -143,7 +143,8 @@ void init() {
     read_partitions_into_memory();
 
     fat32_startup(PARTITION_3);
-    //fat_init();
+    // print_data();
+    // fat_init();
 
     mbr_t *mbr = get_mbr();
 
@@ -170,7 +171,7 @@ void init() {
     int usable_parts = 0;
     for (i = 0; i < 4; i++) {
         if (!mbr->partitions[i].error) {
-            printf("part #%d LBA: %d\n", i, mbr->partitions[i].lba_first_sector);
+            printf("part #%d LBA: %d - %d\n", i, mbr->partitions[i].lba_first_sector, mbr->partitions[i].lba_end_sector);
             usable_parts++;
         }
     }

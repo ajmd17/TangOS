@@ -42,6 +42,7 @@ unsigned char parse_partition(partition_t *part, uint8_t *mbr_dat, size_t loc) {
         part->type = sys_id;
         part->lba_first_sector = to_uint32(mbr_dat, loc+8);
         part->sector_count = to_uint32(mbr_dat, loc+12);
+        part->lba_end_sector = part->lba_first_sector+part->sector_count;
         part->bootable = mbr_dat[loc] == 0x81;
         return 0;
     }
@@ -105,6 +106,7 @@ void read_from_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_l
     }
     partition_t *part;
     part = &mbr.partitions[part_n];
+    printf("reading from %d\n", part->lba_first_sector+rel_lba);
     ata_pio_rw(mode, part->lba_first_sector+rel_lba, 0, buf, NULL, sec_amt);
 }
 
