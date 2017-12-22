@@ -1,3 +1,5 @@
+//TODO: make more modular and install images onto hard drive instead of coded in.
+
 #if !defined(__cplusplus)
 #include <stdbool.h>
 #endif
@@ -150,28 +152,28 @@ void init() {
 
     //set_sysid(PARTITION_3);
 
-    uint8_t *out_dat = (uint8_t *)malloc(20);
-    out_dat[0] = 83;
-    out_dat[1] = 113;
-    out_dat[2] = 117;
-    out_dat[3] = 105;
-    out_dat[4] = 100;
-    out_dat[5] = 0;
+    // uint8_t *out_dat = (uint8_t *)malloc(20);
+    // out_dat[0] = 83;
+    // out_dat[1] = 113;
+    // out_dat[2] = 117;
+    // out_dat[3] = 105;
+    // out_dat[4] = 100;
+    // out_dat[5] = 0;
 
-    write_to_partition(PARTITION_3, WRITE, 10, out_dat, 6, 1);
-    free(out_dat);
+    // write_to_partition(PARTITION_3, WRITE, 10, out_dat, 6, 1);
+    // free(out_dat);
 
-    uint8_t *in_dat;
-    in_dat = (uint8_t *)malloc(20);
-    read_from_partition(PARTITION_3, READ, 10, 1, in_dat);
-    printf("in_dat: %s\n", in_dat);
-    free(in_dat);
+    // uint8_t *in_dat;
+    // in_dat = (uint8_t *)malloc(20);
+    // read_from_partition(PARTITION_3, READ, 10, 1, in_dat);
+    // printf("in_dat: %s\n", in_dat);
+    // free(in_dat);
 
     int i;
     int usable_parts = 0;
     for (i = 0; i < 4; i++) {
-        if (!mbr->partitions[i].error) {
-            printf("part #%d LBA: %d - %d\n", i, mbr->partitions[i].lba_first_sector, mbr->partitions[i].lba_end_sector);
+        if (mbr->partitions[i].error == NO_MBR_ERROR) {
+            printf("part #%d LBA: %d - %d\n", i+1, mbr->partitions[i].lba_first_sector, mbr->partitions[i].lba_end_sector);
             usable_parts++;
         }
     }

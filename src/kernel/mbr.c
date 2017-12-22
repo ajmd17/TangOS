@@ -1,3 +1,5 @@
+//TODO: heavy cleanup of code and get rid of unused functions.
+
 #include <kernel/sys_asm.h>
 #include <kernel/terminal.h>
 #include <kernel/mbr.h>
@@ -21,28 +23,46 @@ void mbr_init() {
     mbr.bootstrap = (uint8_t *)malloc(sizeof(uint8_t)*446);
     int i;
     for (i = 0; i < 4; i++) {
-        mbr.partitions[i].error = 0;
+        mbr.partitions[i].error = NO_MBR_ERROR;
+        mbr.partitions[i].lba_first_sector = 0;
+        mbr.partitions[i].sector_count = 0;
+        mbr.partitions[i].lba_end_sector = 0;
     }
 }
 
-unsigned char parse_partition(partition_t *part, uint8_t *mbr_dat, size_t loc) {
+unsigned char parse_partition(int part_n, uint8_t *mbr_dat, size_t loc) {
+    static char block_partitions = 0;
+    
+    partition_t *part = &mbr.partitions[part_n];
     char sys_id = mbr_dat[loc+4];
+
     if (sys_id == 0) {
-        printf("SYS_ID(%d) is not set\n", sys_id);
-        part->error = 1;
+        printf("sys_id(part: %d) is not set\n", part_n+1);
+        mbr.partitions[part_n].error = EMPTY_PART;
         //empty partition
         //TODO: add partition manager
-        return 1;
+        // return 1;
     }
+
     if (sys_id == 0x5 || sys_id == 0xF || sys_id == 0x85) {
-        part->error = 1;
+        part->error = EBR_PART;
         return 1; //EBR partition(extended boot record) is not supported
     }
     else {
         part->type = sys_id;
         part->lba_first_sector = to_uint32(mbr_dat, loc+8);
         part->sector_count = to_uint32(mbr_dat, loc+12);
+        // if (part->error == EMPTY_PART) {
+        //     if (block_partitions) {
+        //         part->error = NO_DATA_PART;
+        //         return 1;
+        //     }
+        //     part->lba_first_sector = mbr.partitions[part_n-1].lba_end_sector;
+        //     block_partitions = 1;
+        // }
         part->lba_end_sector = part->lba_first_sector+part->sector_count;
+
+
         part->bootable = mbr_dat[loc] == 0x81;
         return 0;
     }
@@ -71,13 +91,13 @@ void read_partitions_into_memory() {
     
     //try and read partitions
     //first partition
-    parse_partition(&mbr.partitions[0], mbr_dat, PARTITION_ENTRY_1);
+    parse_partition(0, mbr_dat, PARTITION_ENTRY_1);
     //second partition
-    parse_partition(&mbr.partitions[1], mbr_dat, PARTITION_ENTRY_2);
+    parse_partition(1, mbr_dat, PARTITION_ENTRY_2);
     //third partition
-    parse_partition(&mbr.partitions[2], mbr_dat, PARTITION_ENTRY_3);
+    parse_partition(2, mbr_dat, PARTITION_ENTRY_3);
     //fourth partition
-    parse_partition(&mbr.partitions[3], mbr_dat, PARTITION_ENTRY_4);
+    parse_partition(3, mbr_dat, PARTITION_ENTRY_4);
 
     free(mbr_dat);
 }

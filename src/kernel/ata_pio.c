@@ -1,3 +1,5 @@
+//TODO: clean code and make functions easier to read
+
 #include <stdio.h>
 #include <stddef.h>
 #include <stdint.h>

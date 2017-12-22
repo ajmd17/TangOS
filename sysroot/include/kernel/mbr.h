@@ -11,6 +11,13 @@
 #define PARTITION_ENTRY_3 0x1DE
 #define PARTITION_ENTRY_4 0x1EE
 
+enum MBR_ERRS {
+    NO_MBR_ERROR,
+    EMPTY_PART,
+    EBR_PART,
+    NO_DATA_PART,
+};
+
 enum PARTITION_N {
     NONE,
     PARTIIION_1,
