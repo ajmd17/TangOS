@@ -1,0 +1,17 @@
+--------------------
+[!] -> priority
+[X] -> completed
+[ ] -> uncompleted
+--------------------
+
+[!] finish FAT32 implementation
+[!] seperate OS from kernel
+[!] heavy code cleanup and refactoring
+[ ] write VESA/VBE graphics driver
+[ ] write networking driver for OTA updates/apps
+[ ] USB compatibility(needs FAT32)
+[ ] implement Lua
+[ ] program main OS + graphics libs in Lua
+[ ] write new build script using CMake
+[ ] working gui(windows, scrollbars, etc.)
+[ ] eventual python implementation?

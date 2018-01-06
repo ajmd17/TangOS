@@ -11,28 +11,28 @@
 #define PARTITION_ENTRY_3 0x1DE
 #define PARTITION_ENTRY_4 0x1EE
 
-enum MBR_ERRS {
+typedef enum {
     NO_MBR_ERROR,
     EMPTY_PART,
     EBR_PART,
     NO_DATA_PART,
-};
+} MBR_ERR;
 
-enum PARTITION_N {
+typedef enum {
     NONE,
-    PARTIIION_1,
+    PARTITION_1,
     PARTITION_2,
     PARTITION_3,
     PARTITION_4
-};
+} PARTITION;
 
 typedef struct {
-    unsigned char error;
-    uint8_t       bootable;
-	uint8_t       type;
-	uint32_t      lba_first_sector;
-	uint32_t      sector_count;
-    uint32_t      lba_end_sector;
+    MBR_ERR  error;
+    uint8_t  bootable;
+	uint8_t  type;
+	unsigned lba_first_sector;
+	unsigned sector_count;
+    unsigned lba_end_sector;
 } partition_t;
 
 typedef struct {
@@ -43,12 +43,10 @@ typedef struct {
 
 void mbr_init();
 void read_partitions_into_memory();
-void set_sysid(enum PARTITION_N part_n);
-void set_def_partition(enum PARTITION_N part_n);
-void write_to_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_lba, uint8_t *data, int data_len, int sector_len);
-void read_from_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_lba, unsigned sec_amt, uint8_t *buf);
-void read(enum ATA_RW mode, size_t rel_lba, uint8_t *buf, size_t buf_size, int sector_amt);
-void write(enum ATA_RW mode, size_t rel_lba, uint8_t *dat, size_t dat_len, int sector_amt);
+void set_sysid(PARTITION part_n);
+void set_def_partition(PARTITION part_n);
+void mbr_write(PARTITION part_n, size_t rel_lba, uint8_t *data, int data_len, int sector_len);
+void mbr_read(PARTITION part_n, size_t rel_lba, unsigned sec_amt, uint8_t *buf);
 mbr_t *get_mbr();
 void mbr_destroy();
 

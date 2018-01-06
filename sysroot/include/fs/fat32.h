@@ -25,7 +25,7 @@ typedef struct {
     unsigned fatsz32;
 } fat_t;
 
-void fat32_startup(enum PARTITION_N part_n);
+void fat32_startup(PARTITION part_n);
 void print_data(void);
 
 #endif

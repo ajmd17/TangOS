@@ -144,7 +144,7 @@ void init() {
 
     read_partitions_into_memory();
 
-    fat32_startup(PARTITION_3);
+    fat32_startup(PARTITION_2);
     // print_data();
     // fat_init();
 
@@ -160,12 +160,12 @@ void init() {
     // out_dat[4] = 100;
     // out_dat[5] = 0;
 
-    // write_to_partition(PARTITION_3, WRITE, 10, out_dat, 6, 1);
+    // mbr_write(PARTITION_3, 10, out_dat, 6, 1);
     // free(out_dat);
 
     // uint8_t *in_dat;
     // in_dat = (uint8_t *)malloc(20);
-    // read_from_partition(PARTITION_3, READ, 10, 1, in_dat);
+    // mbr_read(PARTITION_3, 10, 1, in_dat);
     // printf("in_dat: %s\n", in_dat);
     // free(in_dat);
 

@@ -1,5 +1,6 @@
 #include <fs/fat32.h>
 #include <kernel/ata_pio.h>
+#include <kernel/mbr.h>
 #include <kernel/byte_converter.h>
 
 #include <stdlib.h>
@@ -32,14 +33,17 @@ typedef struct {
     size_t file_size;
 } dir_entry_t;
 
-void fat32_startup(enum PARTITION_N part_n) {
+void fat32_startup(PARTITION part_n) {
     //loading bios parameter block
-    set_def_partition(part_n);
 
     // write(WRITE, 16, 2, 1, 1);
 
     uint8_t *bpb = (uint8_t *)malloc(512);
-    read(READ, 0, bpb, 512, 1);
+
+    mbr_read(part_n, 0, 1, bpb);
+    // read(READ, 0, bpb, 512, 1);
+
+    uint8_t amt_fats = 1;
 
     if (bpb[510] != 0x55 || bpb[511] != 0xAA) {
         //non valid filesystem
@@ -118,4 +122,27 @@ void assign_value(uint8_t *n_bpb, uint8_t *value, int offset, int len) {
     for (i = 0; i < len; i++) {
         value[i] = n_bpb[i+offset];
     }
+}
+
+void new_partition(unsigned n_sectors) {
+    int i;
+    partition_t *last_part;
+
+    for (i = 0; i < 4; i++) {
+        if (mbr->partitions[i].error == NULL)
+            last_part = &(mbr->partitions[i]);
+        else
+            break;
+    }
+
+    partition_t new_part;
+    new_part.lba_first_sector = last_part->lba_end_sector;
+    new_part.sector_count = n_sectors;
+    new_part.lba_end_sector = new_part.lba_first_sector + new_part.sector_count;
+
+    int part_index = PARTITION_ENTRY_1+((i-1)*10);
+
+    //split int into four bytes and write each to disk
+    uint8_t *lba_f_sec_split = (uint8_t *)&new_part.lba_first_sector;
+    ata_pio_write_seq(part_index+8, lba_f_sec_split, 4);
 }

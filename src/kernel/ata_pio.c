@@ -153,22 +153,12 @@ void ata_pio_write(size_t lba, uint8_t *data, unsigned data_len, size_t n_sector
 	free(temp_buf);
 }
 
-uint8_t *ata_pio_rw(enum ATA_RW mode, size_t pos, size_t buf_s_pos, uint8_t *rw_dat, unsigned data_len, size_t n_sectors) {
-	switch(mode) {
-		case READ:
-			ata_pio_read(pos, buf_s_pos, rw_dat, n_sectors);
-			break;
-		case WRITE:
-			ata_pio_write(pos, rw_dat, data_len, n_sectors);
-			break;
-		case READ_SECTOR:
-			ata_pio_read(pos*512, buf_s_pos, rw_dat, n_sectors);
-			break;
-		case WRITE_SECTOR:
-			ata_pio_write(pos*512, rw_dat, data_len, n_sectors);
-			break;
-	};
+void ata_pio_write_seq(size_t lba, uint8_t *data, int amt_dat) {
+	int i;
+	for (i = 0; i < amt_dat; i++)
+		ata_pio_write(lba+i, data[i], 1, 1);
 }
+
 
 size_t lba_max_size() {
 	size_t max_lba = 0;

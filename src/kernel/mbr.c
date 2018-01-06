@@ -11,12 +11,6 @@
 
 #include <math.h>
 
-int round_up(float num) {
-    float post_dec = num-(int)num;
-    if (post_dec > 0 && post_dec < 1)
-        return (num-post_dec)+1;
-}
-
 static mbr_t mbr;
 
 void mbr_init() {
@@ -36,6 +30,7 @@ unsigned char parse_partition(int part_n, uint8_t *mbr_dat, size_t loc) {
     partition_t *part = &mbr.partitions[part_n];
     char sys_id = mbr_dat[loc+4];
 
+    printf("part %d is %x\n", part_n, sys_id);
     if (sys_id == 0) {
         printf("sys_id(part: %d) is not set\n", part_n+1);
         mbr.partitions[part_n].error = EMPTY_PART;
@@ -43,12 +38,11 @@ unsigned char parse_partition(int part_n, uint8_t *mbr_dat, size_t loc) {
         //TODO: add partition manager
         // return 1;
     }
-
-    if (sys_id == 0x5 || sys_id == 0xF || sys_id == 0x85) {
+    else if (sys_id == 0x05 || sys_id == 0x0F || sys_id == 0x85) {
         part->error = EBR_PART;
         return 1; //EBR partition(extended boot record) is not supported
     }
-    else {
+    else if (sys_id == 0x0C || sys_id == 0x0B) {
         part->type = sys_id;
         part->lba_first_sector = to_uint32(mbr_dat, loc+8);
         part->sector_count = to_uint32(mbr_dat, loc+12);
@@ -63,20 +57,24 @@ unsigned char parse_partition(int part_n, uint8_t *mbr_dat, size_t loc) {
         part->lba_end_sector = part->lba_first_sector+part->sector_count;
 
 
-        part->bootable = mbr_dat[loc] == 0x81;
+        part->bootable = (mbr_dat[loc] == 0x81);
         return 0;
+    }
+    else {
+        return 1;
     }
 }
 
-void set_sysid(enum PARTITION_N part_n) {
+void set_sysid(PARTITION part_n) {
     unsigned part_pos = PARTITION_ENTRY_1+(part_n*10);
     uint8_t sysid = 0x0C; //FAT32 LBA addressing
-    ata_pio_rw(WRITE, part_pos+4, 0, &sysid, 1, 1);
+    ata_pio_write(part_pos+4, &sysid, 1, 1);
 }
 
 void read_partitions_into_memory() {
     uint8_t *mbr_dat = (uint8_t *)malloc(512);
-    ata_pio_rw(READ, 0, 0, mbr_dat, 512, 1);
+
+    ata_pio_read(0, 0, mbr_dat, 1);
 
     mbr.signature[0] = mbr_dat[510];
     mbr.signature[1] = mbr_dat[511];
@@ -102,48 +100,14 @@ void read_partitions_into_memory() {
     free(mbr_dat);
 }
 
-static enum PARTITION_N def_part = NONE;
-
-void set_def_partition(enum PARTITION_N part_n) {
-    if (def_part == NONE) def_part = part_n;
-}
-void write_to_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_lba, uint8_t *data, int data_len, int sector_len) {
-    if (mode == READ || mode == READ_SECTOR) {
-        printf("write_to_partition: reading is not for use in writing function!\n");
-        return;
-    }
-    partition_t *part;
-
-    part = &mbr.partitions[part_n];
-    ata_pio_rw(mode, part->lba_first_sector+rel_lba,
-               0, data, data_len, sector_len);
+void mbr_write(PARTITION part_n, size_t rel_lba, uint8_t *data, int data_len, int n_sectors) {
+    partition_t *part = &mbr.partitions[part_n];
+    ata_pio_write(part->lba_first_sector+rel_lba, data, data_len, n_sectors);
 }
 
-void read_from_partition(enum PARTITION_N part_n, enum ATA_RW mode, size_t rel_lba, unsigned sec_amt, uint8_t *buf) {
-    if (mode == WRITE || mode == WRITE_SECTOR) {
-        printf("read_from_partition: writing is not for use in reading function!\n");
-        return;
-    }
-    partition_t *part;
-    part = &mbr.partitions[part_n];
-    printf("reading from %d\n", part->lba_first_sector+rel_lba);
-    ata_pio_rw(mode, part->lba_first_sector+rel_lba, 0, buf, NULL, sec_amt);
-}
-
-void read(enum ATA_RW mode, size_t rel_lba, uint8_t *buf, size_t buf_size, int sector_amt) {
-    if (def_part == NONE) {
-        printf("read(): partition set to NONE; skipping\n");
-        return;
-    }
-    read_from_partition(def_part, mode, rel_lba, sector_amt, buf);
-}
-
-void write(enum ATA_RW mode, size_t rel_lba, uint8_t *dat, size_t dat_len, int sector_amt) {
-    if (def_part == NONE) {
-        printf("write(): partition set to NONE; skipping\n");
-        return;
-    }
-    write_to_partition(def_part, mode, rel_lba, dat, dat_len, sector_amt);
+void mbr_read(PARTITION part_n, size_t rel_lba, unsigned sec_amt, uint8_t *buf) {
+    partition_t *part = &mbr.partitions[part_n];
+    ata_pio_read(part->lba_first_sector+rel_lba, 0, buf, sec_amt);
 }
 
 mbr_t *get_mbr() {
@@ -152,4 +116,8 @@ mbr_t *get_mbr() {
 
 void mbr_destroy() {
     free(mbr.bootstrap);
+}
+
+int get_partition_entry(int n) {
+    return PARTITION_ENTRY_1+(n*10);
 }
