@@ -47,6 +47,7 @@ void set_sysid(PARTITION part_n);
 void set_def_partition(PARTITION part_n);
 void mbr_write(PARTITION part_n, size_t rel_lba, uint8_t *data, int data_len, int sector_len);
 void mbr_read(PARTITION part_n, size_t rel_lba, unsigned sec_amt, uint8_t *buf);
+void mbr_write_seq(PARTITION part_n, size_t rel_lba, uint8_t *data, int n_chars);
 mbr_t *get_mbr();
 void mbr_destroy();
 

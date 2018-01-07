@@ -129,20 +129,33 @@ void new_partition(unsigned n_sectors) {
     partition_t *last_part;
 
     for (i = 0; i < 4; i++) {
-        if (mbr->partitions[i].error == NULL)
+        if (mbr->partitions[i].error != NULL)
             last_part = &(mbr->partitions[i]);
         else
             break;
     }
+
+    i--;
 
     partition_t new_part;
     new_part.lba_first_sector = last_part->lba_end_sector;
     new_part.sector_count = n_sectors;
     new_part.lba_end_sector = new_part.lba_first_sector + new_part.sector_count;
 
-    int part_index = PARTITION_ENTRY_1+((i-1)*10);
+    //get partition entry from last usable partition
+    int part_index = PARTITION_ENTRY_1+((i)*10);
 
-    //split int into four bytes and write each to disk
-    uint8_t *lba_f_sec_split = (uint8_t *)&new_part.lba_first_sector;
-    ata_pio_write_seq(part_index+8, lba_f_sec_split, 4);
+    //write sys_id for FAT32(LBA addressing) for loading later
+    uint8_t sys_id = 0x0C;
+    ata_pio_write(part_index+4, &sys_id, 1, 1);
+
+    //split ints into four bytes each and write bytes to disk
+    uint8_t *split = (uint8_t *)&new_part.lba_first_sector;
+    ata_pio_write_seq(part_index+8, split, 4);
+    split = (uint8_t *)&new_part.sector_count;
+    ata_pio_write_seq(part_index+12, split, 4);
+
+    printf("Created partition %d\n", i);
 }
+
+

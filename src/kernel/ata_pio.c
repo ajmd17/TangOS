@@ -156,7 +156,7 @@ void ata_pio_write(size_t lba, uint8_t *data, unsigned data_len, size_t n_sector
 void ata_pio_write_seq(size_t lba, uint8_t *data, int amt_dat) {
 	int i;
 	for (i = 0; i < amt_dat; i++)
-		ata_pio_write(lba+i, data[i], 1, 1);
+		ata_pio_write(lba+i, &data[i], 1, 1);
 }
 
 

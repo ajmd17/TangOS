@@ -143,31 +143,32 @@ void init() {
     mbr_init();
 
     read_partitions_into_memory();
+    mbr_t *mbr = get_mbr();
 
-    fat32_startup(PARTITION_2);
+    if (mbr->partitions[2].error == EMPTY_PART) {
+        new_partition(100);
+    }
+
+    fat32_startup(PARTITION_3);
     // print_data();
     // fat_init();
 
-    mbr_t *mbr = get_mbr();
 
     //set_sysid(PARTITION_3);
 
-    // uint8_t *out_dat = (uint8_t *)malloc(20);
+    // uint8_t out_dat[20];
     // out_dat[0] = 83;
     // out_dat[1] = 113;
     // out_dat[2] = 117;
     // out_dat[3] = 105;
-    // out_dat[4] = 100;
+    // out_dat[4] = 101;
     // out_dat[5] = 0;
 
     // mbr_write(PARTITION_3, 10, out_dat, 6, 1);
-    // free(out_dat);
 
-    // uint8_t *in_dat;
-    // in_dat = (uint8_t *)malloc(20);
-    // mbr_read(PARTITION_3, 10, 1, in_dat);
-    // printf("in_dat: %s\n", in_dat);
-    // free(in_dat);
+    uint8_t in_dat[20];
+    mbr_read(PARTITION_3, 10, 1, in_dat);
+    printf("in_dat: %s\n", in_dat);
 
     int i;
     int usable_parts = 0;

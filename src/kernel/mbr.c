@@ -32,7 +32,7 @@ unsigned char parse_partition(int part_n, uint8_t *mbr_dat, size_t loc) {
 
     printf("part %d is %x\n", part_n, sys_id);
     if (sys_id == 0) {
-        printf("sys_id(part: %d) is not set\n", part_n+1);
+        // printf("sys_id(part: %d) is not set\n", part_n+1);
         mbr.partitions[part_n].error = EMPTY_PART;
         //empty partition
         //TODO: add partition manager
@@ -103,11 +103,18 @@ void read_partitions_into_memory() {
 void mbr_write(PARTITION part_n, size_t rel_lba, uint8_t *data, int data_len, int n_sectors) {
     partition_t *part = &mbr.partitions[part_n];
     ata_pio_write(part->lba_first_sector+rel_lba, data, data_len, n_sectors);
+    printf("writing to partition %d(%x)\n", part_n, PARTITION_ENTRY_1+(part_n*10));
 }
 
 void mbr_read(PARTITION part_n, size_t rel_lba, unsigned sec_amt, uint8_t *buf) {
     partition_t *part = &mbr.partitions[part_n];
     ata_pio_read(part->lba_first_sector+rel_lba, 0, buf, sec_amt);
+    printf("reading from partition %d(%x)\n", part_n, PARTITION_ENTRY_1+(part_n*10));    
+}
+
+void mbr_write_seq(PARTITION part_n, size_t rel_lba, uint8_t *data, int n_chars) {
+    partition_t *part = &mbr.partitions[part_n];
+    ata_pio_write_seq(part->lba_first_sector+rel_lba, data, n_chars);
 }
 
 mbr_t *get_mbr() {

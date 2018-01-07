@@ -10,6 +10,14 @@ extern "C" {
 int printf(const char *, ...);
 int putchar(int);
 int puts(const char*);
+
+typedef struct {
+    int id;
+} FILE;
+
+FILE *fopen(const char *path, const char *mode);
+int fclose(FILE *stream);
+int fprintf(FILE* file, const char *, ...);
  
 #ifdef __cplusplus
 }
